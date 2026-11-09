@@ -20,7 +20,7 @@ dependencies = [
 azure = [
   "azure-identity>=1.19,<2",
   "azure-mgmt-resourcegraph>=8.0,<9",
-  "azure-monitor-query>=1.4,<2",
+  "azure-monitor-query>=1.4,<3",
 ]
 api = ["fastapi>=0.115,<1", "uvicorn[standard]>=0.32,<1"]
 kubernetes = ["kubernetes>=37.0.1,<38"]
