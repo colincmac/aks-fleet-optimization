@@ -1,0 +1,31 @@
+# Local
+.local/
+
+# Demo Files
+*.pptx
+
+# Build Artifacts
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+report.md
+.env
+.coverage
+htmlcov/
+node_modules/
+eng/promtool.exe
+eng/promtool
+eng/prometheus.exe
+eng/prometheus
+
+preview-dist/
+playwright-report/
+test-results/
+plugins/headlamp-fleet-efficiency/*.tar.gz
+node_modules/

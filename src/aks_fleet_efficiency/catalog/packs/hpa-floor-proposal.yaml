@@ -1,0 +1,45 @@
+schema_version: '1.0'
+id: AKS-AS-005
+version: 2.0.0
+family: autoscaler
+evaluator: hpa-floor-proposal
+evidence_kind: metrics
+title: Review bounded HPA minimum replicas
+purpose: A separately default-off positive-only HPA minimum proposal preserves maximum, signals and resources under configuration-bound owner and availability review.
+sources: [prometheus, azure-managed-prometheus]
+parameters: {}
+queries:
+  baseline: &queries
+    hpa: [hpa_min_replicas, hpa_max_replicas, hpa_desired_replicas, hpa_current_replicas]
+    workload: [desired_replicas, observed_replicas, available_replicas]
+  guarded: *queries
+required_evidence:
+  baseline:
+  - Current configuration and all seven full-grid UID-bound series may expose explicit proposal gaps, never a numeric baseline proposal
+  guarded:
+  - Complete fresh exact-scoped sources and all seven 100-percent aligned stable HPA/workload series
+  - One unmanaged HPA and unconstrained Deployment with explicit current availability
+  - Default-off allow_floor_reduction and exact HPA/configuration/window-bound owner review
+  - Reviewed positive tested/minimum replicas, maximum reduction, failover reserve and disruption allowance
+  - Independently reviewed peak, throughput, startup, zone failure and zero reliability incidents
+limitations:
+- KEDA-managed floors, StatefulSet/quorum, PDB matching, changed controllers, Pod budgets and unsupported scheduling/overhead are blocked.
+- No current-only values, references or digests establish historical evidence, source attestation or change approval.
+- Proposed floor is at least one and below the current floor; resources, maximum and signals remain unchanged.
+prerequisites:
+- Obtain separate owner approval bound to this exact workload/HPA UID, proposal, configuration and observation window.
+- Reconfirm the reviewed load test, throughput, startup, zonal failure, failover reserve and disruption allowance for the proposed floor.
+risks:
+- Lower warm capacity can delay scale-up or increase per-Pod load.
+- PDB matching, stateful quorum, KEDA-managed floors, changing histories and unsupported scheduling constraints are not supported proposals.
+validation:
+- Canary only the HPA minimum; leave maximum, signals and CPU/memory requests unchanged. Verify availability and SLOs under peak load, startup and declared zone/failover scenarios.
+- Stop promotion on pending/unavailable Pods, elevated throttling, OOM/restarts, scale-up latency or throughput/SLO regression.
+rollback:
+- Restore the original HPA minimum of __current_floor__ replicas through customer-owned delivery tooling on any guardrail regression; the advisor never changes controllers or performs rollback.
+actions:
+  baseline: &actions
+  - Review the structured HPA minimum proposal with the owner; this report does not approve or apply a change.
+  guarded: *actions
+baseline_summary: Baseline exposes evidence gaps only; a numeric HPA floor proposal requires guarded mode and independent owner opt-in with complete configuration-bound history.
+guarded_summary: An explicitly opted-in owner policy and complete stable HPA/workload availability history permit a bounded minimum-replica proposal. Owner review declarations are not source attestation or change approval. The HPA maximum, metric targets and resource requests remain unchanged; no savings or automatic remediation is implied.

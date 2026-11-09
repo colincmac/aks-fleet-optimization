@@ -1,0 +1,3565 @@
+{
+  "$defs": {
+    "AutoscalerOwnerReference": {
+      "additionalProperties": false,
+      "properties": {
+        "api_version": {
+          "minLength": 1,
+          "title": "Api Version",
+          "type": "string"
+        },
+        "controller": {
+          "title": "Controller",
+          "type": "boolean"
+        },
+        "kind": {
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "uid": {
+          "minLength": 1,
+          "title": "Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "api_version",
+        "kind",
+        "name",
+        "uid",
+        "controller"
+      ],
+      "title": "AutoscalerOwnerReference",
+      "type": "object"
+    },
+    "AutoscalingState": {
+      "additionalProperties": false,
+      "properties": {
+        "hpa": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hpa"
+        },
+        "keda": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Keda"
+        },
+        "max_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Replicas"
+        },
+        "min_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Replicas"
+        },
+        "vpa": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Vpa"
+        },
+        "vpa_mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Vpa Mode"
+        }
+      },
+      "title": "AutoscalingState",
+      "type": "object"
+    },
+    "CapabilityCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown",
+            "unsupported"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "status",
+        "reason_codes"
+      ],
+      "title": "CapabilityCheck",
+      "type": "object"
+    },
+    "CapacityInventory": {
+      "additionalProperties": false,
+      "properties": {
+        "azure_observed_at": {
+          "format": "date-time",
+          "title": "Azure Observed At",
+          "type": "string"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Cluster Uid"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "kubernetes_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Kubernetes Observed At"
+        },
+        "nap_api_status": {
+          "additionalProperties": {
+            "enum": [
+              "available",
+              "absent",
+              "unsupported",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "title": "Nap Api Status",
+          "type": "object"
+        },
+        "nap_managed_nodes": {
+          "items": {
+            "$ref": "#/$defs/NapManagedNode"
+          },
+          "title": "Nap Managed Nodes",
+          "type": "array"
+        },
+        "nap_pools": {
+          "items": {
+            "$ref": "#/$defs/NapPoolEvidence"
+          },
+          "title": "Nap Pools",
+          "type": "array"
+        },
+        "pools": {
+          "items": {
+            "$ref": "#/$defs/CapacityPoolEvidence"
+          },
+          "title": "Pools",
+          "type": "array"
+        },
+        "provisioning_mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Provisioning Mode"
+        }
+      },
+      "required": [
+        "cluster_resource_id",
+        "cluster_uid",
+        "azure_observed_at",
+        "kubernetes_observed_at",
+        "provisioning_mode",
+        "pools",
+        "nap_api_status"
+      ],
+      "title": "CapacityInventory",
+      "type": "object"
+    },
+    "CapacityPoolEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "autoscaling_enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Autoscaling Enabled"
+        },
+        "intent": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PoolIntentBinding"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "max_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Count"
+        },
+        "min_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Count"
+        },
+        "mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mode"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "node_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Count"
+        },
+        "os_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Os Type"
+        },
+        "resource_id": {
+          "minLength": 1,
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "spot": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Spot"
+        },
+        "vm_size": {
+          "minLength": 1,
+          "title": "Vm Size",
+          "type": "string"
+        },
+        "zones": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Zones"
+        }
+      },
+      "required": [
+        "resource_id",
+        "name",
+        "vm_size"
+      ],
+      "title": "CapacityPoolEvidence",
+      "type": "object"
+    },
+    "ClusterSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "capacity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CapacityInventory"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "cost_analysis_enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cost Analysis Enabled"
+        },
+        "environment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Environment"
+        },
+        "fleet_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fleet Id"
+        },
+        "kubernetes_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Kubernetes Version"
+        },
+        "location": {
+          "title": "Location",
+          "type": "string"
+        },
+        "managed_prometheus_enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Managed Prometheus Enabled"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "node_pools": {
+          "items": {
+            "$ref": "#/$defs/NodePoolSnapshot"
+          },
+          "title": "Node Pools",
+          "type": "array"
+        },
+        "resource_group": {
+          "title": "Resource Group",
+          "type": "string"
+        },
+        "resource_id": {
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "scheduling": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SchedulingInventory"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "sku_tier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sku Tier"
+        },
+        "subscription_id": {
+          "title": "Subscription Id",
+          "type": "string"
+        },
+        "tags": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "object"
+        },
+        "uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uid"
+        },
+        "workloads": {
+          "items": {
+            "$ref": "#/$defs/WorkloadSnapshot"
+          },
+          "title": "Workloads",
+          "type": "array"
+        }
+      },
+      "required": [
+        "resource_id",
+        "name",
+        "subscription_id",
+        "resource_group",
+        "location",
+        "node_pools",
+        "workloads"
+      ],
+      "title": "ClusterSnapshot",
+      "type": "object"
+    },
+    "CollectionError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "unauthorized",
+            "forbidden",
+            "timeout",
+            "throttled",
+            "unavailable",
+            "invalid-response",
+            "response-budget-exceeded",
+            "identity-mismatch"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "code"
+      ],
+      "title": "CollectionError",
+      "type": "object"
+    },
+    "CollectionManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "results": {
+          "items": {
+            "$ref": "#/$defs/CollectorResult"
+          },
+          "minItems": 1,
+          "title": "Results",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_results": {
+          "items": {
+            "$ref": "#/$defs/CollectorResult"
+          },
+          "minItems": 1,
+          "title": "Source Results",
+          "type": "array"
+        },
+        "status": {
+          "$ref": "#/$defs/CollectionStatus"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "status",
+        "results",
+        "source_results"
+      ],
+      "title": "CollectionManifest",
+      "type": "object"
+    },
+    "CollectionStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "title": "CollectionStatus",
+      "type": "string"
+    },
+    "CollectorResult": {
+      "additionalProperties": false,
+      "properties": {
+        "collector": {
+          "minLength": 1,
+          "title": "Collector",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "completed_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Completed Scope",
+          "type": "array"
+        },
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/CollectionError"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "pagination_complete": {
+          "default": false,
+          "title": "Pagination Complete",
+          "type": "boolean"
+        },
+        "requested_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requested Scope",
+          "type": "array"
+        },
+        "retry_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Retry Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Observed At"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CollectionStatus"
+        }
+      },
+      "required": [
+        "collector",
+        "status",
+        "requested_scope",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "CollectorResult",
+      "type": "object"
+    },
+    "ContainerSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "image": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Image"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "resources": {
+          "$ref": "#/$defs/ResourceObservation"
+        }
+      },
+      "required": [
+        "name",
+        "resources"
+      ],
+      "title": "ContainerSnapshot",
+      "type": "object"
+    },
+    "ContainerTerminationContext": {
+      "additionalProperties": false,
+      "properties": {
+        "container": {
+          "minLength": 1,
+          "title": "Container",
+          "type": "string"
+        },
+        "current_only": {
+          "const": true,
+          "default": true,
+          "title": "Current Only",
+          "type": "boolean"
+        },
+        "exit_code": {
+          "minimum": 0,
+          "title": "Exit Code",
+          "type": "integer"
+        },
+        "finished_at": {
+          "format": "date-time",
+          "title": "Finished At",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "pod_uid": {
+          "minLength": 1,
+          "title": "Pod Uid",
+          "type": "string"
+        },
+        "reason": {
+          "minLength": 1,
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pod_uid",
+        "container",
+        "reason",
+        "exit_code",
+        "finished_at",
+        "observed_at"
+      ],
+      "title": "ContainerTerminationContext",
+      "type": "object"
+    },
+    "HpaConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "current_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Current Replicas"
+        },
+        "desired_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Desired Replicas"
+        },
+        "max_replicas": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Replicas"
+        },
+        "metrics": {
+          "items": {
+            "$ref": "#/$defs/HpaMetricSignal"
+          },
+          "minItems": 1,
+          "title": "Metrics",
+          "type": "array"
+        },
+        "min_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Replicas"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "owner_references": {
+          "items": {
+            "$ref": "#/$defs/AutoscalerOwnerReference"
+          },
+          "title": "Owner References",
+          "type": "array"
+        },
+        "uid": {
+          "minLength": 1,
+          "title": "Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "uid",
+        "name",
+        "metrics"
+      ],
+      "title": "HpaConfiguration",
+      "type": "object"
+    },
+    "HpaMetricSignal": {
+      "additionalProperties": false,
+      "properties": {
+        "average_utilization": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Average Utilization"
+        },
+        "container": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Container"
+        },
+        "metric_type": {
+          "enum": [
+            "Resource",
+            "ContainerResource",
+            "External",
+            "Pods",
+            "Object"
+          ],
+          "title": "Metric Type",
+          "type": "string"
+        },
+        "resource": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resource"
+        },
+        "target_type": {
+          "enum": [
+            "Utilization",
+            "AverageValue",
+            "Value"
+          ],
+          "title": "Target Type",
+          "type": "string"
+        },
+        "target_value": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Value"
+        }
+      },
+      "required": [
+        "metric_type",
+        "target_type"
+      ],
+      "title": "HpaMetricSignal",
+      "type": "object"
+    },
+    "HpaReplicaHistory": {
+      "additionalProperties": false,
+      "properties": {
+        "availability_issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Availability Issues",
+          "type": "array"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "minLength": 1,
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "history_reference": {
+          "minLength": 1,
+          "title": "History Reference",
+          "type": "string"
+        },
+        "hpa_uid": {
+          "minLength": 1,
+          "title": "Hpa Uid",
+          "type": "string"
+        },
+        "issues": {
+          "items": {
+            "enum": [
+              "hpa_history_identity_mismatch",
+              "unsupported_hpa_history_metric",
+              "unreviewed_hpa_history_window"
+            ],
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "metrics": {
+          "additionalProperties": {
+            "$ref": "#/$defs/HpaReplicaMetric"
+          },
+          "propertyNames": {
+            "enum": [
+              "hpa_min_replicas",
+              "hpa_max_replicas",
+              "hpa_desired_replicas",
+              "hpa_current_replicas"
+            ]
+          },
+          "title": "Metrics",
+          "type": "object"
+        },
+        "namespace_uid": {
+          "minLength": 1,
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "query_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Query Version",
+          "type": "string"
+        },
+        "reliability_issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Reliability Issues",
+          "type": "array"
+        },
+        "source_name": {
+          "minLength": 1,
+          "title": "Source Name",
+          "type": "string"
+        },
+        "workload_metrics": {
+          "additionalProperties": {
+            "$ref": "#/$defs/HpaReplicaMetric"
+          },
+          "propertyNames": {
+            "enum": [
+              "desired_replicas",
+              "observed_replicas",
+              "available_replicas"
+            ]
+          },
+          "title": "Workload Metrics",
+          "type": "object"
+        },
+        "workload_uid": {
+          "minLength": 1,
+          "title": "Workload Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cluster_resource_id",
+        "cluster_uid",
+        "namespace_uid",
+        "workload_uid",
+        "hpa_uid",
+        "source_name",
+        "history_reference"
+      ],
+      "title": "HpaReplicaHistory",
+      "type": "object"
+    },
+    "HpaReplicaMetric": {
+      "additionalProperties": false,
+      "properties": {
+        "maximum": {
+          "minimum": 0,
+          "title": "Maximum",
+          "type": "integer"
+        },
+        "minimum": {
+          "minimum": 0,
+          "title": "Minimum",
+          "type": "integer"
+        },
+        "quality": {
+          "$ref": "#/$defs/MetricQuality"
+        }
+      },
+      "required": [
+        "minimum",
+        "maximum",
+        "quality"
+      ],
+      "title": "HpaReplicaMetric",
+      "type": "object"
+    },
+    "KedaConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "cooldown_period_seconds": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cooldown Period Seconds"
+        },
+        "generated_hpa_name": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Generated Hpa Name"
+        },
+        "max_replicas": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Replicas"
+        },
+        "min_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Replicas"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "polling_interval_seconds": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Polling Interval Seconds"
+        },
+        "triggers": {
+          "items": {
+            "$ref": "#/$defs/KedaTrigger"
+          },
+          "minItems": 1,
+          "title": "Triggers",
+          "type": "array"
+        },
+        "uid": {
+          "minLength": 1,
+          "title": "Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "uid",
+        "name",
+        "triggers"
+      ],
+      "title": "KedaConfiguration",
+      "type": "object"
+    },
+    "KedaTrigger": {
+      "additionalProperties": false,
+      "properties": {
+        "metric_type": {
+          "anyOf": [
+            {
+              "enum": [
+                "Utilization",
+                "AverageValue",
+                "Value"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metric Type"
+        },
+        "type": {
+          "minLength": 1,
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "KedaTrigger",
+      "type": "object"
+    },
+    "MemoryLimitPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allocator_cache_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Allocator Cache Reviewed"
+        },
+        "allow_limit_reduction": {
+          "default": false,
+          "title": "Allow Limit Reduction",
+          "type": "boolean"
+        },
+        "configuration_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configuration Digest"
+        },
+        "evidence_reference": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "failover_total_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failover Total Peak Mib"
+        },
+        "headroom_factor": {
+          "minimum": 1,
+          "title": "Headroom Factor",
+          "type": "number"
+        },
+        "maximum_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Reduction Ratio",
+          "type": "number"
+        },
+        "minimum_limit_mib": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Limit Mib",
+          "type": "number"
+        },
+        "startup_total_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Startup Total Peak Mib"
+        }
+      },
+      "required": [
+        "minimum_limit_mib",
+        "maximum_reduction_ratio",
+        "headroom_factor",
+        "evidence_reference"
+      ],
+      "title": "MemoryLimitPolicy",
+      "type": "object"
+    },
+    "MemorySafetyPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_request_reduction": {
+          "default": false,
+          "title": "Allow Request Reduction",
+          "type": "boolean"
+        },
+        "eviction_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Eviction Events"
+        },
+        "evidence_reference": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "failover_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failover Peak Mib"
+        },
+        "headroom_factor": {
+          "minimum": 1,
+          "title": "Headroom Factor",
+          "type": "number"
+        },
+        "maximum_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Reduction Ratio",
+          "type": "number"
+        },
+        "minimum_request_mib": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Request Mib",
+          "type": "number"
+        },
+        "qos_class": {
+          "anyOf": [
+            {
+              "enum": [
+                "Guaranteed",
+                "Burstable",
+                "BestEffort"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qos Class"
+        },
+        "startup_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Startup Peak Mib"
+        }
+      },
+      "required": [
+        "minimum_request_mib",
+        "maximum_reduction_ratio",
+        "headroom_factor",
+        "evidence_reference"
+      ],
+      "title": "MemorySafetyPolicy",
+      "type": "object"
+    },
+    "MetricQuality": {
+      "additionalProperties": false,
+      "properties": {
+        "maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "query_expression": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query Expression"
+        },
+        "query_version": {
+          "minLength": 1,
+          "title": "Query Version",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "step_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Step Seconds",
+          "type": "integer"
+        },
+        "unit": {
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "window": {
+          "$ref": "#/$defs/MetricWindow"
+        }
+      },
+      "required": [
+        "source",
+        "query_version",
+        "step_seconds",
+        "observed_at",
+        "window",
+        "unit"
+      ],
+      "title": "MetricQuality",
+      "type": "object"
+    },
+    "MetricWindow": {
+      "additionalProperties": false,
+      "properties": {
+        "coverage_ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Coverage Ratio",
+          "type": "number"
+        },
+        "end": {
+          "format": "date-time",
+          "title": "End",
+          "type": "string"
+        },
+        "sample_count": {
+          "minimum": 0,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "start": {
+          "format": "date-time",
+          "title": "Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "sample_count",
+        "coverage_ratio"
+      ],
+      "title": "MetricWindow",
+      "type": "object"
+    },
+    "NapManagedNode": {
+      "additionalProperties": false,
+      "properties": {
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "nodeclaim_uid": {
+          "minLength": 1,
+          "title": "Nodeclaim Uid",
+          "type": "string"
+        },
+        "nodepool_uid": {
+          "minLength": 1,
+          "title": "Nodepool Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "node_uid",
+        "nodeclaim_uid",
+        "nodepool_uid"
+      ],
+      "title": "NapManagedNode",
+      "type": "object"
+    },
+    "NapPoolEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "disruption_budget_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Disruption Budget Count"
+        },
+        "limits_observed": {
+          "default": false,
+          "title": "Limits Observed",
+          "type": "boolean"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "nodeclass_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nodeclass Uid"
+        },
+        "requirement_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Requirement Count"
+        },
+        "taint_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Taint Count"
+        },
+        "uid": {
+          "minLength": 1,
+          "title": "Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "uid",
+        "name"
+      ],
+      "title": "NapPoolEvidence",
+      "type": "object"
+    },
+    "NodePoolSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "allocatable_cpu_mcores": {
+          "minimum": 0,
+          "title": "Allocatable Cpu Mcores",
+          "type": "number"
+        },
+        "allocatable_memory_mib": {
+          "minimum": 0,
+          "title": "Allocatable Memory Mib",
+          "type": "number"
+        },
+        "autoscaling_enabled": {
+          "default": false,
+          "title": "Autoscaling Enabled",
+          "type": "boolean"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Currency"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "object"
+        },
+        "max_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Count"
+        },
+        "metric_quality": {
+          "additionalProperties": {
+            "$ref": "#/$defs/MetricQuality"
+          },
+          "title": "Metric Quality",
+          "type": "object"
+        },
+        "min_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Count"
+        },
+        "mode": {
+          "default": "User",
+          "title": "Mode",
+          "type": "string"
+        },
+        "monthly_cost": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Monthly Cost"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "nap_managed": {
+          "default": false,
+          "title": "Nap Managed",
+          "type": "boolean"
+        },
+        "node_count": {
+          "minimum": 0,
+          "title": "Node Count",
+          "type": "integer"
+        },
+        "resource_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resource Id"
+        },
+        "spot": {
+          "default": false,
+          "title": "Spot",
+          "type": "boolean"
+        },
+        "usage_cpu_p95_mcores": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Usage Cpu P95 Mcores"
+        },
+        "usage_memory_p95_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Usage Memory P95 Mib"
+        },
+        "vm_size": {
+          "title": "Vm Size",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "vm_size",
+        "node_count",
+        "allocatable_cpu_mcores",
+        "allocatable_memory_mib"
+      ],
+      "title": "NodePoolSnapshot",
+      "type": "object"
+    },
+    "PodMemoryAccounting": {
+      "additionalProperties": false,
+      "properties": {
+        "application_request_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Application Request Mib"
+        },
+        "current_only": {
+          "const": true,
+          "default": true,
+          "title": "Current Only",
+          "type": "boolean"
+        },
+        "effective_request_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Effective Request Mib"
+        },
+        "init_peak_request_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Init Peak Request Mib"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "overhead_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Overhead Mib"
+        },
+        "pod_uid": {
+          "minLength": 1,
+          "title": "Pod Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pod_uid",
+        "observed_at"
+      ],
+      "title": "PodMemoryAccounting",
+      "type": "object"
+    },
+    "PoolIntentBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "classification": {
+          "enum": [
+            "specialized",
+            "intentionally-reserved"
+          ],
+          "title": "Classification",
+          "type": "string"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "owner": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Owner",
+          "type": "string"
+        },
+        "pool_resource_id": {
+          "minLength": 1,
+          "title": "Pool Resource Id",
+          "type": "string"
+        },
+        "reference": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cluster_resource_id",
+        "pool_resource_id",
+        "owner",
+        "classification",
+        "reference"
+      ],
+      "title": "PoolIntentBinding",
+      "type": "object"
+    },
+    "ReplicaSafetyPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_floor_reduction": {
+          "default": false,
+          "title": "Allow Floor Reduction",
+          "type": "boolean"
+        },
+        "configuration_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configuration Digest"
+        },
+        "eviction_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Eviction Events"
+        },
+        "evidence_reference": {
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "failover_reserve_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failover Reserve Replicas"
+        },
+        "hpa_uid": {
+          "minLength": 1,
+          "title": "Hpa Uid",
+          "type": "string"
+        },
+        "maximum_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Reduction Ratio",
+          "type": "number"
+        },
+        "maximum_unavailable_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Unavailable Replicas"
+        },
+        "minimum_available_replicas": {
+          "minimum": 1,
+          "title": "Minimum Available Replicas",
+          "type": "integer"
+        },
+        "oom_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Oom Events"
+        },
+        "peak_load_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Peak Load Reviewed"
+        },
+        "reliability_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reliability Reviewed"
+        },
+        "restart_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Restart Events"
+        },
+        "startup_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Startup Reviewed"
+        },
+        "tested_replicas": {
+          "minimum": 1,
+          "title": "Tested Replicas",
+          "type": "integer"
+        },
+        "throughput_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Throughput Reviewed"
+        },
+        "zone_failure_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Zone Failure Reviewed"
+        }
+      },
+      "required": [
+        "hpa_uid",
+        "minimum_available_replicas",
+        "tested_replicas",
+        "maximum_reduction_ratio",
+        "evidence_reference"
+      ],
+      "title": "ReplicaSafetyPolicy",
+      "type": "object"
+    },
+    "ResourceObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_observation_basis": {
+          "anyOf": [
+            {
+              "enum": [
+                "pod",
+                "replica-envelope"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Observation Basis"
+        },
+        "cpu_request_observed": {
+          "default": false,
+          "title": "Cpu Request Observed",
+          "type": "boolean"
+        },
+        "cpu_throttled_ratio": {
+          "anyOf": [
+            {
+              "maximum": 1,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Throttled Ratio"
+        },
+        "limit_cpu_mcores": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Limit Cpu Mcores"
+        },
+        "limit_memory_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Limit Memory Mib"
+        },
+        "memory_limit_observed": {
+          "default": false,
+          "title": "Memory Limit Observed",
+          "type": "boolean"
+        },
+        "memory_membership_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Membership Digest"
+        },
+        "memory_observation_basis": {
+          "anyOf": [
+            {
+              "enum": [
+                "pod",
+                "replica-envelope"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Observation Basis"
+        },
+        "memory_oom_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Oom Events"
+        },
+        "memory_request_observed": {
+          "default": false,
+          "title": "Memory Request Observed",
+          "type": "boolean"
+        },
+        "metric_quality": {
+          "additionalProperties": {
+            "$ref": "#/$defs/MetricQuality"
+          },
+          "title": "Metric Quality",
+          "type": "object"
+        },
+        "request_cpu_mcores": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Request Cpu Mcores"
+        },
+        "request_memory_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Request Memory Mib"
+        },
+        "restart_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Restart Events"
+        },
+        "total_memory_usage_p99_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total Memory Usage P99 Mib"
+        },
+        "usage_cpu_p50_mcores": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Usage Cpu P50 Mcores"
+        },
+        "usage_cpu_p95_mcores": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Usage Cpu P95 Mcores"
+        },
+        "usage_cpu_p99_mcores": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Usage Cpu P99 Mcores"
+        },
+        "usage_memory_p50_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Usage Memory P50 Mib"
+        },
+        "usage_memory_p95_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Usage Memory P95 Mib"
+        },
+        "usage_memory_p99_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Usage Memory P99 Mib"
+        }
+      },
+      "title": "ResourceObservation",
+      "type": "object"
+    },
+    "SchedulingInventory": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Cluster Uid"
+        },
+        "cordoned_node_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Cordoned Node Uids",
+          "type": "array"
+        },
+        "daemonset_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Daemonset Uids",
+          "type": "array"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "pods": {
+          "items": {
+            "$ref": "#/$defs/SchedulingPodEvidence"
+          },
+          "title": "Pods",
+          "type": "array"
+        },
+        "tainted_node_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Tainted Node Uids",
+          "type": "array"
+        },
+        "unobserved_context": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unobserved Context",
+          "type": "array"
+        }
+      },
+      "required": [
+        "cluster_resource_id",
+        "cluster_uid",
+        "observed_at",
+        "pods"
+      ],
+      "title": "SchedulingInventory",
+      "type": "object"
+    },
+    "SchedulingPodEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "constraints": {
+          "additionalProperties": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "propertyNames": {
+            "enum": [
+              "node_selector",
+              "required_node_affinity",
+              "preferred_node_affinity",
+              "required_pod_affinity",
+              "preferred_pod_affinity",
+              "required_pod_anti_affinity",
+              "preferred_pod_anti_affinity",
+              "hard_topology_spread",
+              "soft_topology_spread",
+              "tolerations",
+              "persistent_volume_claims",
+              "local_emptydir_volumes",
+              "priority_class",
+              "runtime_class",
+              "custom_scheduler",
+              "init_containers",
+              "pod_overhead",
+              "pod_resource_budget"
+            ]
+          },
+          "title": "Constraints",
+          "type": "object"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "namespace": {
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "namespace_pdb_candidates": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Namespace Pdb Candidates",
+          "type": "array"
+        },
+        "namespace_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace Uid"
+        },
+        "pod_name": {
+          "minLength": 1,
+          "title": "Pod Name",
+          "type": "string"
+        },
+        "pod_uid": {
+          "minLength": 1,
+          "title": "Pod Uid",
+          "type": "string"
+        },
+        "unobserved_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unobserved Fields",
+          "type": "array"
+        },
+        "workload_kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Kind"
+        },
+        "workload_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Name"
+        },
+        "workload_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Uid"
+        }
+      },
+      "required": [
+        "pod_uid",
+        "pod_name",
+        "namespace",
+        "constraints"
+      ],
+      "title": "SchedulingPodEvidence",
+      "type": "object"
+    },
+    "SourceCapability": {
+      "additionalProperties": false,
+      "properties": {
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/CapabilityCheck"
+          },
+          "minItems": 1,
+          "title": "Checks",
+          "type": "array"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "baseline",
+            "guarded"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "notice": {
+          "const": "Metric capability is not source attestation or safe-change approval.",
+          "default": "Metric capability is not source attestation or safe-change approval.",
+          "title": "Notice",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "pack_id": {
+          "minLength": 1,
+          "title": "Pack Id",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "source_profile": {
+          "$ref": "#/$defs/SourceDefinition"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown",
+            "unsupported"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pack_id",
+        "mode",
+        "source",
+        "cluster_resource_id",
+        "observed_at",
+        "source_profile",
+        "status",
+        "checks"
+      ],
+      "title": "SourceCapability",
+      "type": "object"
+    },
+    "SourceDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "characterization": {
+          "const": "synthetic",
+          "title": "Characterization",
+          "type": "string"
+        },
+        "characterized_versions": {
+          "additionalProperties": {
+            "items": {
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.]+)?$",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "propertyNames": {
+            "enum": [
+              "prometheus",
+              "kube-state-metrics",
+              "cadvisor",
+              "kubernetes"
+            ]
+          },
+          "title": "Characterized Versions",
+          "type": "object"
+        },
+        "id": {
+          "enum": [
+            "identity-enriched",
+            "cadvisor-ksm"
+          ],
+          "title": "Id",
+          "type": "string"
+        },
+        "identity": {
+          "enum": [
+            "historical",
+            "name-only"
+          ],
+          "title": "Identity",
+          "type": "string"
+        },
+        "joins": {
+          "const": "none",
+          "title": "Joins",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "query_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Query Ids",
+          "type": "array"
+        },
+        "transports": {
+          "items": {
+            "enum": [
+              "prometheus",
+              "azure-managed-prometheus"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Transports",
+          "type": "array"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "identity",
+        "transports",
+        "labels",
+        "query_ids",
+        "characterized_versions",
+        "characterization",
+        "joins",
+        "limitations"
+      ],
+      "title": "SourceDefinition",
+      "type": "object"
+    },
+    "VpaConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "container_policies": {
+          "items": {
+            "$ref": "#/$defs/VpaContainerPolicy"
+          },
+          "title": "Container Policies",
+          "type": "array"
+        },
+        "evidence_issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidence Issues",
+          "type": "array"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "recommendations": {
+          "items": {
+            "$ref": "#/$defs/VpaContainerRecommendation"
+          },
+          "title": "Recommendations",
+          "type": "array"
+        },
+        "uid": {
+          "minLength": 1,
+          "title": "Uid",
+          "type": "string"
+        },
+        "update_mode": {
+          "enum": [
+            "Off",
+            "Initial",
+            "Recreate",
+            "Auto",
+            "InPlaceOrRecreate"
+          ],
+          "title": "Update Mode",
+          "type": "string"
+        }
+      },
+      "required": [
+        "uid",
+        "name",
+        "update_mode"
+      ],
+      "title": "VpaConfiguration",
+      "type": "object"
+    },
+    "VpaContainerPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "container_name": {
+          "minLength": 1,
+          "title": "Container Name",
+          "type": "string"
+        },
+        "controlled_resources": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "cpu",
+                  "memory"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Controlled Resources"
+        },
+        "controlled_values": {
+          "anyOf": [
+            {
+              "enum": [
+                "RequestsOnly",
+                "RequestsAndLimits"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Controlled Values"
+        },
+        "max_allowed": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VpaResourceValues"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "min_allowed": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VpaResourceValues"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "mode": {
+          "enum": [
+            "Auto",
+            "Off"
+          ],
+          "title": "Mode",
+          "type": "string"
+        }
+      },
+      "required": [
+        "container_name",
+        "mode"
+      ],
+      "title": "VpaContainerPolicy",
+      "type": "object"
+    },
+    "VpaContainerRecommendation": {
+      "additionalProperties": false,
+      "properties": {
+        "container_name": {
+          "minLength": 1,
+          "title": "Container Name",
+          "type": "string"
+        },
+        "lower_bound": {
+          "$ref": "#/$defs/VpaResourceValues"
+        },
+        "target": {
+          "$ref": "#/$defs/VpaResourceValues"
+        },
+        "uncapped_target": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VpaResourceValues"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "upper_bound": {
+          "$ref": "#/$defs/VpaResourceValues"
+        }
+      },
+      "required": [
+        "container_name",
+        "target",
+        "lower_bound",
+        "upper_bound"
+      ],
+      "title": "VpaContainerRecommendation",
+      "type": "object"
+    },
+    "VpaResourceValues": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_mcores": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Mcores"
+        },
+        "memory_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Mib"
+        }
+      },
+      "title": "VpaResourceValues",
+      "type": "object"
+    },
+    "WorkloadAutoscalerConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Cluster Uid"
+        },
+        "current_only": {
+          "const": true,
+          "default": true,
+          "title": "Current Only",
+          "type": "boolean"
+        },
+        "hpa_observed": {
+          "default": false,
+          "title": "Hpa Observed",
+          "type": "boolean"
+        },
+        "hpas": {
+          "items": {
+            "$ref": "#/$defs/HpaConfiguration"
+          },
+          "title": "Hpas",
+          "type": "array"
+        },
+        "issues": {
+          "items": {
+            "enum": [
+              "ambiguous_autoscaler_target",
+              "unsupported_hpa_configuration",
+              "unsupported_vpa_configuration",
+              "unsupported_keda_configuration"
+            ],
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "keda_observed": {
+          "default": false,
+          "title": "Keda Observed",
+          "type": "boolean"
+        },
+        "kedas": {
+          "items": {
+            "$ref": "#/$defs/KedaConfiguration"
+          },
+          "title": "Kedas",
+          "type": "array"
+        },
+        "namespace": {
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Namespace Uid"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "replica_constraint_issues": {
+          "anyOf": [
+            {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Replica Constraint Issues"
+        },
+        "replica_pod_configuration_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Replica Pod Configuration Digest"
+        },
+        "target_api_version": {
+          "const": "apps/v1",
+          "title": "Target Api Version",
+          "type": "string"
+        },
+        "target_kind": {
+          "enum": [
+            "Deployment",
+            "StatefulSet"
+          ],
+          "title": "Target Kind",
+          "type": "string"
+        },
+        "target_name": {
+          "minLength": 1,
+          "title": "Target Name",
+          "type": "string"
+        },
+        "vpa_observed": {
+          "default": false,
+          "title": "Vpa Observed",
+          "type": "boolean"
+        },
+        "vpas": {
+          "items": {
+            "$ref": "#/$defs/VpaConfiguration"
+          },
+          "title": "Vpas",
+          "type": "array"
+        },
+        "workload_available_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Available Replicas"
+        },
+        "workload_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Workload Uid"
+        }
+      },
+      "required": [
+        "cluster_resource_id",
+        "cluster_uid",
+        "namespace",
+        "namespace_uid",
+        "workload_uid",
+        "target_api_version",
+        "target_kind",
+        "target_name",
+        "observed_at"
+      ],
+      "title": "WorkloadAutoscalerConfiguration",
+      "type": "object"
+    },
+    "WorkloadSafetyPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_headroom_factor": {
+          "minimum": 1,
+          "title": "Cpu Headroom Factor",
+          "type": "number"
+        },
+        "disruption_reviewed": {
+          "title": "Disruption Reviewed",
+          "type": "boolean"
+        },
+        "maximum_cpu_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Cpu Reduction Ratio",
+          "type": "number"
+        },
+        "maximum_cpu_throttled_ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Maximum Cpu Throttled Ratio",
+          "type": "number"
+        },
+        "memory": {
+          "additionalProperties": {
+            "$ref": "#/$defs/MemorySafetyPolicy"
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Memory",
+          "type": "object"
+        },
+        "memory_limits": {
+          "additionalProperties": {
+            "$ref": "#/$defs/MemoryLimitPolicy"
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Memory Limits",
+          "type": "object"
+        },
+        "minimum_cpu_request_mcores": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Cpu Request Mcores",
+          "type": "number"
+        },
+        "owner": {
+          "minLength": 1,
+          "title": "Owner",
+          "type": "string"
+        },
+        "replicas": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReplicaSafetyPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "reviewed_window_end": {
+          "format": "date-time",
+          "title": "Reviewed Window End",
+          "type": "string"
+        },
+        "reviewed_window_start": {
+          "format": "date-time",
+          "title": "Reviewed Window Start",
+          "type": "string"
+        },
+        "slo_reference": {
+          "minLength": 1,
+          "title": "Slo Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "owner",
+        "slo_reference",
+        "reviewed_window_start",
+        "reviewed_window_end",
+        "disruption_reviewed",
+        "minimum_cpu_request_mcores",
+        "maximum_cpu_reduction_ratio",
+        "cpu_headroom_factor",
+        "maximum_cpu_throttled_ratio"
+      ],
+      "title": "WorkloadSafetyPolicy",
+      "type": "object"
+    },
+    "WorkloadSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "autoscaler_configuration": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WorkloadAutoscalerConfiguration"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "autoscaling": {
+          "$ref": "#/$defs/AutoscalingState"
+        },
+        "containers": {
+          "items": {
+            "$ref": "#/$defs/ContainerSnapshot"
+          },
+          "title": "Containers",
+          "type": "array"
+        },
+        "disruption_budget_present": {
+          "default": false,
+          "title": "Disruption Budget Present",
+          "type": "boolean"
+        },
+        "eviction_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Eviction Events"
+        },
+        "eviction_quality": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetricQuality"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "hpa_replica_history": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HpaReplicaHistory"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "object"
+        },
+        "memory_admission_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Admission Digest"
+        },
+        "memory_admission_issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Memory Admission Issues",
+          "type": "array"
+        },
+        "memory_admission_limit_request_ratio": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Admission Limit Request Ratio"
+        },
+        "memory_admission_maximum_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Admission Maximum Mib"
+        },
+        "memory_admission_minimum_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Admission Minimum Mib"
+        },
+        "memory_admission_observed": {
+          "default": false,
+          "title": "Memory Admission Observed",
+          "type": "boolean"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "namespace": {
+          "title": "Namespace",
+          "type": "string"
+        },
+        "pod_memory_accounting": {
+          "items": {
+            "$ref": "#/$defs/PodMemoryAccounting"
+          },
+          "title": "Pod Memory Accounting",
+          "type": "array"
+        },
+        "priority_class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Priority Class"
+        },
+        "qos_class": {
+          "anyOf": [
+            {
+              "enum": [
+                "Guaranteed",
+                "Burstable",
+                "BestEffort"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qos Class"
+        },
+        "replicas": {
+          "minimum": 0,
+          "title": "Replicas",
+          "type": "integer"
+        },
+        "safety_policy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WorkloadSafetyPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "termination_context": {
+          "items": {
+            "$ref": "#/$defs/ContainerTerminationContext"
+          },
+          "title": "Termination Context",
+          "type": "array"
+        },
+        "termination_issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Termination Issues",
+          "type": "array"
+        },
+        "uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Uid"
+        }
+      },
+      "required": [
+        "kind",
+        "name",
+        "namespace",
+        "replicas",
+        "containers"
+      ],
+      "title": "WorkloadSnapshot",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "clusters": {
+      "items": {
+        "$ref": "#/$defs/ClusterSnapshot"
+      },
+      "title": "Clusters",
+      "type": "array"
+    },
+    "collection_manifest": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CollectionManifest"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "metric_window": {
+      "$ref": "#/$defs/MetricWindow"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source": {
+      "title": "Source",
+      "type": "string"
+    },
+    "source_capabilities": {
+      "items": {
+        "$ref": "#/$defs/SourceCapability"
+      },
+      "title": "Source Capabilities",
+      "type": "array"
+    }
+  },
+  "required": [
+    "generated_at",
+    "metric_window",
+    "source",
+    "clusters"
+  ],
+  "title": "FleetSnapshot",
+  "type": "object"
+}

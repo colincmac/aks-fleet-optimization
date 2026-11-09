@@ -1,0 +1,63 @@
+id: identity-enriched
+version: 1.3.0
+identity: historical
+transports:
+- prometheus
+- azure-managed-prometheus
+labels:
+  cluster_resource_id: azure_resource_id
+  namespace: namespace
+  workload_kind: workload_kind
+  workload: workload
+  container: container
+query_ids:
+- available_replicas
+- cpu_request
+- cpu_throttling
+- cpu_usage
+- desired_replicas
+- evictions
+- hpa_present
+- hpa_min_replicas
+- hpa_max_replicas
+- hpa_desired_replicas
+- hpa_current_replicas
+- keda_present
+- memory_limit
+- memory_request
+- memory_total_usage
+- memory_usage
+- node_allocatable_cpu
+- node_allocatable_memory
+- node_cpu_usage
+- observed_replicas
+- oom_events
+- replica_cpu_envelope
+- replica_cpu_request_max
+- replica_cpu_request_min
+- replica_cpu_throttling
+- replica_memory_envelope
+- replica_memory_limit_max
+- replica_memory_limit_min
+- replica_memory_request_max
+- replica_memory_request_min
+- replica_oom_events
+- replica_restarts
+- restarts
+- unschedulable_pods
+- vpa_present
+characterized_versions:
+  prometheus:
+  - 3.16.0-rc.2
+  kube-state-metrics:
+  - 2.17.0
+characterization: synthetic
+joins: none
+limitations:
+- Historical UIDs and approved complete-roster recordings must already exist; this
+  profile does not create them.
+- HPA replica gauges require retained controller UID and historical target workload
+  UID at each point; current configuration cannot relabel historical counts.
+- Matching labels or version strings are not source attestation or owner approval.
+- Synthetic characterization does not prove raw scrape completeness or live Azure
+  compatibility.

@@ -1,0 +1,478 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-29T11:00:00Z",
+  "metric_window": {
+    "start": "2026-09-29T00:00:00Z",
+    "end": "2026-10-29T00:00:00Z",
+    "sample_count": 8640,
+    "coverage_ratio": 1.0
+  },
+  "source": "approved-fragments",
+  "clusters": [
+    {
+      "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+      "name": "aks-synthetic",
+      "uid": "synthetic-cluster-uid",
+      "subscription_id": "00000000-0000-0000-0000-000000000000",
+      "resource_group": "rg-synthetic",
+      "location": "eastus",
+      "kubernetes_version": null,
+      "environment": "nonproduction",
+      "fleet_id": null,
+      "sku_tier": null,
+      "cost_analysis_enabled": null,
+      "managed_prometheus_enabled": null,
+      "node_pools": [
+        {
+          "name": "userpool",
+          "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool",
+          "vm_size": "Standard_D4s_v5",
+          "mode": "User",
+          "spot": false,
+          "nap_managed": false,
+          "autoscaling_enabled": false,
+          "node_count": 1,
+          "min_count": null,
+          "max_count": null,
+          "allocatable_cpu_mcores": 3500.0,
+          "allocatable_memory_mib": 14000.0,
+          "usage_cpu_p95_mcores": 200.0,
+          "usage_memory_p95_mib": null,
+          "monthly_cost": null,
+          "currency": null,
+          "labels": {},
+          "metric_quality": {
+            "usage_cpu_p95_mcores": {
+              "source": "synthetic",
+              "query_version": "1.0",
+              "step_seconds": 300,
+              "observed_at": "2026-10-29T11:00:00Z",
+              "window": {
+                "start": "2026-09-29T00:00:00Z",
+                "end": "2026-10-29T00:00:00Z",
+                "sample_count": 8640,
+                "coverage_ratio": 1.0
+              },
+              "unit": "mCPU",
+              "minimum": 50.0,
+              "maximum": 300.0,
+              "query_expression": null
+            }
+          }
+        }
+      ],
+      "workloads": [],
+      "scheduling": {
+        "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+        "cluster_uid": "synthetic-cluster-uid",
+        "observed_at": "2026-10-29T11:00:00Z",
+        "pods": [],
+        "tainted_node_uids": [],
+        "cordoned_node_uids": [],
+        "daemonset_uids": [],
+        "unobserved_context": [
+          "apps/v1/daemonsets",
+          "node_cordon:synthetic-node-uid",
+          "node_taints:synthetic-node-uid",
+          "policy/v1/poddisruptionbudgets"
+        ],
+        "issues": []
+      },
+      "capacity": {
+        "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+        "cluster_uid": "synthetic-cluster-uid",
+        "azure_observed_at": "2026-10-29T11:00:00Z",
+        "kubernetes_observed_at": "2026-10-29T11:00:00Z",
+        "provisioning_mode": "Manual",
+        "pools": [
+          {
+            "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool",
+            "name": "userpool",
+            "vm_size": "Standard_D4s_v5",
+            "mode": "User",
+            "node_count": 1,
+            "min_count": null,
+            "max_count": null,
+            "autoscaling_enabled": false,
+            "spot": false,
+            "zones": null,
+            "os_type": null,
+            "intent": null
+          }
+        ],
+        "nap_api_status": {
+          "karpenter.sh/v1/nodepools": "unknown",
+          "karpenter.sh/v1/nodeclaims": "unknown",
+          "karpenter.azure.com/v1beta1/aksnodeclasses": "unknown"
+        },
+        "nap_pools": [],
+        "nap_managed_nodes": [],
+        "issues": []
+      },
+      "tags": {}
+    }
+  ],
+  "collection_manifest": {
+    "schema_version": "1.0",
+    "tenant_id": "00000000-0000-0000-0000-000000000000",
+    "status": "complete",
+    "results": [
+      {
+        "schema_version": "1.0",
+        "collector": "azure-inventory",
+        "status": "complete",
+        "requested_scope": [
+          "00000000-0000-0000-0000-000000000000"
+        ],
+        "completed_scope": [
+          "00000000-0000-0000-0000-000000000000"
+        ],
+        "started_at": "2026-10-29T10:00:00Z",
+        "completed_at": "2026-10-29T11:00:00Z",
+        "source_observed_at": "2026-10-29T10:00:00Z",
+        "pagination_complete": true,
+        "retry_count": 0,
+        "errors": [],
+        "missing_fields": []
+      },
+      {
+        "schema_version": "1.0",
+        "collector": "kubernetes-metadata",
+        "status": "complete",
+        "requested_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "completed_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "started_at": "2026-10-29T10:00:00Z",
+        "completed_at": "2026-10-29T11:00:00Z",
+        "source_observed_at": "2026-10-29T10:00:00Z",
+        "pagination_complete": true,
+        "retry_count": 0,
+        "errors": [],
+        "missing_fields": []
+      },
+      {
+        "schema_version": "1.0",
+        "collector": "prometheus",
+        "status": "complete",
+        "requested_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "completed_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "started_at": "2026-10-29T10:00:00Z",
+        "completed_at": "2026-10-29T11:00:00Z",
+        "source_observed_at": "2026-10-29T10:00:00Z",
+        "pagination_complete": true,
+        "retry_count": 0,
+        "errors": [],
+        "missing_fields": []
+      }
+    ],
+    "source_results": [
+      {
+        "schema_version": "1.0",
+        "collector": "azure-inventory",
+        "status": "complete",
+        "requested_scope": [
+          "00000000-0000-0000-0000-000000000000"
+        ],
+        "completed_scope": [
+          "00000000-0000-0000-0000-000000000000"
+        ],
+        "started_at": "2026-10-29T10:00:00Z",
+        "completed_at": "2026-10-29T11:00:00Z",
+        "source_observed_at": "2026-10-29T10:00:00Z",
+        "pagination_complete": true,
+        "retry_count": 0,
+        "errors": [],
+        "missing_fields": []
+      },
+      {
+        "schema_version": "1.0",
+        "collector": "kubernetes-metadata",
+        "status": "complete",
+        "requested_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "completed_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "started_at": "2026-10-29T10:00:00Z",
+        "completed_at": "2026-10-29T11:00:00Z",
+        "source_observed_at": "2026-10-29T10:00:00Z",
+        "pagination_complete": true,
+        "retry_count": 0,
+        "errors": [],
+        "missing_fields": []
+      },
+      {
+        "schema_version": "1.0",
+        "collector": "prometheus",
+        "status": "complete",
+        "requested_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "completed_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "started_at": "2026-10-29T10:00:00Z",
+        "completed_at": "2026-10-29T11:00:00Z",
+        "source_observed_at": "2026-10-29T10:00:00Z",
+        "pagination_complete": true,
+        "retry_count": 0,
+        "errors": [],
+        "missing_fields": []
+      }
+    ]
+  },
+  "source_capabilities": [
+    {
+      "pack_id": "AKS-NP-001",
+      "mode": "baseline",
+      "source": "synthetic",
+      "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+      "observed_at": "2026-10-29T12:00:00Z",
+      "source_profile": {
+        "id": "identity-enriched",
+        "version": "1.3.0",
+        "identity": "historical",
+        "transports": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "labels": {
+          "cluster_resource_id": "azure_resource_id",
+          "namespace": "namespace",
+          "workload_kind": "workload_kind",
+          "workload": "workload",
+          "container": "container"
+        },
+        "query_ids": [
+          "available_replicas",
+          "cpu_request",
+          "cpu_throttling",
+          "cpu_usage",
+          "desired_replicas",
+          "evictions",
+          "hpa_present",
+          "hpa_min_replicas",
+          "hpa_max_replicas",
+          "hpa_desired_replicas",
+          "hpa_current_replicas",
+          "keda_present",
+          "memory_limit",
+          "memory_request",
+          "memory_total_usage",
+          "memory_usage",
+          "node_allocatable_cpu",
+          "node_allocatable_memory",
+          "node_cpu_usage",
+          "observed_replicas",
+          "oom_events",
+          "replica_cpu_envelope",
+          "replica_cpu_request_max",
+          "replica_cpu_request_min",
+          "replica_cpu_throttling",
+          "replica_memory_envelope",
+          "replica_memory_limit_max",
+          "replica_memory_limit_min",
+          "replica_memory_request_max",
+          "replica_memory_request_min",
+          "replica_oom_events",
+          "replica_restarts",
+          "restarts",
+          "unschedulable_pods",
+          "vpa_present"
+        ],
+        "characterized_versions": {
+          "prometheus": [
+            "3.16.0-rc.2"
+          ],
+          "kube-state-metrics": [
+            "2.17.0"
+          ]
+        },
+        "characterization": "synthetic",
+        "joins": "none",
+        "limitations": [
+          "Historical UIDs and approved complete-roster recordings must already exist; this profile does not create them.",
+          "HPA replica gauges require retained controller UID and historical target workload UID at each point; current configuration cannot relabel historical counts.",
+          "Matching labels or version strings are not source attestation or owner approval.",
+          "Synthetic characterization does not prove raw scrape completeness or live Azure compatibility."
+        ]
+      },
+      "status": "unknown",
+      "checks": [
+        {
+          "code": "profile.transport",
+          "status": "available",
+          "reason_codes": [
+            "declared_transport"
+          ]
+        },
+        {
+          "code": "profile.versions",
+          "status": "unknown",
+          "reason_codes": [
+            "versions_not_declared"
+          ]
+        },
+        {
+          "code": "history.identity",
+          "status": "available",
+          "reason_codes": [
+            "declared_identity_shape"
+          ]
+        },
+        {
+          "code": "node_cpu_usage",
+          "status": "available",
+          "reason_codes": [
+            "series_observed"
+          ]
+        },
+        {
+          "code": "node_allocatable_cpu",
+          "status": "available",
+          "reason_codes": [
+            "series_observed"
+          ]
+        },
+        {
+          "code": "node_allocatable_memory",
+          "status": "available",
+          "reason_codes": [
+            "series_observed"
+          ]
+        }
+      ],
+      "notice": "Metric capability is not source attestation or safe-change approval."
+    },
+    {
+      "pack_id": "AKS-NP-001",
+      "mode": "guarded",
+      "source": "synthetic",
+      "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+      "observed_at": "2026-10-29T12:00:00Z",
+      "source_profile": {
+        "id": "identity-enriched",
+        "version": "1.3.0",
+        "identity": "historical",
+        "transports": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "labels": {
+          "cluster_resource_id": "azure_resource_id",
+          "namespace": "namespace",
+          "workload_kind": "workload_kind",
+          "workload": "workload",
+          "container": "container"
+        },
+        "query_ids": [
+          "available_replicas",
+          "cpu_request",
+          "cpu_throttling",
+          "cpu_usage",
+          "desired_replicas",
+          "evictions",
+          "hpa_present",
+          "hpa_min_replicas",
+          "hpa_max_replicas",
+          "hpa_desired_replicas",
+          "hpa_current_replicas",
+          "keda_present",
+          "memory_limit",
+          "memory_request",
+          "memory_total_usage",
+          "memory_usage",
+          "node_allocatable_cpu",
+          "node_allocatable_memory",
+          "node_cpu_usage",
+          "observed_replicas",
+          "oom_events",
+          "replica_cpu_envelope",
+          "replica_cpu_request_max",
+          "replica_cpu_request_min",
+          "replica_cpu_throttling",
+          "replica_memory_envelope",
+          "replica_memory_limit_max",
+          "replica_memory_limit_min",
+          "replica_memory_request_max",
+          "replica_memory_request_min",
+          "replica_oom_events",
+          "replica_restarts",
+          "restarts",
+          "unschedulable_pods",
+          "vpa_present"
+        ],
+        "characterized_versions": {
+          "prometheus": [
+            "3.16.0-rc.2"
+          ],
+          "kube-state-metrics": [
+            "2.17.0"
+          ]
+        },
+        "characterization": "synthetic",
+        "joins": "none",
+        "limitations": [
+          "Historical UIDs and approved complete-roster recordings must already exist; this profile does not create them.",
+          "HPA replica gauges require retained controller UID and historical target workload UID at each point; current configuration cannot relabel historical counts.",
+          "Matching labels or version strings are not source attestation or owner approval.",
+          "Synthetic characterization does not prove raw scrape completeness or live Azure compatibility."
+        ]
+      },
+      "status": "unknown",
+      "checks": [
+        {
+          "code": "profile.transport",
+          "status": "available",
+          "reason_codes": [
+            "declared_transport"
+          ]
+        },
+        {
+          "code": "profile.versions",
+          "status": "unknown",
+          "reason_codes": [
+            "versions_not_declared"
+          ]
+        },
+        {
+          "code": "history.identity",
+          "status": "available",
+          "reason_codes": [
+            "declared_identity_shape"
+          ]
+        },
+        {
+          "code": "node_cpu_usage",
+          "status": "available",
+          "reason_codes": [
+            "series_observed"
+          ]
+        },
+        {
+          "code": "node_allocatable_cpu",
+          "status": "available",
+          "reason_codes": [
+            "series_observed"
+          ]
+        },
+        {
+          "code": "node_allocatable_memory",
+          "status": "available",
+          "reason_codes": [
+            "series_observed"
+          ]
+        }
+      ],
+      "notice": "Metric capability is not source attestation or safe-change approval."
+    }
+  ]
+}

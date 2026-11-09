@@ -1,0 +1,34 @@
+[
+  {
+    "kind": "workload",
+    "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+    "namespace": "synthetic",
+    "pod": null,
+    "workload_kind": "Deployment",
+    "workload": "synthetic",
+    "workload_uid": "workload-uid",
+    "hpa_uid": null,
+    "pod_uid": null,
+    "container": null,
+    "node_resource_id": null,
+    "node_uid": null,
+    "node_pool_resource_id": null,
+    "membership_digest": null
+  },
+  {
+    "kind": "hpa",
+    "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+    "namespace": "synthetic",
+    "pod": null,
+    "workload_kind": "Deployment",
+    "workload": "synthetic",
+    "workload_uid": "workload-uid",
+    "hpa_uid": "synthetic-hpa-uid",
+    "pod_uid": null,
+    "container": null,
+    "node_resource_id": null,
+    "node_uid": null,
+    "node_pool_resource_id": null,
+    "membership_digest": null
+  }
+]

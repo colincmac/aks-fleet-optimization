@@ -1,0 +1,108 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-28T12:00:00Z",
+  "metric_window": {
+    "start": "2026-10-14T00:00:00Z",
+    "end": "2026-10-28T00:00:00Z",
+    "sample_count": 4032,
+    "coverage_ratio": 0.97
+  },
+  "source": "synthetic-prometheus-fixture",
+  "clusters": [
+    {
+      "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-demo/providers/Microsoft.ContainerService/managedClusters/aks-demo",
+      "name": "aks-demo",
+      "subscription_id": "00000000-0000-0000-0000-000000000000",
+      "resource_group": "rg-demo",
+      "location": "eastus2",
+      "kubernetes_version": "1.32",
+      "environment": "nonproduction",
+      "fleet_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-demo/providers/Microsoft.ContainerService/fleets/demo",
+      "sku_tier": "Standard",
+      "cost_analysis_enabled": true,
+      "managed_prometheus_enabled": true,
+      "tags": {"owner": "platform-team", "environment": "nonproduction"},
+      "node_pools": [
+        {
+          "name": "apps",
+          "vm_size": "Standard_D8as_v5",
+          "mode": "User",
+          "spot": false,
+          "nap_managed": false,
+          "autoscaling_enabled": true,
+          "node_count": 4,
+          "min_count": 3,
+          "max_count": 10,
+          "allocatable_cpu_mcores": 28000,
+          "allocatable_memory_mib": 104000,
+          "usage_cpu_p95_mcores": 4200,
+          "usage_memory_p95_mib": 49000,
+          "monthly_cost": 1200,
+          "currency": "USD",
+          "labels": {"workload-class": "general"}
+        }
+      ],
+      "workloads": [
+        {
+          "kind": "Deployment",
+          "name": "orders-api",
+          "namespace": "orders",
+          "replicas": 4,
+          "priority_class": "business-medium",
+          "disruption_budget_present": true,
+          "autoscaling": {"hpa": false, "vpa_mode": "Off", "keda": false},
+          "labels": {"app.kubernetes.io/part-of": "orders"},
+          "containers": [
+            {
+              "name": "api",
+              "image": "example.invalid/orders-api:1.0.0",
+              "resources": {
+                "request_cpu_mcores": 1000,
+                "limit_cpu_mcores": 2000,
+                "usage_cpu_p50_mcores": 120,
+                "usage_cpu_p95_mcores": 280,
+                "usage_cpu_p99_mcores": 510,
+                "request_memory_mib": 1024,
+                "limit_memory_mib": 2048,
+                "usage_memory_p50_mib": 610,
+                "usage_memory_p95_mib": 780,
+                "usage_memory_p99_mib": 840,
+                "cpu_throttled_ratio": 0.002,
+                "memory_oom_events": 0
+              }
+            }
+          ]
+        },
+        {
+          "kind": "Deployment",
+          "name": "checkout-worker",
+          "namespace": "checkout",
+          "replicas": 2,
+          "disruption_budget_present": false,
+          "autoscaling": {"hpa": false, "vpa_mode": null, "keda": false},
+          "labels": {},
+          "containers": [
+            {
+              "name": "worker",
+              "image": "example.invalid/checkout-worker:1.0.0",
+              "resources": {
+                "request_cpu_mcores": null,
+                "limit_cpu_mcores": 1000,
+                "usage_cpu_p50_mcores": 180,
+                "usage_cpu_p95_mcores": 460,
+                "usage_cpu_p99_mcores": 720,
+                "request_memory_mib": 512,
+                "limit_memory_mib": 1024,
+                "usage_memory_p50_mib": 300,
+                "usage_memory_p95_mib": 430,
+                "usage_memory_p99_mib": 500,
+                "cpu_throttled_ratio": 0.01,
+                "memory_oom_events": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

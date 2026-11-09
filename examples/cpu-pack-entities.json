@@ -1,0 +1,18 @@
+[
+  {
+    "kind": "container",
+    "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+    "namespace": "synthetic",
+    "pod": null,
+    "workload_kind": "StatefulSet",
+    "workload": "synthetic",
+    "workload_uid": "workload-uid",
+    "hpa_uid": null,
+    "pod_uid": "pod-uid",
+    "container": "api",
+    "node_resource_id": null,
+    "node_uid": null,
+    "node_pool_resource_id": null,
+    "membership_digest": null
+  }
+]

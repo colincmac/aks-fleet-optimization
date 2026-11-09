@@ -1,0 +1,35 @@
+name: Feature work package
+description: Propose one bounded product or platform change
+title: "[FEATURE] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: User outcome
+      description: What decision or workflow improves?
+    validations: {required: true}
+  - type: textarea
+    id: scope
+    attributes:
+      label: In scope / out of scope
+    validations: {required: true}
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Data and evidence requirements
+    validations: {required: true}
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria and tests
+    validations: {required: true}
+  - type: dropdown
+    id: permissions
+    attributes:
+      label: Permission impact
+      options:
+        - No new permissions
+        - Additional read-only permissions
+        - Write permission requested (requires ADR and security review)
+    validations: {required: true}

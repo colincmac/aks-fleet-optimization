@@ -1,0 +1,22 @@
+rules:
+  - {id: AKS-SCHED-001, boundary: Current UID-bound placement-constraint investigation; no packing or removable-node claim}
+  - {id: AKS-RQ-001, boundary: Current observed missing CPU request investigation; no numeric target}
+  - {id: AKS-RQ-002, boundary: Baseline CPU request investigation or separately guarded peak/owner-bounded CPU proposal}
+  - {id: AKS-RQ-003, boundary: Qualified CPU request-ratio investigation; not proof of saturation}
+  - {id: AKS-NP-001, boundary: Historical membership-bound aligned pool CPU review; no removable-node claim}
+  - {id: AKS-NP-002, boundary: Current capacity classification and NAP prerequisite investigation; no migration or removable-node claim}
+  - {id: AKS-AS-001, boundary: Current fixed-replica autoscaling investigation; no replica proposal}
+  - {id: AKS-AS-002, boundary: Current HPA utilization/VPA request-denominator interaction; no historical behavior claim}
+  - {id: AKS-AS-003, boundary: Complete UID-bound sampled HPA floor/ceiling/fixed investigation; no target}
+  - {id: AKS-AS-004, boundary: Current KEDA ownership and activation investigation; no safe zero target}
+  - {id: AKS-AS-005, boundary: Default-off configuration/owner/full-grid-bound positive HPA-floor proposal}
+  - {id: AKS-AS-006, boundary: Complete UID-bound changing HPA extrema/context investigation; no oscillation diagnosis}
+  - {id: AKS-AS-007, boundary: Current VPA status/policy bounds investigation; not safe rightsizing}
+  - {id: AKS-MEM-001, boundary: Complete OOM history investigation with independent memory context; no cause or target}
+  - {id: AKS-MEM-002, boundary: Independent memory safety readiness; no numeric proposal}
+  - {id: AKS-MEM-003, boundary: Default-off owner/full-grid-bound direct or complete-roster request-only proposal}
+  - {id: AKS-MEM-004, boundary: Current effective-Pod request accounting; not historical usage or packing}
+  - {id: AKS-MEM-005, boundary: Default-off owner/admission/full-memory/reliability-bound single-Pod limit-only proposal}
+  - {id: AKS-REL-001, boundary: Complete direct or approved roster-bound restart investigation; no root cause}
+  - {id: AKS-REL-002, boundary: Current UID-bound termination reason/time context; no historical cause attribution}
+  - {id: AKS-REL-003, boundary: Complete integral workload eviction history investigation; no node-pressure diagnosis}

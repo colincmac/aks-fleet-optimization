@@ -1,0 +1,47 @@
+schema_version: '1.0'
+scope:
+  tenant_id: 00000000-0000-0000-0000-000000000000
+  subscription_ids:
+  - 00000000-0000-0000-0000-000000000000
+metric_sources:
+- name: synthetic
+  type: azure-managed-prometheus
+  endpoint: https://synthetic.prometheus.monitor.azure.com
+  authentication: default-azure-credential
+  catalog_profile: cadvisor-ksm
+  component_versions:
+    prometheus: 3.16.0-rc.2
+    kube-state-metrics: 2.17.0
+  token_environment_variable: null
+  label_mapping:
+    cluster_resource_id: azure_resource_id
+    namespace: namespace
+    pod: pod
+    container: container
+  declared_retention_days: 30
+  declared_step_seconds: 300
+clusters:
+- resource_id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic
+  metric_source: synthetic
+  environment: nonproduction
+ownership: []
+report_directory: C:\source\aks-fleet-optimization-advisor\examples\reports
+analysis:
+  mode: baseline
+  packs:
+  - AKS-RQ-002
+  pack_parameters: {}
+  pack_locks: {}
+  thresholds:
+    minimum_coverage_ratio: 0.85
+    minimum_observation_days: 30
+    maximum_evidence_age_hours: 24.0
+    maximum_metric_step_seconds: 300
+    minimum_replicas_for_autoscaling_review: 2
+  excluded_namespaces:
+  - kube-system
+  - gatekeeper-system
+  environment_risk:
+    production: high
+    nonproduction: medium
+  enable_estimated_savings: false

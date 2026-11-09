@@ -1,0 +1,38 @@
+schema_version: '1.0'
+id: AKS-AS-002
+version: 2.0.0
+family: autoscaler
+evaluator: autoscaler-interaction
+evidence_kind: inventory
+title: Review HPA/VPA resource interaction
+purpose: Review utilization request-denominator overlap on the exact current container and resource, with exact-container VPA policy taking precedence over wildcard policy.
+sources: []
+parameters: {}
+queries:
+  baseline: {}
+  guarded: {}
+required_evidence:
+  baseline: &evidence
+  - Complete fresh exact-scoped metadata and current workload/controller identities
+  - Observed HPA utilization signals and explicit mutating VPA container resource policies
+  guarded: *evidence
+limitations:
+- Current-only evidence cannot prove request changes, oscillation, controller history or SLO impact.
+- Absolute and external signals do not establish utilization-denominator overlap.
+prerequisites:
+- Have the owner verify the exact current HPA/VPA UIDs, target workload and container resource policy before interpreting the interaction.
+- Distinguish utilization percentages from absolute/external signals; KEDA ownership does not remove a generated HPA's request denominator.
+risks:
+- Changing requests can change utilization feedback and replica decisions.
+- External or absolute signals do not eliminate per-Pod throughput risk; no conflict finding is not proof of safe rightsizing.
+validation:
+- Use approved operational tools to correlate replica/request history with demand, controller behavior and owner-declared SLOs.
+- Validate any separately approved controller change in an isolated canary with explicit availability and rollback criteria.
+rollback:
+- If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline.
+actions:
+  baseline: &actions
+  - Review controller responsibilities and resource signals with the owner; no controller change or numeric resource reduction is proposed.
+  guarded: *actions
+baseline_summary: A current HPA utilization target uses a resource request that a matching VPA may change. Review the shared request denominator; configuration alone does not establish oscillation or SLO impact. Initial mode affects new Pods rather than continuously updating them.
+guarded_summary: A current HPA utilization target uses a resource request that a matching VPA may change. Review the shared request denominator; configuration alone does not establish oscillation or SLO impact. Initial mode affects new Pods rather than continuously updating them.

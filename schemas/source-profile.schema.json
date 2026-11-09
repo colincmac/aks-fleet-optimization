@@ -1,0 +1,107 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "characterization": {
+      "const": "synthetic",
+      "title": "Characterization",
+      "type": "string"
+    },
+    "characterized_versions": {
+      "additionalProperties": {
+        "items": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.]+)?$",
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "propertyNames": {
+        "enum": [
+          "prometheus",
+          "kube-state-metrics",
+          "cadvisor",
+          "kubernetes"
+        ]
+      },
+      "title": "Characterized Versions",
+      "type": "object"
+    },
+    "id": {
+      "enum": [
+        "identity-enriched",
+        "cadvisor-ksm"
+      ],
+      "title": "Id",
+      "type": "string"
+    },
+    "identity": {
+      "enum": [
+        "historical",
+        "name-only"
+      ],
+      "title": "Identity",
+      "type": "string"
+    },
+    "joins": {
+      "const": "none",
+      "title": "Joins",
+      "type": "string"
+    },
+    "labels": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Labels",
+      "type": "object"
+    },
+    "limitations": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Limitations",
+      "type": "array"
+    },
+    "query_ids": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9_]*$",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Query Ids",
+      "type": "array"
+    },
+    "transports": {
+      "items": {
+        "enum": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Transports",
+      "type": "array"
+    },
+    "version": {
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "identity",
+    "transports",
+    "labels",
+    "query_ids",
+    "characterized_versions",
+    "characterization",
+    "joins",
+    "limitations"
+  ],
+  "title": "SourceDefinition",
+  "type": "object"
+}

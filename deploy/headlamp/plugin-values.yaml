@@ -1,0 +1,33 @@
+# Operator-reviewed overlay for the upstream Headlamp Helm chart.
+# No plugin downloads, credentials, role bindings or public ingress are enabled.
+config:
+  pluginsDir: /headlamp/plugins
+  watchPlugins: false
+  unsafeUseServiceAccountToken: false
+  oidc:
+    secret:
+      create: false
+clusterRoleBinding:
+  create: false
+pluginsManager:
+  enabled: false
+ingress:
+  enabled: false
+service:
+  type: ClusterIP
+securityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: [ALL]
+  seccompProfile:
+    type: RuntimeDefault
+volumeMounts:
+  - name: fleet-efficiency-plugin
+    mountPath: /headlamp/plugins/headlamp-fleet-efficiency
+    readOnly: true
+volumes:
+  - name: fleet-efficiency-plugin
+    configMap:
+      name: headlamp-fleet-efficiency-plugin

@@ -1,0 +1,334 @@
+{
+  "card": {
+    "manifest": {
+      "schema_version": "1.0",
+      "id": "AKS-RQ-002",
+      "version": "2.1.0",
+      "family": "cpu",
+      "evaluator": "cpu-request-review",
+      "evidence_kind": "metrics",
+      "title": "Review CPU request",
+      "purpose": "Compare observed CPU usage with the admitted request, then independently evaluate a policy-bounded reduction.",
+      "sources": [
+        "prometheus",
+        "azure-managed-prometheus"
+      ],
+      "parameters": {
+        "review_ratio": 0.4
+      },
+      "queries": {
+        "baseline": {
+          "container": [
+            "cpu_usage",
+            "cpu_request"
+          ],
+          "unresolved_container": [
+            "cpu_usage",
+            "cpu_request"
+          ],
+          "workload_container": [
+            "replica_cpu_envelope",
+            "replica_cpu_request_min",
+            "replica_cpu_request_max"
+          ]
+        },
+        "guarded": {
+          "container": [
+            "cpu_usage",
+            "cpu_request",
+            "cpu_throttling",
+            "oom_events"
+          ],
+          "workload_container": [
+            "replica_cpu_envelope",
+            "replica_cpu_request_min",
+            "replica_cpu_request_max",
+            "replica_cpu_throttling",
+            "replica_oom_events"
+          ]
+        }
+      },
+      "required_evidence": {
+        "baseline": [
+          "Complete fresh scoped Azure, Kubernetes and Prometheus receipts",
+          "Exact cluster/workload identity and declared direct or approved replica-envelope usage",
+          "Observed positive admitted CPU request and qualified P95 usage",
+          "Configured observation duration, coverage, freshness and resolution"
+        ],
+        "guarded": [
+          "All baseline evidence, qualified P99/observed peaks, throttling and OOM history",
+          "Known compatible autoscalers and no observed OOM or workload eviction veto",
+          "Owner-reviewed window, disruption policy, environment, minimum, headroom and reduction bounds"
+        ]
+      },
+      "limitations": [
+        "Low CPU usage is not a safe reduction target or proof a node can be removed.",
+        "Requests are not CPU limits; a request ratio is not saturation.",
+        "Current identities cannot reconstruct missing history or deleted membership.",
+        "Replica-envelope statistics are conservative per-replica values, not workload-total percentiles.",
+        "Returned evaluation-point coverage is not raw scrape completeness."
+      ],
+      "prerequisites": [
+        "Confirm the metric window contains peak and business-critical periods.",
+        "Review P99 usage, throttling, startup and failover behavior."
+      ],
+      "risks": [
+        "Historical usage might not represent future peaks.",
+        "Lower requests can change placement and noisy-neighbor behavior."
+      ],
+      "validation": [
+        "Run VPA in Off mode and compare recommendations.",
+        "Canary an independently approved request change and verify SLOs under load."
+      ],
+      "rollback": [
+        "Restore the previous CPU request of __current_cpu_request__ mCPU in source configuration through the owning delivery pipeline.",
+        "Stop promotion if SLOs, throttling, OOM or restarts regress; remeasure before proposing another change."
+      ],
+      "baseline_rollback": [
+        "No numeric change is proposed; do not apply a baseline investigation."
+      ],
+      "summary_variants": {},
+      "actions": {
+        "baseline": [
+          "Review observed usage, owner requirements and missing guarded evidence."
+        ],
+        "guarded": [
+          "Open a review PR with the proposed request and rollback criteria."
+        ]
+      },
+      "baseline_summary": "Observed P95 CPU usage is below the configured fraction of the current admitted request. This is an investigation, not a safe reduction target; owner policy, peaks and reliability must be reviewed independently.",
+      "guarded_summary": "Historical CPU usage is below the request. The proposal respects observed peaks, declared headroom and owner policy; validate it through a separately approved canary."
+    },
+    "provenance": {
+      "id": "AKS-RQ-002",
+      "version": "2.1.0",
+      "digest": "b347d11ef3b28bf5b7e851d3d01cff46b461a8d9ae120e4fdab983513ab66344",
+      "parameters": {
+        "review_ratio": 0.4
+      },
+      "queries": [
+        {
+          "id": "cpu_request",
+          "version": "1.0.0",
+          "unit": "mCPU",
+          "kind": "container",
+          "delta": false,
+          "expression": "kube_pod_container_resource_requests{__scope__,resource=\"cpu\",unit=\"core\"} * 1000"
+        },
+        {
+          "id": "cpu_throttling",
+          "version": "1.0.0",
+          "unit": "ratio",
+          "kind": "container",
+          "delta": false,
+          "expression": "rate(container_cpu_cfs_throttled_periods_total{__scope__}[5m]) / rate(container_cpu_cfs_periods_total{__scope__}[5m])"
+        },
+        {
+          "id": "cpu_usage",
+          "version": "1.0.0",
+          "unit": "mCPU",
+          "kind": "container",
+          "delta": false,
+          "expression": "rate(container_cpu_usage_seconds_total{__scope__}[5m]) * 1000"
+        },
+        {
+          "id": "oom_events",
+          "version": "1.0.0",
+          "unit": "events",
+          "kind": "container",
+          "delta": true,
+          "expression": "increase(container_oom_events_total{__scope__}[__step__s])"
+        },
+        {
+          "id": "replica_cpu_envelope",
+          "version": "1.0.0",
+          "unit": "mCPU",
+          "kind": "workload_container",
+          "delta": false,
+          "expression": "aks_advisor:workload_container_cpu_max_mcores{__scope__}"
+        },
+        {
+          "id": "replica_cpu_request_max",
+          "version": "1.0.0",
+          "unit": "mCPU",
+          "kind": "workload_container",
+          "delta": false,
+          "expression": "aks_advisor:workload_container_cpu_request_max_mcores{__scope__}"
+        },
+        {
+          "id": "replica_cpu_request_min",
+          "version": "1.0.0",
+          "unit": "mCPU",
+          "kind": "workload_container",
+          "delta": false,
+          "expression": "aks_advisor:workload_container_cpu_request_min_mcores{__scope__}"
+        },
+        {
+          "id": "replica_cpu_throttling",
+          "version": "1.0.0",
+          "unit": "ratio",
+          "kind": "workload_container",
+          "delta": false,
+          "expression": "aks_advisor:workload_container_cpu_throttling_max{__scope__}"
+        },
+        {
+          "id": "replica_oom_events",
+          "version": "1.0.0",
+          "unit": "events",
+          "kind": "workload_container",
+          "delta": true,
+          "expression": "aks_advisor:workload_container_oom_increase{__scope__,step_seconds=\"__step__\"}"
+        }
+      ]
+    },
+    "parameter_guidance": {
+      "review_ratio": {
+        "unit": "ratio",
+        "bounds": "0 < review_ratio < 1",
+        "implication": "Investigation threshold only, not a utilization target or proposal bound. Equality produces no signal; safety/owner gates cannot be overridden."
+      }
+    },
+    "synthetic_example": {
+      "mode": "baseline",
+      "packs": [
+        "AKS-RQ-002"
+      ],
+      "pack_parameters": {
+        "AKS-RQ-002": {
+          "review_ratio": 0.4
+        }
+      },
+      "pack_locks": {
+        "AKS-RQ-002": "b347d11ef3b28bf5b7e851d3d01cff46b461a8d9ae120e4fdab983513ab66344"
+      },
+      "thresholds": {
+        "minimum_coverage_ratio": 0.85,
+        "minimum_observation_days": 30,
+        "maximum_evidence_age_hours": 24.0,
+        "maximum_metric_step_seconds": 300,
+        "minimum_replicas_for_autoscaling_review": 2
+      },
+      "excluded_namespaces": [
+        "kube-system",
+        "gatekeeper-system"
+      ],
+      "environment_risk": {
+        "production": "high",
+        "nonproduction": "medium"
+      },
+      "enable_estimated_savings": false
+    }
+  },
+  "mode": "guarded",
+  "capabilities": [
+    {
+      "pack_id": "AKS-RQ-002",
+      "mode": "guarded",
+      "source": "synthetic",
+      "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+      "observed_at": "2026-10-29T12:00:00Z",
+      "source_profile": {
+        "id": "identity-enriched",
+        "version": "1.3.0",
+        "identity": "historical",
+        "transports": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "labels": {
+          "cluster_resource_id": "azure_resource_id",
+          "namespace": "namespace",
+          "workload_kind": "workload_kind",
+          "workload": "workload",
+          "container": "container"
+        },
+        "query_ids": [
+          "available_replicas",
+          "cpu_request",
+          "cpu_throttling",
+          "cpu_usage",
+          "desired_replicas",
+          "evictions",
+          "hpa_present",
+          "hpa_min_replicas",
+          "hpa_max_replicas",
+          "hpa_desired_replicas",
+          "hpa_current_replicas",
+          "keda_present",
+          "memory_limit",
+          "memory_request",
+          "memory_total_usage",
+          "memory_usage",
+          "node_allocatable_cpu",
+          "node_allocatable_memory",
+          "node_cpu_usage",
+          "observed_replicas",
+          "oom_events",
+          "replica_cpu_envelope",
+          "replica_cpu_request_max",
+          "replica_cpu_request_min",
+          "replica_cpu_throttling",
+          "replica_memory_envelope",
+          "replica_memory_limit_max",
+          "replica_memory_limit_min",
+          "replica_memory_request_max",
+          "replica_memory_request_min",
+          "replica_oom_events",
+          "replica_restarts",
+          "restarts",
+          "unschedulable_pods",
+          "vpa_present"
+        ],
+        "characterized_versions": {
+          "prometheus": [
+            "3.16.0-rc.2"
+          ],
+          "kube-state-metrics": [
+            "2.17.0"
+          ]
+        },
+        "characterization": "synthetic",
+        "joins": "none",
+        "limitations": [
+          "Historical UIDs and approved complete-roster recordings must already exist; this profile does not create them.",
+          "HPA replica gauges require retained controller UID and historical target workload UID at each point; current configuration cannot relabel historical counts.",
+          "Matching labels or version strings are not source attestation or owner approval.",
+          "Synthetic characterization does not prove raw scrape completeness or live Azure compatibility."
+        ]
+      },
+      "status": "unknown",
+      "checks": [
+        {
+          "code": "profile.transport",
+          "status": "available",
+          "reason_codes": [
+            "declared_transport"
+          ]
+        },
+        {
+          "code": "profile.versions",
+          "status": "unknown",
+          "reason_codes": [
+            "versions_not_declared"
+          ]
+        },
+        {
+          "code": "history.identity",
+          "status": "available",
+          "reason_codes": [
+            "declared_identity_shape"
+          ]
+        },
+        {
+          "code": "source.evidence",
+          "status": "unknown",
+          "reason_codes": [
+            "not_collected"
+          ]
+        }
+      ],
+      "notice": "Metric capability is not source attestation or safe-change approval."
+    }
+  ],
+  "resolved_queries": []
+}

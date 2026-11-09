@@ -1,0 +1,80 @@
+schema_version: '1.0'
+id: AKS-MEM-002
+version: 2.0.0
+family: memory
+evaluator: memory-safety-review
+evidence_kind: metrics
+title: Review memory safety
+purpose: Supported memory evidence and owner-reviewed scenarios pass the readiness
+  gates. This is not a safe memory target, a waste claim or approval to change requests
+  or limits.
+sources:
+- prometheus
+- azure-managed-prometheus
+parameters: {}
+queries:
+  baseline: &id001
+    container:
+    - memory_request
+    - memory_limit
+    - memory_usage
+    - oom_events
+    - restarts
+    workload_container:
+    - replica_memory_envelope
+    - replica_memory_request_min
+    - replica_memory_request_max
+    - replica_memory_limit_min
+    - replica_memory_limit_max
+    - replica_oom_events
+    - replica_restarts
+    workload:
+    - desired_replicas
+    - available_replicas
+    - observed_replicas
+    - hpa_present
+    - keda_present
+    - vpa_present
+    - unschedulable_pods
+    - evictions
+  guarded: *id001
+required_evidence:
+  baseline: &id002
+  - Complete fresh exact-scoped sources and aligned metric quality
+  - Exact historical identities and complete required history; missing is not zero
+  - Independent owner-reviewed window/SLO/disruption/scenario bounds
+  - Existing QoS, admission, controller, full-grid and reliability guards
+  guarded: *id002
+limitations:
+- Supported memory evidence and owner-reviewed scenarios pass the readiness gates.
+  This is not a safe memory target, a waste claim or approval to change requests or
+  limits.
+- References/digests are integrity declarations, not source attestation or approval.
+prerequisites:
+- Independently verify owner-reviewed startup, failover and eviction evidence; references
+  and declarations are not source attestation.
+- Keep limits and QoS unchanged; any future target needs separate owner approval and
+  effective-Pod validation.
+risks:
+- Working set and sampled peaks can omit relevant memory and bursts.
+- Lower requests can increase node-pressure eviction risk even when the QoS class
+  is unchanged.
+validation:
+- Validate startup, peak load and failover against owner-declared SLOs, OOM, restarts
+  and evictions before approving any change.
+rollback:
+- If a separately approved change regresses guardrails, stop promotion and revert
+  its Git commit through the owning delivery pipeline.
+actions:
+  baseline:
+  - Review memory safety evidence only; no numeric memory request or limit change
+    is proposed.
+  guarded:
+  - Review memory safety evidence only; no numeric memory request or limit change
+    is proposed.
+baseline_summary: Supported memory evidence and owner-reviewed scenarios pass the
+  readiness gates. This is not a safe memory target, a waste claim or approval to
+  change requests or limits.
+guarded_summary: Supported memory evidence and owner-reviewed scenarios pass the readiness
+  gates. This is not a safe memory target, a waste claim or approval to change requests
+  or limits.

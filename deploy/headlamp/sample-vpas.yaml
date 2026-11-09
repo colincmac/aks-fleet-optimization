@@ -1,0 +1,348 @@
+# Synthetic fixtures for 2026-10-30T12:00:00Z. Not approved changes.
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: catalog-api
+  namespace: storefront
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: catalog-api
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 650m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: order-worker
+  namespace: operations
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: order-worker
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 1400m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: inventory-sync
+  namespace: storefront
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: inventory-sync
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 350m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: checkout-api
+  namespace: operations
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: checkout-api
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 750m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: search-indexer
+  namespace: storefront
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: search-indexer
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 650m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: notification-worker
+  namespace: operations
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: notification-worker
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 1400m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: edge-gateway
+  namespace: storefront
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: edge-gateway
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 350m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: session-store
+  namespace: operations
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: session-store
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 750m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: report-worker
+  namespace: storefront
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: report-worker
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 650m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: billing-api
+  namespace: operations
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: billing-api
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 1400m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: event-router
+  namespace: storefront
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: event-router
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 350m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: image-worker
+  namespace: operations
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: image-worker
+  updatePolicy:
+    updateMode: Off
+status:
+  recommendation:
+    containerRecommendations:
+      - containerName: api
+        lowerBound:
+          cpu: 400m
+          memory: 1Gi
+        target:
+          cpu: 750m
+          memory: 1536Mi
+        upperBound:
+          cpu: 900m
+          memory: 2Gi
+        uncappedTarget:
+          cpu: 600m
+          memory: 1400Mi

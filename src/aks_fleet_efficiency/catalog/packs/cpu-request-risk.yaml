@@ -1,0 +1,32 @@
+schema_version: "1.0"
+id: AKS-RQ-003
+version: "2.0.0"
+family: cpu
+evaluator: cpu-request-risk
+title: Review CPU request risk
+purpose: Correlate high observed usage relative to an admitted request with throttling, limits and SLOs; do not infer saturation.
+sources: [prometheus, azure-managed-prometheus]
+parameters:
+  review_ratio: 0.9
+queries:
+  baseline:
+    container: [cpu_usage, cpu_request, cpu_throttling]
+    workload_container: [replica_cpu_envelope, replica_cpu_request_min, replica_cpu_request_max, replica_cpu_throttling]
+  guarded:
+    container: [cpu_usage, cpu_request, cpu_throttling]
+    workload_container: [replica_cpu_envelope, replica_cpu_request_min, replica_cpu_request_max, replica_cpu_throttling]
+required_evidence:
+  baseline: [Complete fresh scoped sources, Observed positive admitted request, Qualified P95 CPU and throttling evidence]
+  guarded: [Complete fresh scoped sources, Observed positive admitted request, Qualified P95 CPU and throttling evidence]
+limitations:
+  - Requests are not CPU limits; a request ratio does not establish saturation.
+  - This independent review never proposes resources, replicas or financial savings.
+prerequisites: [Correlate saturation with latency and error SLOs.]
+risks: [Densification can amplify contention.]
+validation: [Load test at peak concurrency and failover conditions.]
+rollback: [No target is proposed; revert a separately approved change through its owning delivery pipeline if guardrails regress.]
+actions:
+  baseline: [Review CPU request/limit policy and horizontal scaling signal.]
+  guarded: [Review CPU request/limit policy and horizontal scaling signal.]
+baseline_summary: P95 CPU usage is close to or above the request. Requests are not CPU limits; this ratio alone does not establish saturation. Review throttling, limits and SLOs before denser placement.
+guarded_summary: P95 CPU usage is close to or above the request. Requests are not CPU limits; this ratio alone does not establish saturation. Review throttling, limits and SLOs before denser placement.

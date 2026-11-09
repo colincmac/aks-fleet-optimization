@@ -1,0 +1,413 @@
+{
+  "$defs": {
+    "AdvisorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "enable_estimated_savings": {
+          "default": false,
+          "title": "Enable Estimated Savings",
+          "type": "boolean"
+        },
+        "environment_risk": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Environment Risk",
+          "type": "object"
+        },
+        "excluded_namespaces": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Excluded Namespaces",
+          "type": "array"
+        },
+        "mode": {
+          "default": "baseline",
+          "enum": [
+            "baseline",
+            "guarded"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "pack_locks": {
+          "patternProperties": {
+            "^AKS-[A-Z]+-[0-9]{3}$": {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            }
+          },
+          "title": "Pack Locks",
+          "type": "object"
+        },
+        "pack_parameters": {
+          "patternProperties": {
+            "^AKS-[A-Z]+-[0-9]{3}$": {
+              "$ref": "#/$defs/PackParameters"
+            }
+          },
+          "title": "Pack Parameters",
+          "type": "object"
+        },
+        "packs": {
+          "anyOf": [
+            {
+              "items": {
+                "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Packs"
+        },
+        "thresholds": {
+          "$ref": "#/$defs/Thresholds"
+        }
+      },
+      "title": "AdvisorConfig",
+      "type": "object"
+    },
+    "AssessmentScope": {
+      "additionalProperties": false,
+      "properties": {
+        "subscription_ids": {
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Subscription Ids",
+          "type": "array"
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "subscription_ids"
+      ],
+      "title": "AssessmentScope",
+      "type": "object"
+    },
+    "ClusterTarget": {
+      "additionalProperties": false,
+      "properties": {
+        "environment": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Environment"
+        },
+        "metric_source": {
+          "anyOf": [
+            {
+              "pattern": "^[a-z][a-z0-9-]{0,62}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metric Source"
+        },
+        "resource_id": {
+          "title": "Resource Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource_id"
+      ],
+      "title": "ClusterTarget",
+      "type": "object"
+    },
+    "MetricSourceProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "authentication": {
+          "enum": [
+            "anonymous",
+            "default-azure-credential",
+            "bearer-environment"
+          ],
+          "title": "Authentication",
+          "type": "string"
+        },
+        "catalog_profile": {
+          "default": "identity-enriched",
+          "enum": [
+            "identity-enriched",
+            "cadvisor-ksm"
+          ],
+          "title": "Catalog Profile",
+          "type": "string"
+        },
+        "component_versions": {
+          "additionalProperties": {
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.]+)?$",
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "prometheus",
+              "kube-state-metrics",
+              "cadvisor",
+              "kubernetes"
+            ]
+          },
+          "title": "Component Versions",
+          "type": "object"
+        },
+        "declared_retention_days": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Declared Retention Days"
+        },
+        "declared_step_seconds": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Declared Step Seconds"
+        },
+        "endpoint": {
+          "format": "uri",
+          "minLength": 1,
+          "title": "Endpoint",
+          "type": "string"
+        },
+        "label_mapping": {
+          "additionalProperties": {
+            "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "cluster_resource_id",
+              "namespace",
+              "workload",
+              "workload_kind",
+              "container",
+              "pod"
+            ]
+          },
+          "title": "Label Mapping",
+          "type": "object"
+        },
+        "name": {
+          "pattern": "^[a-z][a-z0-9-]{0,62}$",
+          "title": "Name",
+          "type": "string"
+        },
+        "token_environment_variable": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z_][A-Z0-9_]*$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Token Environment Variable"
+        },
+        "type": {
+          "enum": [
+            "prometheus",
+            "azure-managed-prometheus"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "type",
+        "endpoint",
+        "authentication"
+      ],
+      "title": "MetricSourceProfile",
+      "type": "object"
+    },
+    "OwnershipMapping": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "namespace": {
+          "maxLength": 63,
+          "pattern": "^[a-z0-9](?:[-a-z0-9]*[a-z0-9])?$",
+          "title": "Namespace",
+          "type": "string"
+        },
+        "owner": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Owner",
+          "type": "string"
+        },
+        "policy_reference": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Policy Reference"
+        }
+      },
+      "required": [
+        "cluster_resource_id",
+        "namespace",
+        "owner"
+      ],
+      "title": "OwnershipMapping",
+      "type": "object"
+    },
+    "PackParameters": {
+      "additionalProperties": false,
+      "properties": {
+        "review_ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Ratio"
+        }
+      },
+      "title": "PackParameters",
+      "type": "object"
+    },
+    "Thresholds": {
+      "additionalProperties": false,
+      "properties": {
+        "maximum_evidence_age_hours": {
+          "default": 24,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Evidence Age Hours",
+          "type": "number"
+        },
+        "maximum_metric_step_seconds": {
+          "default": 300,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Metric Step Seconds",
+          "type": "integer"
+        },
+        "minimum_coverage_ratio": {
+          "default": 0.85,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Minimum Coverage Ratio",
+          "type": "number"
+        },
+        "minimum_observation_days": {
+          "default": 30,
+          "minimum": 1,
+          "title": "Minimum Observation Days",
+          "type": "integer"
+        },
+        "minimum_replicas_for_autoscaling_review": {
+          "default": 2,
+          "minimum": 1,
+          "title": "Minimum Replicas For Autoscaling Review",
+          "type": "integer"
+        }
+      },
+      "title": "Thresholds",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "analysis": {
+      "$ref": "#/$defs/AdvisorConfig"
+    },
+    "clusters": {
+      "items": {
+        "$ref": "#/$defs/ClusterTarget"
+      },
+      "title": "Clusters",
+      "type": "array"
+    },
+    "metric_sources": {
+      "items": {
+        "$ref": "#/$defs/MetricSourceProfile"
+      },
+      "title": "Metric Sources",
+      "type": "array"
+    },
+    "ownership": {
+      "items": {
+        "$ref": "#/$defs/OwnershipMapping"
+      },
+      "title": "Ownership",
+      "type": "array"
+    },
+    "report_directory": {
+      "format": "path",
+      "title": "Report Directory",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "scope": {
+      "$ref": "#/$defs/AssessmentScope"
+    }
+  },
+  "required": [
+    "scope",
+    "report_directory"
+  ],
+  "title": "OnboardingConfig",
+  "type": "object"
+}

@@ -1,0 +1,19 @@
+schema_version: '1.0'
+scope:
+  tenant_id: 00000000-0000-0000-0000-000000000000
+  subscription_ids: [00000000-0000-0000-0000-000000000000]
+clusters:
+  - resource_id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic
+    metric_source: synthetic
+    environment: nonproduction
+  - resource_id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic-denied
+    metric_source: synthetic
+    environment: nonproduction
+metric_sources:
+  - name: synthetic
+    type: prometheus
+    endpoint: https://metrics.example.invalid
+    authentication: anonymous
+    declared_retention_days: 30
+    declared_step_seconds: 300
+report_directory: reports

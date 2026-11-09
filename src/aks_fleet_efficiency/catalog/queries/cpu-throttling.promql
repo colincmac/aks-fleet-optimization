@@ -1,0 +1,1 @@
+rate(container_cpu_cfs_throttled_periods_total{__scope__}[5m]) / rate(container_cpu_cfs_periods_total{__scope__}[5m])

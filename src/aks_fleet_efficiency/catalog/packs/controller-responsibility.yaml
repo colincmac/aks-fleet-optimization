@@ -1,0 +1,44 @@
+schema_version: '1.0'
+id: AKS-AS-004
+version: 2.0.0
+family: autoscaler
+evaluator: controller-responsibility
+evidence_kind: inventory
+title: Review controller ownership and activation
+purpose: Investigate current KEDA ownership, generated HPA chains, activation and multiple controllers without interpreting trigger values or collecting authentication.
+sources: []
+parameters: {}
+queries:
+  baseline: {}
+  guarded: {}
+required_evidence:
+  baseline: &evidence
+  - Complete fresh exact-scoped metadata with observed HPA/VPA/KEDA APIs
+  - Exact workload/controller UIDs and resolved KEDA generated-HPA ownership
+  - Explicit trigger types, metric types, minima/maxima, polling and cooldown
+  guarded: *evidence
+limitations:
+- A generated HPA and its KEDA owner are one chain, not two competing HPAs.
+- A zero minimum is an investigation only, not safe zero capacity or observed activation.
+prerequisites:
+- Verify exact workload/controller UIDs, approved source scope and owner-declared availability and SLO policy.
+- For KEDA, verify activation, trigger authentication and generated HPA behavior in operator tools; trigger values and credentials are never collected by the advisor.
+risks:
+- Current settings and sampled extrema do not establish controller health or safe resource/replica reductions.
+- Scale-to-zero can violate cold-start, state, quorum, throughput or availability requirements.
+validation:
+- Correlate approved controller/demand history with representative peak load, startup, failover and owner-declared SLOs.
+- Canary any separately approved change one dimension at a time; stop promotion on availability or throughput regression.
+rollback:
+- If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline.
+actions:
+  baseline: &actions
+  - Investigate with the owner; no numeric resource request, replica target or controller change is proposed by this investigation.
+  guarded: *actions
+baseline_summary: Review current controller responsibilities; configuration does not prove oscillation, demand or SLO impact.
+guarded_summary: Review current controller responsibilities; configuration does not prove oscillation, demand or SLO impact.
+summary_variants:
+  multiple-controllers: Multiple controllers target the same current workload. Review their responsibilities; this does not prove oscillation or SLO impact.
+  keda-chain: KEDA owns the observed generated HPA; these are one scaling chain, not two competing HPAs. Trigger types and metric types are current configuration, not proof of demand or activation.
+  cpu-memory-only: CPU/memory-only triggers cannot activate a workload from zero; review an independent activation signal and availability policy.
+  zero-minimum: A declared zero minimum is only a scale-to-zero review candidate; verify activation, cold-start, state and availability requirements.

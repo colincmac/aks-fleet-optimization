@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "step_seconds": 300,
+  "clusters": [
+    {
+      "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+      "expected_cluster_uid": "REPLACE_WITH_INDEPENDENTLY_VERIFIED_KUBE_SYSTEM_UID",
+      "expected_node_resource_group": "REPLACE_WITH_VERIFIED_NODE_RESOURCE_GROUP",
+      "entities": [],
+      "metrics": ["cpu_usage"]
+    }
+  ],
+  "maximum_reads": 250,
+  "maximum_objects": 10000,
+  "maximum_queries": 1,
+  "maximum_duration_seconds": 300,
+  "maximum_metric_evaluations": 100000,
+  "maximum_series_per_response": 100
+}

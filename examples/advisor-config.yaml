@@ -1,0 +1,21 @@
+thresholds:
+  minimum_coverage_ratio: 0.85
+  minimum_observation_days: 30
+  maximum_evidence_age_hours: 24
+  maximum_metric_step_seconds: 300
+  minimum_replicas_for_autoscaling_review: 2
+excluded_namespaces:
+  - kube-system
+  - gatekeeper-system
+environment_risk:
+  production: high
+  nonproduction: medium
+enable_estimated_savings: false
+mode: baseline
+pack_parameters:
+  AKS-RQ-003:
+    review_ratio: 0.90
+  AKS-NP-001:
+    review_ratio: 0.20
+  AKS-RQ-002:
+    review_ratio: 0.40

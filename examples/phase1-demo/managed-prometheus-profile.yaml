@@ -1,0 +1,28 @@
+schema_version: '1.0'
+scope:
+  tenant_id: 00000000-0000-0000-0000-000000000000
+  subscription_ids:
+    - 00000000-0000-0000-0000-000000000000
+clusters:
+  - resource_id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic
+    metric_source: demo-managed
+    environment: nonproduction
+metric_sources:
+  - name: demo-managed
+    type: azure-managed-prometheus
+    catalog_profile: cadvisor-ksm
+    endpoint: https://synthetic.prometheus.monitor.azure.com
+    authentication: default-azure-credential
+    label_mapping:
+      cluster_resource_id: azure_resource_id
+      namespace: namespace
+      pod: pod
+      container: container
+    declared_step_seconds: 300
+report_directory: reports
+analysis:
+  mode: baseline
+  packs:
+    - AKS-RQ-002
+  thresholds:
+    minimum_observation_days: 30

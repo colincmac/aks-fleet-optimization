@@ -1,0 +1,17 @@
+{
+  "version": "3.16.0-rc.2",
+  "revision": "e5102713ab342720d4be1914ccb44bf1eb9b19a5",
+  "release": "https://github.com/prometheus/prometheus/releases/tag/v3.16.0-rc.2",
+  "platforms": {
+    "windows-amd64": {
+      "archive": "prometheus-3.16.0-rc.2.windows-amd64.zip",
+      "archive_sha256": "1b1ed4a025a6c4a9cd904a2ee3479a547ec21b4f857f6ca17607f9c56451d49e",
+      "binary_sha256": "29f237bc51321fe0d211378b49438a4cc527a932684d48a4a8045341d65480cc"
+    },
+    "linux-amd64": {
+      "archive": "prometheus-3.16.0-rc.2.linux-amd64.tar.gz",
+      "archive_sha256": "defa81138b91a3aa84d49d6b65ccec0dadf1dea750c7aaf0ddb2ad7e6a8a5caa",
+      "binary_sha256": "5f0ca0825c7f1176d192c837eef97e9cc7a4cd55d685147d4a4c44dfbbe5b7d9"
+    }
+  }
+}

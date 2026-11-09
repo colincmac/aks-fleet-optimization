@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0",
+  "source": "kubernetes-metadata",
+  "tenant_id": "00000000-0000-0000-0000-000000000000",
+  "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+  "cluster_uid": "synthetic-cluster-uid",
+  "generated_at": "2026-10-29T11:00:00Z",
+  "collection": {
+    "schema_version": "1.0",
+    "collector": "kubernetes-metadata",
+    "status": "complete",
+    "requested_scope": [
+      "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+    ],
+    "completed_scope": [
+      "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+    ],
+    "started_at": "2026-10-29T10:00:00Z",
+    "completed_at": "2026-10-29T11:00:00Z",
+    "source_observed_at": "2026-10-29T10:00:00Z",
+    "pagination_complete": true,
+    "retry_count": 0,
+    "errors": [],
+    "missing_fields": []
+  },
+  "api_availability": {
+    "v1/namespaces": "available",
+    "v1/nodes": "available",
+    "v1/pods": "available",
+    "apps/v1/statefulsets": "available",
+    "policy/v1/poddisruptionbudgets": "available"
+  },
+  "resources": [
+    {
+      "api_version": "v1",
+      "kind": "Namespace",
+      "name": "kube-system",
+      "namespace": null,
+      "uid": "synthetic-cluster-uid",
+      "labels": {},
+      "owner_references": [],
+      "spec": {},
+      "status": {},
+      "attributes": {}
+    },
+    {
+      "api_version": "v1",
+      "kind": "Node",
+      "name": "node-synthetic",
+      "namespace": null,
+      "uid": "synthetic-node-uid",
+      "labels": {},
+      "owner_references": [],
+      "spec": {},
+      "status": {},
+      "attributes": {}
+    },
+    {
+      "api_version": "v1",
+      "kind": "Namespace",
+      "name": "synthetic",
+      "namespace": null,
+      "uid": "namespace-uid",
+      "labels": {},
+      "owner_references": [],
+      "spec": {},
+      "status": {},
+      "attributes": {}
+    },
+    {
+      "api_version": "apps/v1",
+      "kind": "StatefulSet",
+      "name": "synthetic",
+      "namespace": "synthetic",
+      "uid": "workload-uid",
+      "labels": {},
+      "owner_references": [],
+      "spec": {
+        "replicas": 1
+      },
+      "status": {},
+      "attributes": {}
+    },
+    {
+      "api_version": "v1",
+      "kind": "Pod",
+      "name": "synthetic-0",
+      "namespace": "synthetic",
+      "uid": "pod-uid",
+      "labels": {},
+      "owner_references": [
+        {
+          "apiVersion": "apps/v1",
+          "kind": "StatefulSet",
+          "name": "synthetic",
+          "uid": "workload-uid",
+          "controller": true
+        }
+      ],
+      "spec": {
+        "containers": [
+          {
+            "name": "api",
+            "resources": {
+              "requests": {}
+            }
+          }
+        ]
+      },
+      "status": {
+        "phase": "Running"
+      },
+      "attributes": {}
+    }
+  ],
+  "nodes": [
+    {
+      "node_uid": "synthetic-node-uid",
+      "provider_id": null,
+      "azure_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic/virtualMachines/0",
+      "node_pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool",
+      "state": "matched"
+    }
+  ],
+  "workload_bindings": {
+    "pod-uid": "workload-uid"
+  },
+  "resource_versions": {
+    "v1/namespaces": "synthetic-version",
+    "v1/nodes": "synthetic-version",
+    "v1/pods": "synthetic-version",
+    "apps/v1/statefulsets": "synthetic-version",
+    "policy/v1/poddisruptionbudgets": "synthetic-version"
+  }
+}

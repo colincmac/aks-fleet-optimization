@@ -1,0 +1,62 @@
+{
+  "name": "headlamp-fleet-efficiency",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Evidence-first fleet recommendation review for Headlamp",
+  "license": "MIT",
+  "main": "dist/main.js",
+  "engines": {
+    "node": ">=22.18",
+    "headlamp": ">=0.40.0"
+  },
+  "scripts": {
+    "start": "headlamp-plugin start",
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && headlamp-plugin build",
+    "build:preview": "vite build --outDir preview-dist",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write src test scripts *.ts *.json *.html",
+    "format:check": "prettier --check src test scripts *.ts *.json *.html",
+    "generate:types": "json2ts -i ../../schemas/analysis-report.schema.json -o src/models/advisor.generated.ts --unreachableDefinitions",
+    "generate:contracts": "node scripts/contracts.mjs",
+    "check:contracts": "node scripts/contracts.mjs --check",
+    "generate:samples": "node scripts/samples.mjs",
+    "check:samples": "node scripts/samples.mjs --check",
+    "package": "headlamp-plugin package",
+    "verify": "npm run check:contracts && npm run check:samples && npm run format:check && npm run test && npm run build && npm run build:preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/ibm-plex-mono": "5.2.7",
+    "@fontsource/ibm-plex-sans": "5.2.8",
+    "@mui/material": "^6.4.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "lucide-react": "^0.468.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router-dom": "^6.30.0"
+  },
+  "devDependencies": {
+    "@kinvolk/headlamp-plugin": "0.14.0",
+    "@playwright/test": "^1.56.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "jsdom": "^26.1.0",
+    "json-schema-to-typescript": "^15.0.4",
+    "prettier": "^3.6.0",
+    "ts-json-schema-generator": "^2.4.0",
+    "typescript": "~5.6.3",
+    "vite": "^6.4.0",
+    "vitest": "^3.2.6",
+    "yaml": "^2.8.1"
+  }
+}

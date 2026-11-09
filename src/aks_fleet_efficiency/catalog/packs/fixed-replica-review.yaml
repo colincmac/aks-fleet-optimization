@@ -1,0 +1,35 @@
+schema_version: '1.0'
+id: AKS-AS-001
+version: 2.0.0
+family: autoscaler
+evaluator: fixed-replica-review
+evidence_kind: inventory
+title: Review autoscaling
+purpose: Investigate current fixed replicas with observed absence of HPA and KEDA.
+sources: []
+parameters: {}
+queries:
+  baseline: {}
+  guarded: {}
+required_evidence:
+  baseline: &evidence
+  - Complete fresh exact-scoped inventory and workload identity
+  - Explicit observed HPA/KEDA absence without contradictory current controllers
+  - Current replicas at or above the configured minimum_replicas_for_autoscaling_review
+  guarded: *evidence
+limitations:
+- Current absence is not historical controller absence, proof of low demand or safe rightsizing.
+prerequisites:
+- Identify a scaling signal tied to user demand or queue depth.
+risks:
+- A poorly selected signal can cause oscillation or SLO regressions.
+validation:
+- Validate scaling behavior with representative load.
+rollback:
+- If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline.
+actions:
+  baseline: &actions
+  - Document why fixed replicas are required, or prototype HPA/KEDA.
+  guarded: *actions
+baseline_summary: The workload has multiple replicas but no HPA or KEDA signal in the current snapshot. Confirm whether fixed capacity is an explicit requirement; current configuration does not establish historical absence.
+guarded_summary: The workload has multiple replicas but no HPA or KEDA signal in the current snapshot. Confirm whether fixed capacity is an explicit requirement; no numeric replica proposal is made.

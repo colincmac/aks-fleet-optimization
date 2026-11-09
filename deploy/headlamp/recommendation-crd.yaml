@@ -1,0 +1,1043 @@
+# Generated from the review envelope. Run npm run generate:contracts.
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: optimizationrecommendations.optimization.aks.io
+spec:
+  group: optimization.aks.io
+  scope: Namespaced
+  names:
+    plural: optimizationrecommendations
+    singular: optimizationrecommendation
+    kind: OptimizationRecommendation
+    shortNames:
+      - optrec
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      subresources:
+        status: {}
+      additionalPrinterColumns:
+        - name: Phase
+          type: string
+          jsonPath: .status.phase
+        - name: Source
+          type: string
+          jsonPath: .spec.source
+        - name: Workload
+          type: string
+          jsonPath: .spec.target.name
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            apiVersion:
+              type: string
+              enum:
+                - optimization.aks.io/v1alpha1
+            kind:
+              type: string
+              enum:
+                - OptimizationRecommendation
+            metadata:
+              type: object
+            spec:
+              type: object
+              properties:
+                finding:
+                  type: object
+                  properties:
+                    category:
+                      type: string
+                    cluster_name:
+                      type: string
+                    confidence:
+                      type: string
+                      enum:
+                        - low
+                        - medium
+                        - high
+                    currency:
+                      type:
+                        - string
+                        - "null"
+                    current_limits:
+                      type: object
+                      properties:
+                        memory_mib:
+                          type: number
+                      required: &a1
+                        - memory_mib
+                      nullable: true
+                    current_replica_floor:
+                      type:
+                        - number
+                        - "null"
+                    current_requests:
+                      type: object
+                      properties:
+                        cpu_mcores:
+                          type: &a2
+                            - number
+                            - "null"
+                        memory_mib:
+                          type: &a3
+                            - number
+                            - "null"
+                      nullable: true
+                    estimated_monthly_savings:
+                      type:
+                        - number
+                        - "null"
+                    evidence:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          metric:
+                            type: string
+                          source:
+                            type: string
+                          unit:
+                            type:
+                              - string
+                              - "null"
+                          value:
+                            type:
+                              - number
+                              - string
+                              - boolean
+                              - "null"
+                        required:
+                          - metric
+                          - source
+                          - value
+                    id:
+                      type: string
+                    metadata:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                    namespace:
+                      type:
+                        - string
+                        - "null"
+                    owner:
+                      type:
+                        - string
+                        - "null"
+                    prerequisites:
+                      type: array
+                      items:
+                        type: string
+                    proposed_actions:
+                      type: array
+                      items:
+                        type: string
+                    proposed_limits:
+                      type: object
+                      properties:
+                        memory_mib:
+                          type: number
+                      required: *a1
+                      nullable: true
+                    proposed_replica_floor:
+                      type:
+                        - number
+                        - "null"
+                    proposed_requests:
+                      type: object
+                      properties:
+                        cpu_mcores:
+                          type: *a2
+                        memory_mib:
+                          type: *a3
+                      nullable: true
+                    resource_id:
+                      type: string
+                    risks:
+                      type: array
+                      items:
+                        type: string
+                    rollback_steps:
+                      type: array
+                      items:
+                        type: string
+                    rule_id:
+                      type: string
+                    rule_version:
+                      type: string
+                    severity:
+                      type: string
+                      enum:
+                        - info
+                        - low
+                        - medium
+                        - high
+                        - critical
+                    summary:
+                      type: string
+                    title:
+                      type: string
+                    validation_steps:
+                      type: array
+                      items:
+                        type: string
+                    workload:
+                      type:
+                        - string
+                        - "null"
+                  required:
+                    - category
+                    - cluster_name
+                    - confidence
+                    - evidence
+                    - id
+                    - resource_id
+                    - rule_id
+                    - rule_version
+                    - severity
+                    - summary
+                    - title
+                inspection:
+                  type: object
+                  properties:
+                    capabilities:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          checks:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                code:
+                                  type: string
+                                reason_codes:
+                                  type: array
+                                  items:
+                                    type: string
+                                  minItems: 1
+                                status:
+                                  type: string
+                                  enum:
+                                    - available
+                                    - unavailable
+                                    - unknown
+                                    - unsupported
+                              required:
+                                - code
+                                - reason_codes
+                                - status
+                            minItems: 1
+                          cluster_resource_id:
+                            type: string
+                          mode:
+                            type: string
+                            enum:
+                              - baseline
+                              - guarded
+                          notice:
+                            type: string
+                            enum:
+                              - Metric capability is not source attestation or
+                                safe-change approval.
+                          observed_at:
+                            type: string
+                          pack_id:
+                            type: string
+                          source:
+                            type: string
+                          source_profile:
+                            type: object
+                            properties:
+                              characterization:
+                                type: string
+                                enum:
+                                  - synthetic
+                              characterized_versions:
+                                type: object
+                                additionalProperties:
+                                  type: array
+                                  items:
+                                    type: string
+                              id:
+                                type: string
+                                enum:
+                                  - identity-enriched
+                                  - cadvisor-ksm
+                              identity:
+                                type: string
+                                enum:
+                                  - historical
+                                  - name-only
+                              joins:
+                                type: string
+                                enum:
+                                  - none
+                              labels:
+                                type: object
+                                additionalProperties:
+                                  type: string
+                              limitations:
+                                type: array
+                                items:
+                                  type: string
+                                minItems: 1
+                              query_ids:
+                                type: array
+                                items:
+                                  type: string
+                                minItems: 1
+                              transports:
+                                type: array
+                                items:
+                                  type: string
+                                  enum:
+                                    - prometheus
+                                    - azure-managed-prometheus
+                                minItems: 1
+                              version:
+                                type: string
+                            required:
+                              - characterization
+                              - characterized_versions
+                              - id
+                              - identity
+                              - joins
+                              - labels
+                              - limitations
+                              - query_ids
+                              - transports
+                              - version
+                          status:
+                            type: string
+                            enum:
+                              - available
+                              - unavailable
+                              - unknown
+                              - unsupported
+                        required:
+                          - checks
+                          - cluster_resource_id
+                          - mode
+                          - observed_at
+                          - pack_id
+                          - source
+                          - source_profile
+                          - status
+                    card:
+                      type: object
+                      properties:
+                        manifest:
+                          type: object
+                          properties:
+                            actions:
+                              type: object
+                              additionalProperties:
+                                type: array
+                                items:
+                                  type: string
+                            baseline_rollback:
+                              type: array
+                              items:
+                                type: string
+                            baseline_summary:
+                              type: string
+                            evaluator:
+                              type: string
+                              enum:
+                                - cpu-request-review
+                                - missing-cpu-request
+                                - cpu-request-risk
+                                - node-pool-review
+                                - scheduling-review
+                                - capacity-review
+                                - oom-investigation
+                                - memory-safety-review
+                                - memory-request-proposal
+                                - pod-memory-accounting
+                                - memory-limit-proposal
+                                - restart-investigation
+                                - termination-context
+                                - eviction-investigation
+                                - fixed-replica-review
+                                - autoscaler-interaction
+                                - hpa-pinning
+                                - controller-responsibility
+                                - hpa-floor-proposal
+                                - hpa-change-review
+                                - vpa-bounds-review
+                            evidence_kind:
+                              type: string
+                              enum:
+                                - metrics
+                                - inventory
+                            family:
+                              type: string
+                              enum:
+                                - cpu
+                                - node-pool
+                                - memory
+                                - reliability
+                                - autoscaler
+                                - scheduling
+                            guarded_summary:
+                              type: string
+                            id:
+                              type: string
+                            limitations:
+                              type: array
+                              items:
+                                type: string
+                              minItems: 1
+                            parameters:
+                              type: object
+                              properties:
+                                review_ratio:
+                                  type: &a4
+                                    - number
+                                    - "null"
+                            prerequisites:
+                              type: array
+                              items:
+                                type: string
+                              minItems: 1
+                            purpose:
+                              type: string
+                            queries:
+                              type: object
+                              additionalProperties:
+                                type: object
+                                additionalProperties:
+                                  type: array
+                                  items:
+                                    type: string
+                            required_evidence:
+                              type: object
+                              additionalProperties:
+                                type: array
+                                items:
+                                  type: string
+                            risks:
+                              type: array
+                              items:
+                                type: string
+                              minItems: 1
+                            rollback:
+                              type: array
+                              items:
+                                type: string
+                              minItems: 1
+                            schema_version:
+                              type: string
+                              enum:
+                                - "1.0"
+                            sources:
+                              type: array
+                              items:
+                                type: string
+                                enum:
+                                  - prometheus
+                                  - azure-managed-prometheus
+                            summary_variants:
+                              type: object
+                              additionalProperties:
+                                type: string
+                            title:
+                              type: string
+                            validation:
+                              type: array
+                              items:
+                                type: string
+                              minItems: 1
+                            version:
+                              type: string
+                          required:
+                            - actions
+                            - baseline_summary
+                            - evaluator
+                            - family
+                            - guarded_summary
+                            - id
+                            - limitations
+                            - parameters
+                            - prerequisites
+                            - purpose
+                            - queries
+                            - required_evidence
+                            - risks
+                            - rollback
+                            - sources
+                            - title
+                            - validation
+                            - version
+                        parameter_guidance:
+                          type: object
+                          additionalProperties:
+                            type: object
+                            properties:
+                              bounds:
+                                type: string
+                              implication:
+                                type: string
+                              unit:
+                                type: string
+                            required:
+                              - bounds
+                              - implication
+                              - unit
+                        provenance:
+                          type: object
+                          properties:
+                            digest:
+                              type: string
+                            id:
+                              type: string
+                            parameters:
+                              type: object
+                              properties:
+                                review_ratio:
+                                  type: *a4
+                            queries:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  delta:
+                                    type: boolean
+                                  expression:
+                                    type: string
+                                  id:
+                                    type: string
+                                  kind:
+                                    type: string
+                                    enum:
+                                      - container
+                                      - workload_container
+                                      - unresolved_container
+                                      - node
+                                      - workload
+                                      - hpa
+                                  unit:
+                                    type: string
+                                    enum:
+                                      - mCPU
+                                      - MiB
+                                      - ratio
+                                      - events
+                                      - pods
+                                      - boolean
+                                  version:
+                                    type: string
+                                required:
+                                  - delta
+                                  - expression
+                                  - id
+                                  - kind
+                                  - unit
+                                  - version
+                            version:
+                              type: string
+                          required:
+                            - digest
+                            - id
+                            - parameters
+                            - queries
+                            - version
+                        synthetic_example:
+                          type: object
+                          properties:
+                            enable_estimated_savings:
+                              type: boolean
+                            environment_risk:
+                              type: object
+                              additionalProperties:
+                                type: string
+                            excluded_namespaces:
+                              type: array
+                              items:
+                                type: string
+                            mode:
+                              type: string
+                              enum:
+                                - baseline
+                                - guarded
+                            pack_locks:
+                              type: object
+                              additionalProperties:
+                                type: string
+                            pack_parameters:
+                              type: object
+                              additionalProperties:
+                                type: object
+                                properties:
+                                  review_ratio:
+                                    type: *a4
+                            packs:
+                              type: array
+                              items:
+                                type: string
+                              minItems: 1
+                              nullable: true
+                            thresholds:
+                              type: object
+                              properties:
+                                maximum_evidence_age_hours:
+                                  type: number
+                                maximum_metric_step_seconds:
+                                  type: number
+                                minimum_coverage_ratio:
+                                  type: number
+                                minimum_observation_days:
+                                  type: number
+                                minimum_replicas_for_autoscaling_review:
+                                  type: number
+                      required:
+                        - manifest
+                        - parameter_guidance
+                        - provenance
+                        - synthetic_example
+                    mode:
+                      type: string
+                      enum:
+                        - baseline
+                        - guarded
+                    resolved_queries:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          entity_digest:
+                            type: string
+                          expression:
+                            type: string
+                          expression_digest:
+                            type: string
+                          metric:
+                            type: string
+                          source:
+                            type: string
+                          step_seconds:
+                            type: number
+                          version:
+                            type: string
+                        required:
+                          - entity_digest
+                          - expression
+                          - expression_digest
+                          - metric
+                          - source
+                          - step_seconds
+                          - version
+                  required:
+                    - capabilities
+                    - card
+                    - mode
+                type:
+                  type: string
+                source:
+                  type: string
+                  enum:
+                    - VPA
+                    - Deterministic
+                    - AI-assisted
+                target:
+                  type: object
+                  properties:
+                    clusterResourceId:
+                      type: string
+                    namespace:
+                      type: string
+                    apiVersion:
+                      type: string
+                    kind:
+                      type: string
+                    name:
+                      type: string
+                    uid:
+                      type: string
+                    container:
+                      type: string
+                  required:
+                    - clusterResourceId
+                    - namespace
+                    - apiVersion
+                    - kind
+                    - name
+                    - uid
+                    - container
+                generatedAt:
+                  type: string
+                expiresAt:
+                  type: string
+                evidenceCollectedAt:
+                  type: string
+                evidenceVersion:
+                  type: string
+                maxEvidenceAgeHours:
+                  type: number
+                completeness:
+                  type: string
+                  enum:
+                    - complete
+                    - partial
+                    - unknown
+                observationWindow:
+                  type: object
+                  properties:
+                    start:
+                      type: string
+                    end:
+                      type: string
+                    coverageRatio:
+                      type:
+                        - number
+                        - "null"
+                  required:
+                    - start
+                    - end
+                    - coverageRatio
+                risk:
+                  type: object
+                  properties:
+                    level:
+                      type: string
+                      enum:
+                        - low
+                        - medium
+                        - high
+                    reasons:
+                      type: array
+                      items:
+                        type: string
+                    requiredChecks:
+                      type: array
+                      items:
+                        type: string
+                    restart:
+                      type: string
+                  required:
+                    - level
+                    - reasons
+                    - requiredChecks
+                    - restart
+                checks:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      state:
+                        type: string
+                        enum:
+                          - Pass
+                          - Fail
+                          - Unknown
+                      detail:
+                        type: string
+                    required:
+                      - name
+                      - state
+                      - detail
+                approvalsRequired:
+                  type: array
+                  items:
+                    type: string
+                sourceRevision:
+                  type: string
+                implementation:
+                  type: object
+                  properties:
+                    owner:
+                      type: string
+                    repository:
+                      type: string
+                    configurationPath:
+                      type: string
+                    baseBranch:
+                      type: string
+                  required:
+                    - owner
+                    - repository
+                    - configurationPath
+                    - baseBranch
+                vpa:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    namespace:
+                      type: string
+                    bounds:
+                      type: object
+                      properties:
+                        containerName:
+                          type: string
+                        lowerBound:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                        target:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                        upperBound:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                        uncappedTarget:
+                          type: object
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                      required:
+                        - containerName
+                    updateMode:
+                      type: string
+                  required:
+                    - name
+                    - namespace
+                ai:
+                  type: object
+                  properties:
+                    generator:
+                      type: string
+                    model:
+                      type: string
+                    analyzedAt:
+                      type: string
+                    evidenceVersion:
+                      type: string
+                    policyVersion:
+                      type: string
+                    explanation:
+                      type: string
+                    alternatives:
+                      type: array
+                      items:
+                        type: string
+                    limitations:
+                      type: array
+                      items:
+                        type: string
+                    humanValidation:
+                      type: array
+                      items:
+                        type: string
+                    confidence:
+                      type: string
+                  required:
+                    - generator
+                    - model
+                    - analyzedAt
+                    - evidenceVersion
+                    - policyVersion
+                    - explanation
+                    - alternatives
+                    - limitations
+                    - humanValidation
+                    - confidence
+                relatedResources:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      apiVersion:
+                        type: string
+                      kind:
+                        type: string
+                      namespace:
+                        type: string
+                      name:
+                        type: string
+                      plugin:
+                        type: string
+                        enum:
+                          - keda
+                          - karpenter
+                    required:
+                      - apiVersion
+                      - kind
+                      - name
+                      - plugin
+              required:
+                - finding
+                - type
+                - source
+                - target
+                - generatedAt
+                - expiresAt
+                - evidenceCollectedAt
+                - evidenceVersion
+                - maxEvidenceAgeHours
+                - completeness
+                - observationWindow
+                - risk
+                - checks
+                - approvalsRequired
+                - sourceRevision
+            status:
+              type: object
+              properties:
+                phase:
+                  type: string
+                  enum:
+                    - AwaitingApproval
+                    - Approved
+                    - Rejected
+                    - Deferred
+                    - Observing
+                    - Exception
+                    - Cancelled
+                    - PullRequestOpen
+                    - Validating
+                    - Completed
+                observedGeneration:
+                  type: number
+                evidenceVersion:
+                  type: string
+                sourceConfiguration:
+                  type: string
+                  enum:
+                    - Unchanged
+                    - Changed
+                    - Unknown
+                supersededBy:
+                  type: string
+                approvals:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                      actor:
+                        type: string
+                      generation:
+                        type: number
+                      evidenceVersion:
+                        type: string
+                      sourceRevision:
+                        type: string
+                    required:
+                      - role
+                      - actor
+                      - generation
+                      - evidenceVersion
+                      - sourceRevision
+                pullRequest:
+                  type: object
+                  properties:
+                    state:
+                      type: string
+                      enum:
+                        - NotCreated
+                        - Open
+                        - Merged
+                        - Closed
+                        - Failed
+                    number:
+                      type: number
+                    url:
+                      type: string
+                    message:
+                      type: string
+                  required:
+                    - state
+                validation:
+                  type: object
+                  properties:
+                    state:
+                      type: string
+                      enum:
+                        - NotStarted
+                        - Collecting
+                        - Healthy
+                        - Warning
+                        - Failed
+                        - RolledBack
+                        - Inconclusive
+                    deployedAt:
+                      type: string
+                    window:
+                      type: string
+                    rollback:
+                      type: string
+                    metrics:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          baseline:
+                            type:
+                              - number
+                              - "null"
+                          current:
+                            type:
+                              - number
+                              - "null"
+                          unit:
+                            type: string
+                        required:
+                          - name
+                          - baseline
+                          - current
+                          - unit
+                  required:
+                    - state
+                timeline:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      actor:
+                        type: string
+                      timestamp:
+                        type: string
+                      action:
+                        type: string
+                      reason:
+                        type: string
+                      generation:
+                        type: number
+                      evidenceVersion:
+                        type: string
+                      deferUntil:
+                        type: string
+                    required:
+                      - id
+                      - actor
+                      - timestamp
+                      - action
+                      - reason
+                      - generation
+                      - evidenceVersion
+              required:
+                - phase
+                - observedGeneration
+                - evidenceVersion
+                - sourceConfiguration
+                - approvals
+                - pullRequest
+                - validation
+                - timeline
+          required:
+            - spec

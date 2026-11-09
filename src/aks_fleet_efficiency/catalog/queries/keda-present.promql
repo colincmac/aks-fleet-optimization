@@ -1,0 +1,1 @@
+aks_advisor:workload_keda_present{__scope__}

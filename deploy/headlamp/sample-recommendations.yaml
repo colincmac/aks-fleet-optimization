@@ -1,0 +1,2255 @@
+# Synthetic fixtures for 2026-10-30T12:00:00Z. Not approved changes.
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-001
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-001
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-001
+    rule_id: cpu-request-overprovisioned
+    rule_version: 1.0.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/cedar-east
+    cluster_name: cedar-east
+    namespace: storefront
+    workload: catalog-api
+    severity: medium
+    confidence: high
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 1000
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 650
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Commerce platform
+    metadata: {}
+  type: VPAResourceRecommendation
+  source: VPA
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/cedar-east
+    namespace: storefront
+    apiVersion: apps/v1
+    kind: Deployment
+    name: catalog-api
+    uid: synthetic-workload-0
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-11-13T12:00:00.000Z
+  evidenceCollectedAt: 2026-10-30T09:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: complete
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: medium
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Pass
+      detail: HPA and KEDA explicitly absent; VPA is recommendation-only.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: catalog-api
+    namespace: storefront
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 650m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+status:
+  phase: AwaitingApproval
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals: []
+  pullRequest:
+    state: NotCreated
+  validation:
+    state: NotStarted
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+---
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-002
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-002
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-002
+    rule_id: cpu-request-overprovisioned
+    rule_version: 1.0.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/birch-west
+    cluster_name: birch-west
+    namespace: operations
+    workload: order-worker
+    severity: medium
+    confidence: high
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 2000
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 1400
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Core services
+    metadata: {}
+  type: CpuRequestReview
+  source: AI-assisted
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/birch-west
+    namespace: operations
+    apiVersion: apps/v1
+    kind: Deployment
+    name: order-worker
+    uid: synthetic-workload-1
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-11-13T12:00:00.000Z
+  evidenceCollectedAt: 2026-10-30T09:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: complete
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: medium
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Pass
+      detail: HPA and KEDA explicitly absent; VPA is recommendation-only.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: order-worker
+    namespace: operations
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 1400m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+  ai:
+    generator: Synthetic explanation fixture
+    model: example-model (not invoked)
+    analyzedAt: 2026-10-30T10:00:00.000Z
+    evidenceVersion: sha256:synthetic-evidence-001
+    policyVersion: grounded-summary/1
+    explanation: The deterministic CPU proposal retains headroom above the observed
+      peak. VPA values are supporting evidence, not an instruction to apply
+      them. Review burst behavior and the owner SLO before proceeding.
+    alternatives:
+      - Retain current requests for another observation window.
+      - Test the proposed CPU request in a canary.
+    limitations:
+      - Historic observations do not guarantee future load.
+      - No reconciled cost data is available.
+    humanValidation:
+      - Workload owner confirms representative traffic and restart timing.
+    confidence: Interpretation only; not a policy gate
+status:
+  phase: AwaitingApproval
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals: []
+  pullRequest:
+    state: NotCreated
+  validation:
+    state: NotStarted
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+---
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-003
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-003
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-003
+    rule_id: cpu-request-overprovisioned
+    rule_version: 1.0.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/maple-central
+    cluster_name: maple-central
+    namespace: storefront
+    workload: inventory-sync
+    severity: medium
+    confidence: high
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 500
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 350
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Commerce platform
+    metadata: {}
+  type: VPAResourceRecommendation
+  source: VPA
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/maple-central
+    namespace: storefront
+    apiVersion: apps/v1
+    kind: Deployment
+    name: inventory-sync
+    uid: synthetic-workload-2
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-11-13T12:00:00.000Z
+  evidenceCollectedAt: 2026-10-30T09:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: complete
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: medium
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Pass
+      detail: HPA and KEDA explicitly absent; VPA is recommendation-only.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: inventory-sync
+    namespace: storefront
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 350m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+status:
+  phase: Approved
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals:
+    - role: ApplicationOwner
+      actor: synthetic-reviewer-0
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+      sourceRevision: synthetic-commit-001
+    - role: PlatformOwner
+      actor: synthetic-reviewer-1
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+      sourceRevision: synthetic-commit-001
+  pullRequest:
+    state: NotCreated
+  validation:
+    state: NotStarted
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+---
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-004
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-004
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-004
+    rule_id: cpu-request-overprovisioned
+    rule_version: 1.0.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/cedar-east
+    cluster_name: cedar-east
+    namespace: operations
+    workload: checkout-api
+    severity: medium
+    confidence: high
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 1000
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 750
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Core services
+    metadata: {}
+  type: VPAResourceRecommendation
+  source: VPA
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/cedar-east
+    namespace: operations
+    apiVersion: apps/v1
+    kind: Deployment
+    name: checkout-api
+    uid: synthetic-workload-3
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-11-13T12:00:00.000Z
+  evidenceCollectedAt: 2026-10-30T09:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: complete
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: medium
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Pass
+      detail: HPA and KEDA explicitly absent; VPA is recommendation-only.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: checkout-api
+    namespace: operations
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 750m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+status:
+  phase: PullRequestOpen
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals: []
+  pullRequest:
+    state: Open
+    number: 145
+    url: https://github.com/example/synthetic-workloads/pull/145
+  validation:
+    state: NotStarted
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+---
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-005
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-005
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-005
+    rule_id: cpu-request-overprovisioned
+    rule_version: 1.0.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/birch-west
+    cluster_name: birch-west
+    namespace: storefront
+    workload: search-indexer
+    severity: medium
+    confidence: high
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 1000
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 650
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Commerce platform
+    metadata: {}
+  type: CpuRequestReview
+  source: AI-assisted
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/birch-west
+    namespace: storefront
+    apiVersion: apps/v1
+    kind: Deployment
+    name: search-indexer
+    uid: synthetic-workload-4
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-11-13T12:00:00.000Z
+  evidenceCollectedAt: 2026-10-30T09:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: complete
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: medium
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Pass
+      detail: HPA and KEDA explicitly absent; VPA is recommendation-only.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: search-indexer
+    namespace: storefront
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 650m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+  ai:
+    generator: Synthetic explanation fixture
+    model: example-model (not invoked)
+    analyzedAt: 2026-10-30T10:00:00.000Z
+    evidenceVersion: sha256:synthetic-evidence-001
+    policyVersion: grounded-summary/1
+    explanation: The deterministic CPU proposal retains headroom above the observed
+      peak. VPA values are supporting evidence, not an instruction to apply
+      them. Review burst behavior and the owner SLO before proceeding.
+    alternatives:
+      - Retain current requests for another observation window.
+      - Test the proposed CPU request in a canary.
+    limitations:
+      - Historic observations do not guarantee future load.
+      - No reconciled cost data is available.
+    humanValidation:
+      - Workload owner confirms representative traffic and restart timing.
+    confidence: Interpretation only; not a policy gate
+status:
+  phase: PullRequestOpen
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals: []
+  pullRequest:
+    state: Open
+    number: 146
+    url: https://github.com/example/synthetic-workloads/pull/146
+  validation:
+    state: NotStarted
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+---
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-006
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-006
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-006
+    rule_id: cpu-request-overprovisioned
+    rule_version: 1.0.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/maple-central
+    cluster_name: maple-central
+    namespace: operations
+    workload: notification-worker
+    severity: medium
+    confidence: high
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 2000
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 1400
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Core services
+    metadata: {}
+  type: VPAResourceRecommendation
+  source: VPA
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/maple-central
+    namespace: operations
+    apiVersion: apps/v1
+    kind: Deployment
+    name: notification-worker
+    uid: synthetic-workload-5
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-11-13T12:00:00.000Z
+  evidenceCollectedAt: 2026-10-30T09:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: complete
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: medium
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Pass
+      detail: HPA and KEDA explicitly absent; VPA is recommendation-only.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: notification-worker
+    namespace: operations
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 1400m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+status:
+  phase: Validating
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals: []
+  pullRequest:
+    state: Merged
+    number: 145
+  validation:
+    state: Collecting
+    deployedAt: 2026-10-30T11:00:00.000Z
+    window: 24 hours
+    rollback: Not requested
+    metrics:
+      - name: CPU throttling
+        baseline: 0.2
+        current: null
+        unit: "%"
+      - name: OOM kills
+        baseline: 0
+        current: null
+        unit: events
+      - name: Restarts
+        baseline: 0
+        current: null
+        unit: events
+      - name: Ready replicas
+        baseline: 3
+        current: null
+        unit: replicas
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+---
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-007
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-007
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-007
+    rule_id: cpu-request-overprovisioned
+    rule_version: 1.0.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/cedar-east
+    cluster_name: cedar-east
+    namespace: storefront
+    workload: edge-gateway
+    severity: medium
+    confidence: high
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 500
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 350
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Commerce platform
+    metadata: {}
+  type: VPAResourceRecommendation
+  source: VPA
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/cedar-east
+    namespace: storefront
+    apiVersion: apps/v1
+    kind: Deployment
+    name: edge-gateway
+    uid: synthetic-workload-6
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-11-13T12:00:00.000Z
+  evidenceCollectedAt: 2026-10-30T09:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: complete
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: medium
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Pass
+      detail: HPA and KEDA explicitly absent; VPA is recommendation-only.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: edge-gateway
+    namespace: storefront
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 350m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+status:
+  phase: Completed
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals: []
+  pullRequest:
+    state: Merged
+    number: 146
+  validation:
+    state: Healthy
+    deployedAt: 2026-10-30T11:00:00.000Z
+    window: 24 hours
+    rollback: Not requested
+    metrics:
+      - name: CPU throttling
+        baseline: 0.2
+        current: 0.3
+        unit: "%"
+      - name: OOM kills
+        baseline: 0
+        current: 0
+        unit: events
+      - name: Restarts
+        baseline: 0
+        current: 1
+        unit: events
+      - name: Ready replicas
+        baseline: 3
+        current: 3
+        unit: replicas
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+---
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-008
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-008
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-008
+    rule_id: cpu-request-overprovisioned
+    rule_version: 1.0.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/birch-west
+    cluster_name: birch-west
+    namespace: operations
+    workload: session-store
+    severity: medium
+    confidence: high
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 1000
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 750
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Core services
+    metadata: {}
+  type: CpuRequestReview
+  source: AI-assisted
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/birch-west
+    namespace: operations
+    apiVersion: apps/v1
+    kind: StatefulSet
+    name: session-store
+    uid: synthetic-workload-7
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-11-13T12:00:00.000Z
+  evidenceCollectedAt: 2026-10-30T09:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: complete
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: medium
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Pass
+      detail: HPA and KEDA explicitly absent; VPA is recommendation-only.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: session-store
+    namespace: operations
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 750m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+  ai:
+    generator: Synthetic explanation fixture
+    model: example-model (not invoked)
+    analyzedAt: 2026-10-30T10:00:00.000Z
+    evidenceVersion: sha256:synthetic-evidence-001
+    policyVersion: grounded-summary/1
+    explanation: The deterministic CPU proposal retains headroom above the observed
+      peak. VPA values are supporting evidence, not an instruction to apply
+      them. Review burst behavior and the owner SLO before proceeding.
+    alternatives:
+      - Retain current requests for another observation window.
+      - Test the proposed CPU request in a canary.
+    limitations:
+      - Historic observations do not guarantee future load.
+      - No reconciled cost data is available.
+    humanValidation:
+      - Workload owner confirms representative traffic and restart timing.
+    confidence: Interpretation only; not a policy gate
+status:
+  phase: Completed
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals: []
+  pullRequest:
+    state: Merged
+    number: 147
+  validation:
+    state: RolledBack
+    deployedAt: 2026-10-30T11:00:00.000Z
+    window: 24 hours
+    rollback: Configuration reverted by owner
+    metrics:
+      - name: CPU throttling
+        baseline: 0.2
+        current: 0.3
+        unit: "%"
+      - name: OOM kills
+        baseline: 0
+        current: 0
+        unit: events
+      - name: Restarts
+        baseline: 0
+        current: 1
+        unit: events
+      - name: Ready replicas
+        baseline: 3
+        current: 3
+        unit: replicas
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+---
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-009
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-009
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-009
+    rule_id: cpu-request-overprovisioned
+    rule_version: 1.0.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/maple-central
+    cluster_name: maple-central
+    namespace: storefront
+    workload: report-worker
+    severity: medium
+    confidence: high
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 1000
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 650
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Commerce platform
+    metadata: {}
+  type: VPAResourceRecommendation
+  source: VPA
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/maple-central
+    namespace: storefront
+    apiVersion: apps/v1
+    kind: Deployment
+    name: report-worker
+    uid: synthetic-workload-8
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-10-30T11:00:00.000Z
+  evidenceCollectedAt: 2026-10-30T09:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: complete
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: medium
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Pass
+      detail: HPA and KEDA explicitly absent; VPA is recommendation-only.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: report-worker
+    namespace: storefront
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 650m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+status:
+  phase: AwaitingApproval
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals: []
+  pullRequest:
+    state: NotCreated
+  validation:
+    state: NotStarted
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+---
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-010
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-010
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-010
+    rule_id: cpu-request-overprovisioned
+    rule_version: 1.0.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/cedar-east
+    cluster_name: cedar-east
+    namespace: operations
+    workload: billing-api
+    severity: medium
+    confidence: high
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 2000
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 1400
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Core services
+    metadata: {}
+  type: VPAResourceRecommendation
+  source: VPA
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/cedar-east
+    namespace: operations
+    apiVersion: apps/v1
+    kind: Deployment
+    name: billing-api
+    uid: synthetic-workload-9
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-11-13T12:00:00.000Z
+  evidenceCollectedAt: 2026-10-30T09:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: complete
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: medium
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Pass
+      detail: HPA and KEDA explicitly absent; VPA is recommendation-only.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: billing-api
+    namespace: operations
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 1400m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+status:
+  phase: AwaitingApproval
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals: []
+  pullRequest:
+    state: NotCreated
+  validation:
+    state: NotStarted
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+  supersededBy: rec-013
+---
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-011
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-011
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-011
+    rule_id: AKS-RQ-002
+    rule_version: 2.1.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic
+    cluster_name: birch-west
+    namespace: storefront
+    workload: event-router
+    severity: medium
+    confidence: low
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 500
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 350
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Commerce platform
+    metadata: {}
+  type: CpuRequestReview
+  source: AI-assisted
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic
+    namespace: storefront
+    apiVersion: apps/v1
+    kind: Deployment
+    name: event-router
+    uid: synthetic-workload-10
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-11-13T12:00:00.000Z
+  evidenceCollectedAt: 2026-10-30T09:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: partial
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: high
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Unknown
+      detail: KEDA API permission denied; interaction unknown.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: event-router
+    namespace: storefront
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 350m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+  ai:
+    generator: Synthetic explanation fixture
+    model: example-model (not invoked)
+    analyzedAt: 2026-10-30T10:00:00.000Z
+    evidenceVersion: sha256:synthetic-evidence-001
+    policyVersion: grounded-summary/1
+    explanation: The deterministic CPU proposal retains headroom above the observed
+      peak. VPA values are supporting evidence, not an instruction to apply
+      them. Review burst behavior and the owner SLO before proceeding.
+    alternatives:
+      - Retain current requests for another observation window.
+      - Test the proposed CPU request in a canary.
+    limitations:
+      - Historic observations do not guarantee future load.
+      - No reconciled cost data is available.
+    humanValidation:
+      - Workload owner confirms representative traffic and restart timing.
+    confidence: Interpretation only; not a policy gate
+  inspection:
+    card:
+      manifest:
+        schema_version: "1.0"
+        id: AKS-RQ-002
+        version: 2.1.0
+        family: cpu
+        evaluator: cpu-request-review
+        evidence_kind: metrics
+        title: Review CPU request
+        purpose: Compare observed CPU usage with the admitted request, then
+          independently evaluate a policy-bounded reduction.
+        sources:
+          - prometheus
+          - azure-managed-prometheus
+        parameters:
+          review_ratio: 0.4
+        queries:
+          baseline:
+            container:
+              - cpu_usage
+              - cpu_request
+            unresolved_container:
+              - cpu_usage
+              - cpu_request
+            workload_container:
+              - replica_cpu_envelope
+              - replica_cpu_request_min
+              - replica_cpu_request_max
+          guarded:
+            container:
+              - cpu_usage
+              - cpu_request
+              - cpu_throttling
+              - oom_events
+            workload_container:
+              - replica_cpu_envelope
+              - replica_cpu_request_min
+              - replica_cpu_request_max
+              - replica_cpu_throttling
+              - replica_oom_events
+        required_evidence:
+          baseline:
+            - Complete fresh scoped Azure, Kubernetes and Prometheus receipts
+            - Exact cluster/workload identity and declared direct or approved
+              replica-envelope usage
+            - Observed positive admitted CPU request and qualified P95 usage
+            - Configured observation duration, coverage, freshness and resolution
+          guarded:
+            - All baseline evidence, qualified P99/observed peaks, throttling
+              and OOM history
+            - Known compatible autoscalers and no observed OOM or workload
+              eviction veto
+            - Owner-reviewed window, disruption policy, environment, minimum,
+              headroom and reduction bounds
+        limitations:
+          - Low CPU usage is not a safe reduction target or proof a node can be
+            removed.
+          - Requests are not CPU limits; a request ratio is not saturation.
+          - Current identities cannot reconstruct missing history or deleted
+            membership.
+          - Replica-envelope statistics are conservative per-replica values, not
+            workload-total percentiles.
+          - Returned evaluation-point coverage is not raw scrape completeness.
+        prerequisites:
+          - Confirm the metric window contains peak and business-critical
+            periods.
+          - Review P99 usage, throttling, startup and failover behavior.
+        risks:
+          - Historical usage might not represent future peaks.
+          - Lower requests can change placement and noisy-neighbor behavior.
+        validation:
+          - Run VPA in Off mode and compare recommendations.
+          - Canary an independently approved request change and verify SLOs
+            under load.
+        rollback:
+          - Restore the previous CPU request of __current_cpu_request__ mCPU in
+            source configuration through the owning delivery pipeline.
+          - Stop promotion if SLOs, throttling, OOM or restarts regress;
+            remeasure before proposing another change.
+        baseline_rollback:
+          - No numeric change is proposed; do not apply a baseline investigation.
+        summary_variants: {}
+        actions:
+          baseline:
+            - Review observed usage, owner requirements and missing guarded
+              evidence.
+          guarded:
+            - Open a review PR with the proposed request and rollback criteria.
+        baseline_summary: Observed P95 CPU usage is below the configured fraction of the
+          current admitted request. This is an investigation, not a safe
+          reduction target; owner policy, peaks and reliability must be reviewed
+          independently.
+        guarded_summary: Historical CPU usage is below the request. The proposal
+          respects observed peaks, declared headroom and owner policy; validate
+          it through a separately approved canary.
+      provenance:
+        id: AKS-RQ-002
+        version: 2.1.0
+        digest: b347d11ef3b28bf5b7e851d3d01cff46b461a8d9ae120e4fdab983513ab66344
+        parameters:
+          review_ratio: 0.4
+        queries:
+          - id: cpu_request
+            version: 1.0.0
+            unit: mCPU
+            kind: container
+            delta: false
+            expression: kube_pod_container_resource_requests{__scope__,resource="cpu",unit="core"}
+              * 1000
+          - id: cpu_throttling
+            version: 1.0.0
+            unit: ratio
+            kind: container
+            delta: false
+            expression: rate(container_cpu_cfs_throttled_periods_total{__scope__}[5m]) /
+              rate(container_cpu_cfs_periods_total{__scope__}[5m])
+          - id: cpu_usage
+            version: 1.0.0
+            unit: mCPU
+            kind: container
+            delta: false
+            expression: rate(container_cpu_usage_seconds_total{__scope__}[5m]) * 1000
+          - id: oom_events
+            version: 1.0.0
+            unit: events
+            kind: container
+            delta: true
+            expression: increase(container_oom_events_total{__scope__}[__step__s])
+          - id: replica_cpu_envelope
+            version: 1.0.0
+            unit: mCPU
+            kind: workload_container
+            delta: false
+            expression: aks_advisor:workload_container_cpu_max_mcores{__scope__}
+          - id: replica_cpu_request_max
+            version: 1.0.0
+            unit: mCPU
+            kind: workload_container
+            delta: false
+            expression: aks_advisor:workload_container_cpu_request_max_mcores{__scope__}
+          - id: replica_cpu_request_min
+            version: 1.0.0
+            unit: mCPU
+            kind: workload_container
+            delta: false
+            expression: aks_advisor:workload_container_cpu_request_min_mcores{__scope__}
+          - id: replica_cpu_throttling
+            version: 1.0.0
+            unit: ratio
+            kind: workload_container
+            delta: false
+            expression: aks_advisor:workload_container_cpu_throttling_max{__scope__}
+          - id: replica_oom_events
+            version: 1.0.0
+            unit: events
+            kind: workload_container
+            delta: true
+            expression: aks_advisor:workload_container_oom_increase{__scope__,step_seconds="__step__"}
+      parameter_guidance:
+        review_ratio:
+          unit: ratio
+          bounds: 0 < review_ratio < 1
+          implication: Investigation threshold only, not a utilization target or proposal
+            bound. Equality produces no signal; safety/owner gates cannot be
+            overridden.
+      synthetic_example:
+        mode: baseline
+        packs:
+          - AKS-RQ-002
+        pack_parameters:
+          AKS-RQ-002:
+            review_ratio: 0.4
+        pack_locks:
+          AKS-RQ-002: b347d11ef3b28bf5b7e851d3d01cff46b461a8d9ae120e4fdab983513ab66344
+        thresholds:
+          minimum_coverage_ratio: 0.85
+          minimum_observation_days: 30
+          maximum_evidence_age_hours: 24
+          maximum_metric_step_seconds: 300
+          minimum_replicas_for_autoscaling_review: 2
+        excluded_namespaces:
+          - kube-system
+          - gatekeeper-system
+        environment_risk:
+          production: high
+          nonproduction: medium
+        enable_estimated_savings: false
+    mode: guarded
+    capabilities:
+      - pack_id: AKS-RQ-002
+        mode: guarded
+        source: synthetic
+        cluster_resource_id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic
+        observed_at: 2026-10-29T12:00:00Z
+        source_profile:
+          id: identity-enriched
+          version: 1.3.0
+          identity: historical
+          transports:
+            - prometheus
+            - azure-managed-prometheus
+          labels:
+            cluster_resource_id: azure_resource_id
+            namespace: namespace
+            workload_kind: workload_kind
+            workload: workload
+            container: container
+          query_ids:
+            - available_replicas
+            - cpu_request
+            - cpu_throttling
+            - cpu_usage
+            - desired_replicas
+            - evictions
+            - hpa_present
+            - hpa_min_replicas
+            - hpa_max_replicas
+            - hpa_desired_replicas
+            - hpa_current_replicas
+            - keda_present
+            - memory_limit
+            - memory_request
+            - memory_total_usage
+            - memory_usage
+            - node_allocatable_cpu
+            - node_allocatable_memory
+            - node_cpu_usage
+            - observed_replicas
+            - oom_events
+            - replica_cpu_envelope
+            - replica_cpu_request_max
+            - replica_cpu_request_min
+            - replica_cpu_throttling
+            - replica_memory_envelope
+            - replica_memory_limit_max
+            - replica_memory_limit_min
+            - replica_memory_request_max
+            - replica_memory_request_min
+            - replica_oom_events
+            - replica_restarts
+            - restarts
+            - unschedulable_pods
+            - vpa_present
+          characterized_versions:
+            prometheus:
+              - 3.16.0-rc.2
+            kube-state-metrics:
+              - 2.17.0
+          characterization: synthetic
+          joins: none
+          limitations:
+            - Historical UIDs and approved complete-roster recordings must
+              already exist; this profile does not create them.
+            - HPA replica gauges require retained controller UID and historical
+              target workload UID at each point; current configuration cannot
+              relabel historical counts.
+            - Matching labels or version strings are not source attestation or
+              owner approval.
+            - Synthetic characterization does not prove raw scrape completeness
+              or live Azure compatibility.
+        status: unsupported
+        checks:
+          - code: synthetic.unsupported
+            status: unsupported
+            reason_codes:
+              - unsupported_source_shape
+          - code: profile.versions
+            status: unknown
+            reason_codes:
+              - versions_not_declared
+          - code: history.identity
+            status: available
+            reason_codes:
+              - declared_identity_shape
+          - code: source.evidence
+            status: unknown
+            reason_codes:
+              - not_collected
+        notice: Metric capability is not source attestation or safe-change approval.
+    resolved_queries: []
+status:
+  phase: AwaitingApproval
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals: []
+  pullRequest:
+    state: NotCreated
+  validation:
+    state: NotStarted
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001
+---
+apiVersion: optimization.aks.io/v1alpha1
+kind: OptimizationRecommendation
+metadata:
+  name: rec-012
+  namespace: fleet-efficiency-system
+  uid: synthetic-rec-012
+  resourceVersion: "1"
+  generation: 1
+spec:
+  finding:
+    id: rec-012
+    rule_id: cpu-request-overprovisioned
+    rule_version: 1.0.0
+    title: Review API container CPU requests
+    summary: Observed CPU peaks remain below the policy-bounded proposal. Validate
+      with the workload owner before changing requests.
+    resource_id: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/maple-central
+    cluster_name: maple-central
+    namespace: operations
+    workload: image-worker
+    severity: medium
+    confidence: high
+    category: workload-rightsizing
+    estimated_monthly_savings: null
+    currency: null
+    current_requests:
+      cpu_mcores: 1000
+      memory_mib: 2048
+    proposed_requests:
+      cpu_mcores: 750
+      memory_mib: null
+    evidence:
+      - metric: cpu_usage_p95
+        value: 320
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_p99
+        value: 460
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_usage_peak
+        value: 520
+        unit: mCPU
+        source: synthetic Prometheus export
+      - metric: cpu_throttling_max
+        value: 0.002
+        unit: ratio
+        source: synthetic Prometheus export
+      - metric: oom_kills
+        value: 0
+        unit: events
+        source: synthetic Prometheus export
+    prerequisites:
+      - Owner SLO review
+      - Canary deployment approved
+    risks:
+      - Rolling restart required
+    validation_steps:
+      - Observe throttling, readiness, OOM events and latency over the
+        validation window.
+    proposed_actions:
+      - Propose a CPU request update through the configuration repository.
+    rollback_steps:
+      - Revert the configuration pull request if the workload SLO regresses.
+    owner: Core services
+    metadata: {}
+  type: VPAResourceRecommendation
+  source: VPA
+  target:
+    clusterResourceId: /subscriptions/00000000-0000-0000-0000-000000000001/resourceGroups/synthetic-fleet/providers/Microsoft.ContainerService/managedClusters/maple-central
+    namespace: operations
+    apiVersion: apps/v1
+    kind: Deployment
+    name: image-worker
+    uid: synthetic-workload-11
+    container: api
+  generatedAt: 2026-10-30T10:00:00.000Z
+  expiresAt: 2026-11-13T12:00:00.000Z
+  evidenceCollectedAt: 2026-10-28T12:00:00.000Z
+  evidenceVersion: sha256:synthetic-evidence-001
+  maxEvidenceAgeHours: 24
+  completeness: complete
+  observationWindow:
+    start: 2026-09-30T09:00:00.000Z
+    end: 2026-10-30T09:00:00.000Z
+    coverageRatio: 0.994
+  risk:
+    level: medium
+    reasons:
+      - A resource request change triggers a rolling restart.
+      - CPU proposal only; memory remains unchanged.
+    requiredChecks:
+      - PodDisruptionBudget
+      - AutoscalerInteraction
+      - OwnerPolicy
+    restart: Rolling restart; respect the disruption budget and canary policy.
+  checks:
+    - name: PodDisruptionBudget
+      state: Pass
+      detail: Synthetic owner review confirms one available disruption.
+    - name: AutoscalerInteraction
+      state: Pass
+      detail: HPA and KEDA explicitly absent; VPA is recommendation-only.
+    - name: OwnerPolicy
+      state: Pass
+      detail: Minimum 500 mCPU; maximum CPU reduction 40%; reviewed SLO policy.
+  approvalsRequired:
+    - ApplicationOwner
+    - PlatformOwner
+  sourceRevision: synthetic-commit-001
+  implementation:
+    owner: example
+    repository: synthetic-workloads
+    configurationPath: deploy/catalog/values.yaml
+    baseBranch: main
+  vpa:
+    name: image-worker
+    namespace: operations
+    updateMode: Off
+    bounds:
+      containerName: api
+      lowerBound:
+        cpu: 400m
+        memory: 1Gi
+      target:
+        cpu: 750m
+        memory: 1536Mi
+      upperBound:
+        cpu: 900m
+        memory: 2Gi
+      uncappedTarget:
+        cpu: 600m
+        memory: 1400Mi
+status:
+  phase: Deferred
+  observedGeneration: 1
+  evidenceVersion: sha256:synthetic-evidence-001
+  sourceConfiguration: Unchanged
+  approvals: []
+  pullRequest:
+    state: NotCreated
+  validation:
+    state: NotStarted
+  timeline:
+    - id: generated-001
+      actor: Deterministic advisor
+      timestamp: 2026-10-30T10:00:00.000Z
+      action: Recommendation generated
+      reason: Policy-bounded CPU proposal; VPA retained as separate evidence.
+      generation: 1
+      evidenceVersion: sha256:synthetic-evidence-001

@@ -1,0 +1,39 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "expected_evaluations": {
+      "minimum": 0,
+      "title": "Expected Evaluations",
+      "type": "integer"
+    },
+    "logical_queries": {
+      "minimum": 0,
+      "title": "Logical Queries",
+      "type": "integer"
+    },
+    "maximum_series": {
+      "minimum": 1,
+      "title": "Maximum Series",
+      "type": "integer"
+    },
+    "requests": {
+      "minimum": 0,
+      "title": "Requests",
+      "type": "integer"
+    },
+    "unique_queries": {
+      "minimum": 0,
+      "title": "Unique Queries",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "logical_queries",
+    "unique_queries",
+    "requests",
+    "expected_evaluations",
+    "maximum_series"
+  ],
+  "title": "MetricQueryPlan",
+  "type": "object"
+}

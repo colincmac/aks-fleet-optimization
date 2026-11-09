@@ -1,0 +1,1 @@
+kube_pod_container_resource_requests{__scope__,resource="memory",unit="byte"} / 1048576

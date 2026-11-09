@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "window_start": "2026-09-29T00:00:00Z",
+  "window_end": "2026-10-29T00:00:00Z",
+  "azure": [
+    {
+      "tenant_id": "00000000-0000-0000-0000-000000000000",
+      "generated_at": "2026-10-29T11:00:00Z",
+      "collection": {
+        "collector": "azure-inventory", "status": "complete",
+        "requested_scope": ["00000000-0000-0000-0000-000000000000"],
+        "completed_scope": ["00000000-0000-0000-0000-000000000000"],
+        "started_at": "2026-10-29T10:00:00Z", "completed_at": "2026-10-29T11:00:00Z",
+        "source_observed_at": "2026-10-29T10:00:00Z", "pagination_complete": true
+      },
+      "clusters": [{
+        "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+        "name": "aks-synthetic", "subscription_id": "00000000-0000-0000-0000-000000000000",
+        "resource_group": "rg-synthetic", "location": "eastus", "node_provisioning_mode": "Manual",
+        "node_pools": []
+      }]
+    },
+    {
+      "tenant_id": "00000000-0000-0000-0000-000000000000",
+      "generated_at": "2026-10-29T11:00:00Z",
+      "collection": {
+        "collector": "azure-inventory", "status": "failed",
+        "requested_scope": ["11111111-1111-1111-1111-111111111111"], "completed_scope": [],
+        "started_at": "2026-10-29T10:00:00Z", "completed_at": "2026-10-29T11:00:00Z",
+        "source_observed_at": null, "pagination_complete": false,
+        "errors": [{"scope": "11111111-1111-1111-1111-111111111111", "code": "forbidden"}]
+      },
+      "clusters": []
+    }
+  ],
+  "kubernetes": [{
+    "tenant_id": "00000000-0000-0000-0000-000000000000",
+    "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+    "cluster_uid": "synthetic-cluster-uid", "generated_at": "2026-10-29T11:00:00Z",
+    "collection": {
+      "collector": "kubernetes-metadata", "status": "complete",
+      "requested_scope": ["/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"],
+      "completed_scope": ["/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"],
+      "started_at": "2026-10-29T10:00:00Z", "completed_at": "2026-10-29T11:00:00Z",
+      "source_observed_at": "2026-10-29T10:00:00Z", "pagination_complete": true
+    },
+    "api_availability": {
+      "v1/namespaces": "available", "v1/pods": "available",
+      "apps/v1/statefulsets": "available", "policy/v1/poddisruptionbudgets": "available"
+    },
+    "resource_versions": {
+      "v1/namespaces": "synthetic-version", "v1/pods": "synthetic-version",
+      "apps/v1/statefulsets": "synthetic-version", "policy/v1/poddisruptionbudgets": "synthetic-version"
+    },
+    "resources": [
+      {"api_version": "v1", "kind": "Namespace", "name": "kube-system", "uid": "synthetic-cluster-uid"},
+      {"api_version": "v1", "kind": "Namespace", "name": "synthetic", "uid": "namespace-uid"},
+      {"api_version": "apps/v1", "kind": "StatefulSet", "namespace": "synthetic", "name": "synthetic", "uid": "workload-uid", "spec": {"replicas": 1}},
+      {
+        "api_version": "v1", "kind": "Pod", "namespace": "synthetic", "name": "synthetic-0", "uid": "pod-uid",
+        "owner_references": [{"apiVersion": "apps/v1", "kind": "StatefulSet", "name": "synthetic", "uid": "workload-uid", "controller": true}],
+        "spec": {"containers": [{"name": "api", "resources": {"requests": {}}}]},
+        "status": {"phase": "Running"}
+      }
+    ],
+    "workload_bindings": {"pod-uid": "workload-uid"}
+  }]
+}

@@ -1,0 +1,592 @@
+{
+  "$defs": {
+    "AdvisorConfig": {
+      "additionalProperties": false,
+      "properties": {
+        "enable_estimated_savings": {
+          "default": false,
+          "title": "Enable Estimated Savings",
+          "type": "boolean"
+        },
+        "environment_risk": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Environment Risk",
+          "type": "object"
+        },
+        "excluded_namespaces": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Excluded Namespaces",
+          "type": "array"
+        },
+        "mode": {
+          "default": "baseline",
+          "enum": [
+            "baseline",
+            "guarded"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "pack_locks": {
+          "patternProperties": {
+            "^AKS-[A-Z]+-[0-9]{3}$": {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            }
+          },
+          "title": "Pack Locks",
+          "type": "object"
+        },
+        "pack_parameters": {
+          "patternProperties": {
+            "^AKS-[A-Z]+-[0-9]{3}$": {
+              "$ref": "#/$defs/PackParameters"
+            }
+          },
+          "title": "Pack Parameters",
+          "type": "object"
+        },
+        "packs": {
+          "anyOf": [
+            {
+              "items": {
+                "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Packs"
+        },
+        "thresholds": {
+          "$ref": "#/$defs/Thresholds"
+        }
+      },
+      "title": "AdvisorConfig",
+      "type": "object"
+    },
+    "OperatorCard": {
+      "additionalProperties": false,
+      "properties": {
+        "manifest": {
+          "$ref": "#/$defs/PackManifest"
+        },
+        "parameter_guidance": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ParameterGuidance"
+          },
+          "title": "Parameter Guidance",
+          "type": "object"
+        },
+        "provenance": {
+          "$ref": "#/$defs/PackProvenance"
+        },
+        "synthetic_example": {
+          "$ref": "#/$defs/AdvisorConfig"
+        }
+      },
+      "required": [
+        "manifest",
+        "provenance",
+        "parameter_guidance",
+        "synthetic_example"
+      ],
+      "title": "OperatorCard",
+      "type": "object"
+    },
+    "PackManifest": {
+      "additionalProperties": false,
+      "properties": {
+        "actions": {
+          "additionalProperties": {
+            "items": {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "propertyNames": {
+            "enum": [
+              "baseline",
+              "guarded"
+            ]
+          },
+          "title": "Actions",
+          "type": "object"
+        },
+        "baseline_rollback": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "title": "Baseline Rollback",
+          "type": "array"
+        },
+        "baseline_summary": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Baseline Summary",
+          "type": "string"
+        },
+        "evaluator": {
+          "enum": [
+            "cpu-request-review",
+            "missing-cpu-request",
+            "cpu-request-risk",
+            "node-pool-review",
+            "scheduling-review",
+            "capacity-review",
+            "oom-investigation",
+            "memory-safety-review",
+            "memory-request-proposal",
+            "pod-memory-accounting",
+            "memory-limit-proposal",
+            "restart-investigation",
+            "termination-context",
+            "eviction-investigation",
+            "fixed-replica-review",
+            "autoscaler-interaction",
+            "hpa-pinning",
+            "controller-responsibility",
+            "hpa-floor-proposal",
+            "hpa-change-review",
+            "vpa-bounds-review"
+          ],
+          "title": "Evaluator",
+          "type": "string"
+        },
+        "evidence_kind": {
+          "default": "metrics",
+          "enum": [
+            "metrics",
+            "inventory"
+          ],
+          "title": "Evidence Kind",
+          "type": "string"
+        },
+        "family": {
+          "enum": [
+            "cpu",
+            "node-pool",
+            "memory",
+            "reliability",
+            "autoscaler",
+            "scheduling"
+          ],
+          "title": "Family",
+          "type": "string"
+        },
+        "guarded_summary": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Guarded Summary",
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "limitations": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "parameters": {
+          "$ref": "#/$defs/PackParameters"
+        },
+        "prerequisites": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Prerequisites",
+          "type": "array"
+        },
+        "purpose": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Purpose",
+          "type": "string"
+        },
+        "queries": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "items": {
+                "pattern": "^[a-z][a-z0-9_]*$",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "propertyNames": {
+              "enum": [
+                "container",
+                "workload_container",
+                "unresolved_container",
+                "node",
+                "workload",
+                "hpa"
+              ]
+            },
+            "type": "object"
+          },
+          "propertyNames": {
+            "enum": [
+              "baseline",
+              "guarded"
+            ]
+          },
+          "title": "Queries",
+          "type": "object"
+        },
+        "required_evidence": {
+          "additionalProperties": {
+            "items": {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "propertyNames": {
+            "enum": [
+              "baseline",
+              "guarded"
+            ]
+          },
+          "title": "Required Evidence",
+          "type": "object"
+        },
+        "risks": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Risks",
+          "type": "array"
+        },
+        "rollback": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Rollback",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "sources": {
+          "items": {
+            "enum": [
+              "prometheus",
+              "azure-managed-prometheus"
+            ],
+            "type": "string"
+          },
+          "title": "Sources",
+          "type": "array"
+        },
+        "summary_variants": {
+          "additionalProperties": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "default",
+              "multiple-controllers",
+              "keda-chain",
+              "cpu-memory-only",
+              "zero-minimum"
+            ]
+          },
+          "title": "Summary Variants",
+          "type": "object"
+        },
+        "title": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Title",
+          "type": "string"
+        },
+        "validation": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Validation",
+          "type": "array"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "family",
+        "evaluator",
+        "title",
+        "purpose",
+        "sources",
+        "parameters",
+        "queries",
+        "required_evidence",
+        "limitations",
+        "prerequisites",
+        "risks",
+        "validation",
+        "rollback",
+        "actions",
+        "baseline_summary",
+        "guarded_summary"
+      ],
+      "title": "PackManifest",
+      "type": "object"
+    },
+    "PackParameters": {
+      "additionalProperties": false,
+      "properties": {
+        "review_ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Ratio"
+        }
+      },
+      "title": "PackParameters",
+      "type": "object"
+    },
+    "PackProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "parameters": {
+          "$ref": "#/$defs/PackParameters"
+        },
+        "queries": {
+          "items": {
+            "$ref": "#/$defs/QueryAsset"
+          },
+          "title": "Queries",
+          "type": "array"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "digest",
+        "parameters",
+        "queries"
+      ],
+      "title": "PackProvenance",
+      "type": "object"
+    },
+    "ParameterGuidance": {
+      "additionalProperties": false,
+      "properties": {
+        "bounds": {
+          "title": "Bounds",
+          "type": "string"
+        },
+        "implication": {
+          "title": "Implication",
+          "type": "string"
+        },
+        "unit": {
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "unit",
+        "bounds",
+        "implication"
+      ],
+      "title": "ParameterGuidance",
+      "type": "object"
+    },
+    "QueryAsset": {
+      "additionalProperties": false,
+      "properties": {
+        "delta": {
+          "title": "Delta",
+          "type": "boolean"
+        },
+        "expression": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Expression",
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "container",
+            "workload_container",
+            "unresolved_container",
+            "node",
+            "workload",
+            "hpa"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "unit": {
+          "enum": [
+            "mCPU",
+            "MiB",
+            "ratio",
+            "events",
+            "pods",
+            "boolean"
+          ],
+          "title": "Unit",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "unit",
+        "kind",
+        "delta",
+        "expression"
+      ],
+      "title": "QueryAsset",
+      "type": "object"
+    },
+    "Thresholds": {
+      "additionalProperties": false,
+      "properties": {
+        "maximum_evidence_age_hours": {
+          "default": 24,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Evidence Age Hours",
+          "type": "number"
+        },
+        "maximum_metric_step_seconds": {
+          "default": 300,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Metric Step Seconds",
+          "type": "integer"
+        },
+        "minimum_coverage_ratio": {
+          "default": 0.85,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Minimum Coverage Ratio",
+          "type": "number"
+        },
+        "minimum_observation_days": {
+          "default": 30,
+          "minimum": 1,
+          "title": "Minimum Observation Days",
+          "type": "integer"
+        },
+        "minimum_replicas_for_autoscaling_review": {
+          "default": 2,
+          "minimum": 1,
+          "title": "Minimum Replicas For Autoscaling Review",
+          "type": "integer"
+        }
+      },
+      "title": "Thresholds",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cards": {
+      "items": {
+        "$ref": "#/$defs/OperatorCard"
+      },
+      "title": "Cards",
+      "type": "array"
+    },
+    "glossary": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Glossary",
+      "type": "object"
+    },
+    "guarded_notice": {
+      "default": "Guarded mode is not approval. Numeric proposals require independent owner policy, complete identity-bound evidence, reliability gates and a one-dimensional canary/rollback. Configuration never enables owner opt-ins or changes a cluster.",
+      "title": "Guarded Notice",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "cards",
+    "glossary"
+  ],
+  "title": "OperatorCatalog",
+  "type": "object"
+}

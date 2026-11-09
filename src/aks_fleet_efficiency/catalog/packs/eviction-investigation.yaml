@@ -1,0 +1,49 @@
+schema_version: '1.0'
+id: AKS-REL-003
+version: 2.0.0
+family: reliability
+evaluator: eviction-investigation
+evidence_kind: metrics
+title: Investigate workload evictions
+purpose: Identity-bound workload eviction counts were observed over the declared window.
+  They are reported once per workload, not multiplied by containers; counts do not
+  establish node-pressure causes or SLO impact.
+sources:
+- prometheus
+- azure-managed-prometheus
+parameters: {}
+queries:
+  baseline: &id001
+    workload:
+    - evictions
+  guarded: *id001
+required_evidence:
+  baseline: &id002
+  - Complete fresh exact-scoped sources and aligned metric quality
+  - Exact historical identities and complete required history; missing is not zero
+  guarded: *id002
+limitations:
+- Identity-bound workload eviction counts were observed over the declared window.
+  They are reported once per workload, not multiplied by containers; counts do not
+  establish node-pressure causes or SLO impact.
+- References/digests are integrity declarations, not source attestation or approval.
+prerequisites:
+- Verify the approved historical eviction producer and workload identity.
+risks:
+- Evictions may have multiple causes; missing history is not zero.
+validation:
+- Review approved incident metadata and availability evidence before reductions.
+rollback:
+- If a separately approved change regresses guardrails, stop promotion and revert
+  its Git commit through the owning delivery pipeline.
+actions:
+  baseline:
+  - Investigate workload eviction risk; no numeric change is proposed.
+  guarded:
+  - Investigate workload eviction risk; no numeric change is proposed.
+baseline_summary: Identity-bound workload eviction counts were observed over the declared
+  window. They are reported once per workload, not multiplied by containers; counts
+  do not establish node-pressure causes or SLO impact.
+guarded_summary: Identity-bound workload eviction counts were observed over the declared
+  window. They are reported once per workload, not multiplied by containers; counts
+  do not establish node-pressure causes or SLO impact.

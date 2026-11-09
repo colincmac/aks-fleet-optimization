@@ -1,0 +1,924 @@
+{
+  "$defs": {
+    "ClusterCollectionPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "entities": {
+          "items": {
+            "$ref": "#/$defs/MetricEntity"
+          },
+          "maxItems": 10000,
+          "title": "Entities",
+          "type": "array"
+        },
+        "expected_cluster_uid": {
+          "minLength": 1,
+          "title": "Expected Cluster Uid",
+          "type": "string"
+        },
+        "expected_node_resource_group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expected Node Resource Group"
+        },
+        "metadata_export": {
+          "anyOf": [
+            {
+              "format": "path",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metadata Export"
+        },
+        "metrics": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Metrics",
+          "type": "array"
+        },
+        "node_history_reference": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node History Reference"
+        },
+        "resource_id": {
+          "minLength": 1,
+          "title": "Resource Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource_id",
+        "expected_cluster_uid"
+      ],
+      "title": "ClusterCollectionPlan",
+      "type": "object"
+    },
+    "MemoryLimitPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allocator_cache_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Allocator Cache Reviewed"
+        },
+        "allow_limit_reduction": {
+          "default": false,
+          "title": "Allow Limit Reduction",
+          "type": "boolean"
+        },
+        "configuration_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configuration Digest"
+        },
+        "evidence_reference": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "failover_total_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failover Total Peak Mib"
+        },
+        "headroom_factor": {
+          "minimum": 1,
+          "title": "Headroom Factor",
+          "type": "number"
+        },
+        "maximum_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Reduction Ratio",
+          "type": "number"
+        },
+        "minimum_limit_mib": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Limit Mib",
+          "type": "number"
+        },
+        "startup_total_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Startup Total Peak Mib"
+        }
+      },
+      "required": [
+        "minimum_limit_mib",
+        "maximum_reduction_ratio",
+        "headroom_factor",
+        "evidence_reference"
+      ],
+      "title": "MemoryLimitPolicy",
+      "type": "object"
+    },
+    "MemorySafetyPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_request_reduction": {
+          "default": false,
+          "title": "Allow Request Reduction",
+          "type": "boolean"
+        },
+        "eviction_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Eviction Events"
+        },
+        "evidence_reference": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "failover_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failover Peak Mib"
+        },
+        "headroom_factor": {
+          "minimum": 1,
+          "title": "Headroom Factor",
+          "type": "number"
+        },
+        "maximum_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Reduction Ratio",
+          "type": "number"
+        },
+        "minimum_request_mib": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Request Mib",
+          "type": "number"
+        },
+        "qos_class": {
+          "anyOf": [
+            {
+              "enum": [
+                "Guaranteed",
+                "Burstable",
+                "BestEffort"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qos Class"
+        },
+        "startup_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Startup Peak Mib"
+        }
+      },
+      "required": [
+        "minimum_request_mib",
+        "maximum_reduction_ratio",
+        "headroom_factor",
+        "evidence_reference"
+      ],
+      "title": "MemorySafetyPolicy",
+      "type": "object"
+    },
+    "MetricEntity": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "container": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Container"
+        },
+        "hpa_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hpa Uid"
+        },
+        "kind": {
+          "default": "container",
+          "enum": [
+            "container",
+            "workload",
+            "workload_container",
+            "hpa",
+            "node",
+            "node_pool",
+            "unresolved_container"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "membership_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Membership Digest"
+        },
+        "namespace": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace"
+        },
+        "node_pool_resource_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Pool Resource Id"
+        },
+        "node_resource_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Resource Id"
+        },
+        "node_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Uid"
+        },
+        "pod": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod"
+        },
+        "pod_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod Uid"
+        },
+        "workload": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload"
+        },
+        "workload_kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Kind"
+        },
+        "workload_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Uid"
+        }
+      },
+      "required": [
+        "cluster_resource_id"
+      ],
+      "title": "MetricEntity",
+      "type": "object"
+    },
+    "ReplicaSafetyPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_floor_reduction": {
+          "default": false,
+          "title": "Allow Floor Reduction",
+          "type": "boolean"
+        },
+        "configuration_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configuration Digest"
+        },
+        "eviction_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Eviction Events"
+        },
+        "evidence_reference": {
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "failover_reserve_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failover Reserve Replicas"
+        },
+        "hpa_uid": {
+          "minLength": 1,
+          "title": "Hpa Uid",
+          "type": "string"
+        },
+        "maximum_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Reduction Ratio",
+          "type": "number"
+        },
+        "maximum_unavailable_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Unavailable Replicas"
+        },
+        "minimum_available_replicas": {
+          "minimum": 1,
+          "title": "Minimum Available Replicas",
+          "type": "integer"
+        },
+        "oom_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Oom Events"
+        },
+        "peak_load_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Peak Load Reviewed"
+        },
+        "reliability_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reliability Reviewed"
+        },
+        "restart_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Restart Events"
+        },
+        "startup_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Startup Reviewed"
+        },
+        "tested_replicas": {
+          "minimum": 1,
+          "title": "Tested Replicas",
+          "type": "integer"
+        },
+        "throughput_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Throughput Reviewed"
+        },
+        "zone_failure_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Zone Failure Reviewed"
+        }
+      },
+      "required": [
+        "hpa_uid",
+        "minimum_available_replicas",
+        "tested_replicas",
+        "maximum_reduction_ratio",
+        "evidence_reference"
+      ],
+      "title": "ReplicaSafetyPolicy",
+      "type": "object"
+    },
+    "WorkloadAssessmentBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "minLength": 1,
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "history_reference": {
+          "minLength": 1,
+          "title": "History Reference",
+          "type": "string"
+        },
+        "hpa_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hpa Uid"
+        },
+        "namespace": {
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "minLength": 1,
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 10000,
+          "minItems": 1,
+          "title": "Pod Uids",
+          "type": "array"
+        },
+        "safety_policy": {
+          "$ref": "#/$defs/WorkloadSafetyPolicy"
+        },
+        "source_name": {
+          "minLength": 1,
+          "title": "Source Name",
+          "type": "string"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "workload": {
+          "minLength": 1,
+          "title": "Workload",
+          "type": "string"
+        },
+        "workload_kind": {
+          "enum": [
+            "Deployment",
+            "StatefulSet"
+          ],
+          "title": "Workload Kind",
+          "type": "string"
+        },
+        "workload_uid": {
+          "minLength": 1,
+          "title": "Workload Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "namespace",
+        "namespace_uid",
+        "workload_kind",
+        "workload",
+        "workload_uid",
+        "pod_uids",
+        "source_name",
+        "history_reference",
+        "safety_policy"
+      ],
+      "title": "WorkloadAssessmentBinding",
+      "type": "object"
+    },
+    "WorkloadSafetyPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_headroom_factor": {
+          "minimum": 1,
+          "title": "Cpu Headroom Factor",
+          "type": "number"
+        },
+        "disruption_reviewed": {
+          "title": "Disruption Reviewed",
+          "type": "boolean"
+        },
+        "maximum_cpu_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Cpu Reduction Ratio",
+          "type": "number"
+        },
+        "maximum_cpu_throttled_ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Maximum Cpu Throttled Ratio",
+          "type": "number"
+        },
+        "memory": {
+          "additionalProperties": {
+            "$ref": "#/$defs/MemorySafetyPolicy"
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Memory",
+          "type": "object"
+        },
+        "memory_limits": {
+          "additionalProperties": {
+            "$ref": "#/$defs/MemoryLimitPolicy"
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Memory Limits",
+          "type": "object"
+        },
+        "minimum_cpu_request_mcores": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Cpu Request Mcores",
+          "type": "number"
+        },
+        "owner": {
+          "minLength": 1,
+          "title": "Owner",
+          "type": "string"
+        },
+        "replicas": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReplicaSafetyPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "reviewed_window_end": {
+          "format": "date-time",
+          "title": "Reviewed Window End",
+          "type": "string"
+        },
+        "reviewed_window_start": {
+          "format": "date-time",
+          "title": "Reviewed Window Start",
+          "type": "string"
+        },
+        "slo_reference": {
+          "minLength": 1,
+          "title": "Slo Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "owner",
+        "slo_reference",
+        "reviewed_window_start",
+        "reviewed_window_end",
+        "disruption_reviewed",
+        "minimum_cpu_request_mcores",
+        "maximum_cpu_reduction_ratio",
+        "cpu_headroom_factor",
+        "maximum_cpu_throttled_ratio"
+      ],
+      "title": "WorkloadSafetyPolicy",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "clusters": {
+      "items": {
+        "$ref": "#/$defs/ClusterCollectionPlan"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Clusters",
+      "type": "array"
+    },
+    "maximum_duration_seconds": {
+      "default": 600,
+      "maximum": 3600,
+      "minimum": 1,
+      "title": "Maximum Duration Seconds",
+      "type": "integer"
+    },
+    "maximum_metric_evaluations": {
+      "default": 5000000,
+      "maximum": 100000000,
+      "minimum": 1,
+      "title": "Maximum Metric Evaluations",
+      "type": "integer"
+    },
+    "maximum_objects": {
+      "default": 50000,
+      "maximum": 1000000,
+      "minimum": 1,
+      "title": "Maximum Objects",
+      "type": "integer"
+    },
+    "maximum_queries": {
+      "default": 10000,
+      "maximum": 100000,
+      "minimum": 1,
+      "title": "Maximum Queries",
+      "type": "integer"
+    },
+    "maximum_reads": {
+      "default": 2000,
+      "maximum": 10000,
+      "minimum": 1,
+      "title": "Maximum Reads",
+      "type": "integer"
+    },
+    "maximum_series_per_response": {
+      "default": 10000,
+      "maximum": 10000,
+      "minimum": 1,
+      "title": "Maximum Series Per Response",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "step_seconds": {
+      "default": 300,
+      "maximum": 300,
+      "minimum": 1,
+      "title": "Step Seconds",
+      "type": "integer"
+    },
+    "window_end": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Window End"
+    },
+    "window_start": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Window Start"
+    },
+    "workload_assessments": {
+      "items": {
+        "$ref": "#/$defs/WorkloadAssessmentBinding"
+      },
+      "title": "Workload Assessments",
+      "type": "array"
+    }
+  },
+  "required": [
+    "clusters"
+  ],
+  "title": "CollectionPlan",
+  "type": "object"
+}

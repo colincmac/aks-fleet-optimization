@@ -1,0 +1,58 @@
+schema_version: '1.0'
+id: AKS-MEM-001
+version: 2.0.0
+family: memory
+evaluator: oom-investigation
+evidence_kind: metrics
+title: Investigate OOM events
+purpose: OOM events were observed in the assessment window. Investigate memory limits,
+  workload behavior and node pressure before any resource reduction; event counts
+  alone do not identify the cause.
+sources:
+- prometheus
+- azure-managed-prometheus
+parameters: {}
+queries:
+  baseline: &id001
+    container:
+    - oom_events
+    workload_container:
+    - replica_oom_events
+  guarded: *id001
+required_evidence:
+  baseline: &id002
+  - Complete fresh exact-scoped sources and aligned metric quality
+  - Exact historical identities and complete required history; missing is not zero
+  guarded: *id002
+limitations:
+- OOM events were observed in the assessment window. Investigate memory limits, workload
+  behavior and node pressure before any resource reduction; event counts alone do
+  not identify the cause.
+- References/digests are integrity declarations, not source attestation or approval.
+prerequisites:
+- Have the workload owner correlate OOM timing with memory limits, node pressure,
+  restarts and application SLOs through approved tools.
+risks:
+- Lowering memory requests or limits can worsen eviction or OOM risk.
+- Working-set samples can miss short peaks and do not prove a safe memory limit or
+  request.
+validation:
+- Review startup, peak load and failover memory behavior.
+- Validate any separately approved change against OOM, restarts, evictions and owner-declared
+  SLOs.
+rollback:
+- If a separately approved change regresses guardrails, stop promotion and revert
+  its Git commit through the owning delivery pipeline.
+actions:
+  baseline:
+  - Investigate memory reliability before considering rightsizing; no numeric memory
+    reduction is proposed.
+  guarded:
+  - Investigate memory reliability before considering rightsizing; no numeric memory
+    reduction is proposed.
+baseline_summary: OOM events were observed in the assessment window. Investigate memory
+  limits, workload behavior and node pressure before any resource reduction; event
+  counts alone do not identify the cause.
+guarded_summary: OOM events were observed in the assessment window. Investigate memory
+  limits, workload behavior and node pressure before any resource reduction; event
+  counts alone do not identify the cause.

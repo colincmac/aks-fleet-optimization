@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "tenant_id": "00000000-0000-0000-0000-000000000000",
+  "subscription_ids": ["00000000-0000-0000-0000-000000000000"],
+  "source_profile": "azure-cost-details-projection-v1",
+  "cost_basis": "amortized",
+  "source_reference": "synthetic-export",
+  "source_observed_at": "2026-10-29T00:00:00Z",
+  "export_complete": true,
+  "period": {"start": "2026-09-29T00:00:00Z", "end": "2026-10-29T00:00:00Z"},
+  "rows": [
+    {
+      "id": "row-1",
+      "subscription_id": "00000000-0000-0000-0000-000000000000",
+      "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic",
+      "period": {"start": "2026-09-29T00:00:00Z", "end": "2026-10-29T00:00:00Z"},
+      "amount": "100.00",
+      "currency": "USD",
+      "charge_category": "compute",
+      "charge_type": "Usage",
+      "pricing_model": "Reservation",
+      "benefit_id": "synthetic-reservation"
+    }
+  ],
+  "bindings": [
+    {
+      "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic",
+      "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+      "cluster_uid": "cluster-uid",
+      "pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/apps",
+      "reference": "synthetic-historical-binding"
+    }
+  ],
+  "allocation": {
+    "profile": "reviewed-allocation-shares-v1",
+    "source": "opencost",
+    "source_reference": "synthetic-reviewed-shares",
+    "basis": "reviewed-shares",
+    "shared_idle": false,
+    "period": {"start": "2026-09-29T00:00:00Z", "end": "2026-10-29T00:00:00Z"},
+    "shares": [
+      {
+        "row_id": "row-1", "fraction": "0.60", "category": "allocated",
+        "namespace": "apps", "workload_uid": "workload-uid", "container": "app"
+      },
+      {"row_id": "row-1", "fraction": "0.25", "category": "idle"},
+      {"row_id": "row-1", "fraction": "0.15", "category": "system"}
+    ]
+  }
+}

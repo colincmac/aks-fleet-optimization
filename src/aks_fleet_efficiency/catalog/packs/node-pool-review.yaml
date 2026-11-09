@@ -1,0 +1,37 @@
+schema_version: "1.0"
+id: AKS-NP-001
+version: "2.0.0"
+family: node-pool
+evaluator: node-pool-review
+title: Review low-utilization node pool
+purpose: Investigate qualified historical pool usage while preserving complete membership, aligned sums and constant capacity.
+sources: [prometheus, azure-managed-prometheus]
+parameters:
+  review_ratio: 0.2
+queries:
+  baseline:
+    node: [node_cpu_usage, node_allocatable_cpu, node_allocatable_memory]
+  guarded:
+    node: [node_cpu_usage, node_allocatable_cpu, node_allocatable_memory]
+required_evidence:
+  baseline: [Complete fresh scoped sources, Exact pool and historical node identities, Complete historical membership, Aligned usage summed before percentiles, Full-window constant allocatable capacity]
+  guarded: [Complete fresh scoped sources, Exact pool and historical node identities, Complete historical membership, Aligned usage summed before percentiles, Full-window constant allocatable capacity]
+limitations:
+  - Low CPU usage is not proof a node can be removed.
+  - Current node membership cannot reconstruct deleted-node history.
+  - This pack does not implement NAP eligibility, packing simulation or a node-count target.
+prerequisites:
+  - Confirm pod disruption budgets and zonal resilience.
+  - Check pending pods, daemonset overhead and scale-up latency.
+risks:
+  - Reducing warm capacity can increase scale-up latency.
+  - Average or P95 utilization alone can hide short bursts.
+validation:
+  - Load test any separately proposed minimum capacity.
+  - Compare P95/P99 saturation, pending pods and SLOs before and after.
+rollback: [No node target is proposed; revert a separately approved capacity change through the owning delivery pipeline on regression.]
+actions:
+  baseline: [Review minimum node count and autoscaler profile., Investigate existing placement and resilience requirements.]
+  guarded: [Review minimum node count and autoscaler profile., Investigate existing placement and resilience requirements.]
+baseline_summary: P95 CPU utilization is below the configured review threshold. This is not proof a node can be removed; validate resilience and scheduling constraints before a separately approved change.
+guarded_summary: P95 CPU utilization is below the configured review threshold. This is not proof a node can be removed; validate resilience and scheduling constraints before a separately approved change.

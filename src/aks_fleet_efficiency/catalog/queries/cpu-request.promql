@@ -1,0 +1,1 @@
+kube_pod_container_resource_requests{__scope__,resource="cpu",unit="core"} * 1000

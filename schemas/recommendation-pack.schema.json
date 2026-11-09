@@ -1,0 +1,293 @@
+{
+  "$defs": {
+    "PackParameters": {
+      "additionalProperties": false,
+      "properties": {
+        "review_ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Ratio"
+        }
+      },
+      "title": "PackParameters",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "actions": {
+      "additionalProperties": {
+        "items": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "propertyNames": {
+        "enum": [
+          "baseline",
+          "guarded"
+        ]
+      },
+      "title": "Actions",
+      "type": "object"
+    },
+    "baseline_rollback": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "title": "Baseline Rollback",
+      "type": "array"
+    },
+    "baseline_summary": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Baseline Summary",
+      "type": "string"
+    },
+    "evaluator": {
+      "enum": [
+        "cpu-request-review",
+        "missing-cpu-request",
+        "cpu-request-risk",
+        "node-pool-review",
+        "scheduling-review",
+        "capacity-review",
+        "oom-investigation",
+        "memory-safety-review",
+        "memory-request-proposal",
+        "pod-memory-accounting",
+        "memory-limit-proposal",
+        "restart-investigation",
+        "termination-context",
+        "eviction-investigation",
+        "fixed-replica-review",
+        "autoscaler-interaction",
+        "hpa-pinning",
+        "controller-responsibility",
+        "hpa-floor-proposal",
+        "hpa-change-review",
+        "vpa-bounds-review"
+      ],
+      "title": "Evaluator",
+      "type": "string"
+    },
+    "evidence_kind": {
+      "default": "metrics",
+      "enum": [
+        "metrics",
+        "inventory"
+      ],
+      "title": "Evidence Kind",
+      "type": "string"
+    },
+    "family": {
+      "enum": [
+        "cpu",
+        "node-pool",
+        "memory",
+        "reliability",
+        "autoscaler",
+        "scheduling"
+      ],
+      "title": "Family",
+      "type": "string"
+    },
+    "guarded_summary": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Guarded Summary",
+      "type": "string"
+    },
+    "id": {
+      "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+      "title": "Id",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Limitations",
+      "type": "array"
+    },
+    "parameters": {
+      "$ref": "#/$defs/PackParameters"
+    },
+    "prerequisites": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Prerequisites",
+      "type": "array"
+    },
+    "purpose": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Purpose",
+      "type": "string"
+    },
+    "queries": {
+      "additionalProperties": {
+        "additionalProperties": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "propertyNames": {
+          "enum": [
+            "container",
+            "workload_container",
+            "unresolved_container",
+            "node",
+            "workload",
+            "hpa"
+          ]
+        },
+        "type": "object"
+      },
+      "propertyNames": {
+        "enum": [
+          "baseline",
+          "guarded"
+        ]
+      },
+      "title": "Queries",
+      "type": "object"
+    },
+    "required_evidence": {
+      "additionalProperties": {
+        "items": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "propertyNames": {
+        "enum": [
+          "baseline",
+          "guarded"
+        ]
+      },
+      "title": "Required Evidence",
+      "type": "object"
+    },
+    "risks": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Risks",
+      "type": "array"
+    },
+    "rollback": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Rollback",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "sources": {
+      "items": {
+        "enum": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "type": "string"
+      },
+      "title": "Sources",
+      "type": "array"
+    },
+    "summary_variants": {
+      "additionalProperties": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "propertyNames": {
+        "enum": [
+          "default",
+          "multiple-controllers",
+          "keda-chain",
+          "cpu-memory-only",
+          "zero-minimum"
+        ]
+      },
+      "title": "Summary Variants",
+      "type": "object"
+    },
+    "title": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Title",
+      "type": "string"
+    },
+    "validation": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Validation",
+      "type": "array"
+    },
+    "version": {
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "family",
+    "evaluator",
+    "title",
+    "purpose",
+    "sources",
+    "parameters",
+    "queries",
+    "required_evidence",
+    "limitations",
+    "prerequisites",
+    "risks",
+    "validation",
+    "rollback",
+    "actions",
+    "baseline_summary",
+    "guarded_summary"
+  ],
+  "title": "PackManifest",
+  "type": "object"
+}

@@ -1,0 +1,13 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: advisor-demo-web
+  namespace: fleet-advisor-demo
+  labels:
+    app.kubernetes.io/name: advisor-demo-web
+    app.kubernetes.io/managed-by: containerization-assist
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: advisor-demo-web

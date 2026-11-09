@@ -1,0 +1,45 @@
+schema_version: '1.0'
+id: AKS-REL-002
+version: 2.0.0
+family: reliability
+evaluator: termination-context
+evidence_kind: inventory
+title: Review reported termination context
+purpose: Current UID-bound last-termination status reports a reason and exit code.
+  It does not establish the cause of all restarts, historical frequency, node pressure
+  or SLO impact; exit code 137 alone is not proof of OOM.
+sources: []
+parameters: {}
+queries:
+  baseline: &id001 {}
+  guarded: *id001
+required_evidence:
+  baseline: &id002
+  - Complete fresh exact-scoped Azure/Kubernetes receipts
+  - Approved current UID-bound metadata; no history extrapolation
+  guarded: *id002
+limitations:
+- Current UID-bound last-termination status reports a reason and exit code. It does
+  not establish the cause of all restarts, historical frequency, node pressure or
+  SLO impact; exit code 137 alone is not proof of OOM.
+- References/digests are integrity declarations, not source attestation or approval.
+prerequisites:
+- Confirm the exact current Pod/container and reported termination time.
+risks:
+- Retained last-state metadata is not a complete incident history.
+validation:
+- Correlate approved incident/change evidence with owner-declared SLOs.
+rollback:
+- If a separately approved change regresses guardrails, stop promotion and revert
+  its Git commit through the owning delivery pipeline.
+actions:
+  baseline:
+  - Investigate reported context; no resource change is proposed.
+  guarded:
+  - Investigate reported context; no resource change is proposed.
+baseline_summary: Current UID-bound last-termination status reports a reason and exit
+  code. It does not establish the cause of all restarts, historical frequency, node
+  pressure or SLO impact; exit code 137 alone is not proof of OOM.
+guarded_summary: Current UID-bound last-termination status reports a reason and exit
+  code. It does not establish the cause of all restarts, historical frequency, node
+  pressure or SLO impact; exit code 137 alone is not proof of OOM.

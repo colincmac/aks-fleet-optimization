@@ -1,0 +1,36 @@
+schema_version: '1.0'
+id: AKS-AS-007
+version: 2.0.0
+family: autoscaler
+evaluator: vpa-bounds-review
+evidence_kind: inventory
+title: Review VPA recommendation and policy bounds
+purpose: Inspect current VPA resource targets, lower/upper/uncapped bounds and exact-container policy precedence without deriving advisor resource proposals.
+sources: []
+parameters: {}
+queries:
+  baseline: {}
+  guarded: {}
+required_evidence:
+  baseline: &evidence
+  - Complete fresh exact-scoped metadata with current workload/controller UIDs
+  - One VPA with matching admitted containers and explicit coherent resource/policy bounds in mCPU or MiB
+  guarded: *evidence
+limitations:
+- Metadata freshness does not prove VPA recommendation generation time or representative history.
+- A VPA target is context, not an advisor request/limit authorization.
+prerequisites:
+- Verify exact workload/controller UIDs, approved source scope and owner-declared availability and SLO policy.
+risks:
+- Current settings and sampled extrema do not establish controller health or safe resource/replica reductions.
+validation:
+- Correlate approved controller/demand history with representative peak load, startup, failover and owner-declared SLOs.
+- Canary any separately approved change one dimension at a time; stop promotion on availability or throughput regression.
+rollback:
+- If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline.
+actions:
+  baseline: &actions
+  - Investigate with the owner; no numeric resource request, replica target or controller change is proposed by this investigation.
+  guarded: *actions
+baseline_summary: Current VPA status retains resource targets and bounds, not an advisor rightsizing authorization. Metadata freshness does not establish the VPA recommendation's generation time or representative history.
+guarded_summary: Current VPA status retains resource targets and bounds, not an advisor rightsizing authorization. Metadata freshness does not establish the VPA recommendation's generation time or representative history.

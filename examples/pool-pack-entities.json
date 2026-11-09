@@ -1,0 +1,18 @@
+[
+  {
+    "kind": "node",
+    "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+    "namespace": null,
+    "pod": null,
+    "workload_kind": null,
+    "workload": null,
+    "workload_uid": null,
+    "hpa_uid": null,
+    "pod_uid": null,
+    "container": null,
+    "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic/virtualMachines/0",
+    "node_uid": "synthetic-node-uid",
+    "node_pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool",
+    "membership_digest": null
+  }
+]

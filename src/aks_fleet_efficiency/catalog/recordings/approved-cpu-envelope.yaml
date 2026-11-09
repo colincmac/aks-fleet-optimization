@@ -1,0 +1,40 @@
+# Optional operator-installed recordings. Never installed by the assessment runtime.
+# Inputs require an independently reviewed complete historical roster producer.
+# The producer supplies exact identities, roster digest, per-member values and
+# disjoint integral OOM interval totals, including deleted members. No backfill.
+groups:
+  - name: aks-advisor-approved-cpu-envelope
+    interval: 5m
+    rules:
+      - record: aks_advisor:workload_container_cpu_max_mcores
+        expr: |
+          max by (azure_resource_id, namespace, workload_kind, workload, workload_uid, container, membership_digest)
+          (aks_advisor:approved_member_cpu_mcores)
+          and on (azure_resource_id, namespace, workload_kind, workload, workload_uid, container, membership_digest)
+          (aks_advisor:approved_roster_complete == 1)
+      - record: aks_advisor:workload_container_cpu_request_min_mcores
+        expr: |
+          min by (azure_resource_id, namespace, workload_kind, workload, workload_uid, container, membership_digest)
+          (aks_advisor:approved_member_cpu_request_mcores)
+          and on (azure_resource_id, namespace, workload_kind, workload, workload_uid, container, membership_digest)
+          (aks_advisor:approved_roster_complete == 1)
+      - record: aks_advisor:workload_container_cpu_request_max_mcores
+        expr: |
+          max by (azure_resource_id, namespace, workload_kind, workload, workload_uid, container, membership_digest)
+          (aks_advisor:approved_member_cpu_request_mcores)
+          and on (azure_resource_id, namespace, workload_kind, workload, workload_uid, container, membership_digest)
+          (aks_advisor:approved_roster_complete == 1)
+      - record: aks_advisor:workload_container_cpu_throttling_max
+        expr: |
+          max by (azure_resource_id, namespace, workload_kind, workload, workload_uid, container, membership_digest)
+          (aks_advisor:approved_member_cpu_throttling_ratio)
+          and on (azure_resource_id, namespace, workload_kind, workload, workload_uid, container, membership_digest)
+          (aks_advisor:approved_roster_complete == 1)
+      - record: aks_advisor:workload_container_oom_increase
+        labels:
+          step_seconds: "300"
+        expr: |
+          sum by (azure_resource_id, namespace, workload_kind, workload, workload_uid, container, membership_digest)
+          (aks_advisor:approved_member_oom_interval_total)
+          and on (azure_resource_id, namespace, workload_kind, workload, workload_uid, container, membership_digest)
+          (aks_advisor:approved_roster_complete == 1)

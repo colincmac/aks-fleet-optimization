@@ -1,0 +1,22 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: advisor-demo-web
+  namespace: fleet-advisor-demo
+  labels:
+    app.kubernetes.io/name: advisor-demo-web
+    app.kubernetes.io/managed-by: containerization-assist
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: advisor-demo-web
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70

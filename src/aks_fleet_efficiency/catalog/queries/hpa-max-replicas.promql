@@ -1,0 +1,1 @@
+aks_advisor:hpa_max_replicas{__scope__}

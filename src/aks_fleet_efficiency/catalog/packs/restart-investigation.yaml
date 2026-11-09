@@ -1,0 +1,57 @@
+schema_version: '1.0'
+id: AKS-REL-001
+version: 2.0.0
+family: reliability
+evaluator: restart-investigation
+evidence_kind: metrics
+title: Investigate restarts
+purpose: Container restarts were observed in the assessment window. Correlate them
+  with owner-declared SLOs and approved operational evidence; the count alone does
+  not establish memory pressure, an OOM cause or an application failure.
+sources:
+- prometheus
+- azure-managed-prometheus
+parameters: {}
+queries:
+  baseline: &id001
+    container:
+    - restarts
+    workload_container:
+    - replica_restarts
+  guarded: *id001
+required_evidence:
+  baseline: &id002
+  - Complete fresh exact-scoped sources and aligned metric quality
+  - Exact historical identities and complete required history; missing is not zero
+  guarded: *id002
+limitations:
+- Container restarts were observed in the assessment window. Correlate them with owner-declared
+  SLOs and approved operational evidence; the count alone does not establish memory
+  pressure, an OOM cause or an application failure.
+- References/digests are integrity declarations, not source attestation or approval.
+prerequisites:
+- Have the workload owner distinguish expected restarts from probe, application, OOM
+  or node-related failures using approved tools.
+risks:
+- Restart counts do not identify their cause or prove SLO impact.
+- Resource changes without cause analysis can worsen reliability.
+validation:
+- Correlate restart timing with changes and owner-declared SLOs.
+- Validate any separately approved change under startup, peak load and failover conditions,
+  checking OOM and restart behavior.
+rollback:
+- If a separately approved change regresses guardrails, stop promotion and revert
+  its Git commit through the owning delivery pipeline.
+actions:
+  baseline:
+  - Investigate restart causes before considering memory rightsizing; no resource
+    change is proposed.
+  guarded:
+  - Investigate restart causes before considering memory rightsizing; no resource
+    change is proposed.
+baseline_summary: Container restarts were observed in the assessment window. Correlate
+  them with owner-declared SLOs and approved operational evidence; the count alone
+  does not establish memory pressure, an OOM cause or an application failure.
+guarded_summary: Container restarts were observed in the assessment window. Correlate
+  them with owner-declared SLOs and approved operational evidence; the count alone
+  does not establish memory pressure, an OOM cause or an application failure.

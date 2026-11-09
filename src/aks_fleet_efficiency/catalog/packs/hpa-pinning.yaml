@@ -1,0 +1,41 @@
+schema_version: '1.0'
+id: AKS-AS-003
+version: 2.0.0
+family: autoscaler
+evaluator: hpa-pinning
+evidence_kind: metrics
+title: Review HPA __bound_state__ history
+purpose: Investigate sampled floor, ceiling or fixed counts using four full-grid controller-UID-bound gauges, not today's bounds extrapolated into history.
+sources: [prometheus, azure-managed-prometheus]
+parameters: {}
+queries:
+  baseline: &queries
+    hpa: [hpa_min_replicas, hpa_max_replicas, hpa_desired_replicas, hpa_current_replicas]
+  guarded: *queries
+required_evidence:
+  baseline: &evidence
+  - Complete fresh exact-scoped sources and four 100-percent aligned HPA history series
+  - One current HPA with matching historical controller and target workload UIDs
+  - Stable historical bounds and matching fresh current spec/status
+  guarded: *evidence
+limitations:
+- Current-only configuration cannot establish controller history.
+- Evaluation-point coverage is not continuous pinning, raw scrape completeness or proof of demand.
+prerequisites:
+- Have the owner verify historical HPA/workload UID enrichment and bound semantics; references are declarations, not source attestation.
+- Review availability, failover, warm capacity, scaling signals and controller health before interpreting any minimum or maximum.
+risks:
+- A floor can be intentional resilience capacity, not waste.
+- A ceiling alone does not establish unsatisfied demand or saturation.
+- Evaluation-point coverage can miss behavior between samples.
+validation:
+- Correlate approved replica, demand, readiness and controller evidence with owner-declared SLOs before considering a separate change.
+- Validate any separately approved change under startup, peak load and failover with explicit availability and rollback criteria.
+rollback:
+- If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline.
+actions:
+  baseline: &actions
+  - Investigate whether the observed replica bound remains appropriate with the owner; no replica target or controller change is proposed.
+  guarded: *actions
+baseline_summary: Requested and current HPA replica counts remained at a configured bound at every collected evaluation point in the assessment window. This does not prove continuous pinning between samples, low demand, unmet demand, saturation or SLO impact.
+guarded_summary: Requested and current HPA replica counts remained at a configured bound at every collected evaluation point in the assessment window. This does not prove continuous pinning between samples, low demand, unmet demand, saturation or SLO impact.

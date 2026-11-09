@@ -1,0 +1,89 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "blocked_recommendations": {
+      "minimum": 0,
+      "title": "Blocked Recommendations",
+      "type": "integer"
+    },
+    "comparison_key": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Comparison Key",
+      "type": "string"
+    },
+    "configuration_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Configuration Digest",
+      "type": "string"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "recommendations": {
+      "minimum": 0,
+      "title": "Recommendations",
+      "type": "integer"
+    },
+    "run_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "savings": {
+      "default": null,
+      "title": "Savings",
+      "type": "null"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "snapshot_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Snapshot Digest",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "complete",
+        "partial"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "window_end": {
+      "format": "date-time",
+      "title": "Window End",
+      "type": "string"
+    },
+    "window_start": {
+      "format": "date-time",
+      "title": "Window Start",
+      "type": "string"
+    }
+  },
+  "required": [
+    "run_id",
+    "tenant_id",
+    "generated_at",
+    "window_start",
+    "window_end",
+    "status",
+    "snapshot_digest",
+    "configuration_digest",
+    "comparison_key",
+    "recommendations",
+    "blocked_recommendations"
+  ],
+  "title": "HistoryRun",
+  "type": "object"
+}

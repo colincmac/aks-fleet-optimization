@@ -1,0 +1,3264 @@
+{
+  "schema_version": "1.0",
+  "cards": [
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-AS-001",
+        "version": "2.0.0",
+        "family": "autoscaler",
+        "evaluator": "fixed-replica-review",
+        "evidence_kind": "inventory",
+        "title": "Review autoscaling",
+        "purpose": "Investigate current fixed replicas with observed absence of HPA and KEDA.",
+        "sources": [],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {},
+          "guarded": {}
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped inventory and workload identity",
+            "Explicit observed HPA/KEDA absence without contradictory current controllers",
+            "Current replicas at or above the configured minimum_replicas_for_autoscaling_review"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped inventory and workload identity",
+            "Explicit observed HPA/KEDA absence without contradictory current controllers",
+            "Current replicas at or above the configured minimum_replicas_for_autoscaling_review"
+          ]
+        },
+        "limitations": [
+          "Current absence is not historical controller absence, proof of low demand or safe rightsizing."
+        ],
+        "prerequisites": [
+          "Identify a scaling signal tied to user demand or queue depth."
+        ],
+        "risks": [
+          "A poorly selected signal can cause oscillation or SLO regressions."
+        ],
+        "validation": [
+          "Validate scaling behavior with representative load."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Document why fixed replicas are required, or prototype HPA/KEDA."
+          ],
+          "guarded": [
+            "Document why fixed replicas are required, or prototype HPA/KEDA."
+          ]
+        },
+        "baseline_summary": "The workload has multiple replicas but no HPA or KEDA signal in the current snapshot. Confirm whether fixed capacity is an explicit requirement; current configuration does not establish historical absence.",
+        "guarded_summary": "The workload has multiple replicas but no HPA or KEDA signal in the current snapshot. Confirm whether fixed capacity is an explicit requirement; no numeric replica proposal is made."
+      },
+      "provenance": {
+        "id": "AKS-AS-001",
+        "version": "2.0.0",
+        "digest": "4c38704d699841a3b9cbfb4365989efdc6255353761e9a092f0a3b81ef4ebc20",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": []
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-AS-001"
+        ],
+        "pack_parameters": {
+          "AKS-AS-001": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-AS-001": "4c38704d699841a3b9cbfb4365989efdc6255353761e9a092f0a3b81ef4ebc20"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-AS-002",
+        "version": "2.0.0",
+        "family": "autoscaler",
+        "evaluator": "autoscaler-interaction",
+        "evidence_kind": "inventory",
+        "title": "Review HPA/VPA resource interaction",
+        "purpose": "Review utilization request-denominator overlap on the exact current container and resource, with exact-container VPA policy taking precedence over wildcard policy.",
+        "sources": [],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {},
+          "guarded": {}
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped metadata and current workload/controller identities",
+            "Observed HPA utilization signals and explicit mutating VPA container resource policies"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped metadata and current workload/controller identities",
+            "Observed HPA utilization signals and explicit mutating VPA container resource policies"
+          ]
+        },
+        "limitations": [
+          "Current-only evidence cannot prove request changes, oscillation, controller history or SLO impact.",
+          "Absolute and external signals do not establish utilization-denominator overlap."
+        ],
+        "prerequisites": [
+          "Have the owner verify the exact current HPA/VPA UIDs, target workload and container resource policy before interpreting the interaction.",
+          "Distinguish utilization percentages from absolute/external signals; KEDA ownership does not remove a generated HPA's request denominator."
+        ],
+        "risks": [
+          "Changing requests can change utilization feedback and replica decisions.",
+          "External or absolute signals do not eliminate per-Pod throughput risk; no conflict finding is not proof of safe rightsizing."
+        ],
+        "validation": [
+          "Use approved operational tools to correlate replica/request history with demand, controller behavior and owner-declared SLOs.",
+          "Validate any separately approved controller change in an isolated canary with explicit availability and rollback criteria."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Review controller responsibilities and resource signals with the owner; no controller change or numeric resource reduction is proposed."
+          ],
+          "guarded": [
+            "Review controller responsibilities and resource signals with the owner; no controller change or numeric resource reduction is proposed."
+          ]
+        },
+        "baseline_summary": "A current HPA utilization target uses a resource request that a matching VPA may change. Review the shared request denominator; configuration alone does not establish oscillation or SLO impact. Initial mode affects new Pods rather than continuously updating them.",
+        "guarded_summary": "A current HPA utilization target uses a resource request that a matching VPA may change. Review the shared request denominator; configuration alone does not establish oscillation or SLO impact. Initial mode affects new Pods rather than continuously updating them."
+      },
+      "provenance": {
+        "id": "AKS-AS-002",
+        "version": "2.0.0",
+        "digest": "7870961887f0fd1b2ccc7ec3bf8c8153b3d4e1d965a05a8331d21cac904f48f8",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": []
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-AS-002"
+        ],
+        "pack_parameters": {
+          "AKS-AS-002": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-AS-002": "7870961887f0fd1b2ccc7ec3bf8c8153b3d4e1d965a05a8331d21cac904f48f8"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-AS-003",
+        "version": "2.0.0",
+        "family": "autoscaler",
+        "evaluator": "hpa-pinning",
+        "evidence_kind": "metrics",
+        "title": "Review HPA __bound_state__ history",
+        "purpose": "Investigate sampled floor, ceiling or fixed counts using four full-grid controller-UID-bound gauges, not today's bounds extrapolated into history.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {
+            "hpa": [
+              "hpa_min_replicas",
+              "hpa_max_replicas",
+              "hpa_desired_replicas",
+              "hpa_current_replicas"
+            ]
+          },
+          "guarded": {
+            "hpa": [
+              "hpa_min_replicas",
+              "hpa_max_replicas",
+              "hpa_desired_replicas",
+              "hpa_current_replicas"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped sources and four 100-percent aligned HPA history series",
+            "One current HPA with matching historical controller and target workload UIDs",
+            "Stable historical bounds and matching fresh current spec/status"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped sources and four 100-percent aligned HPA history series",
+            "One current HPA with matching historical controller and target workload UIDs",
+            "Stable historical bounds and matching fresh current spec/status"
+          ]
+        },
+        "limitations": [
+          "Current-only configuration cannot establish controller history.",
+          "Evaluation-point coverage is not continuous pinning, raw scrape completeness or proof of demand."
+        ],
+        "prerequisites": [
+          "Have the owner verify historical HPA/workload UID enrichment and bound semantics; references are declarations, not source attestation.",
+          "Review availability, failover, warm capacity, scaling signals and controller health before interpreting any minimum or maximum."
+        ],
+        "risks": [
+          "A floor can be intentional resilience capacity, not waste.",
+          "A ceiling alone does not establish unsatisfied demand or saturation.",
+          "Evaluation-point coverage can miss behavior between samples."
+        ],
+        "validation": [
+          "Correlate approved replica, demand, readiness and controller evidence with owner-declared SLOs before considering a separate change.",
+          "Validate any separately approved change under startup, peak load and failover with explicit availability and rollback criteria."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Investigate whether the observed replica bound remains appropriate with the owner; no replica target or controller change is proposed."
+          ],
+          "guarded": [
+            "Investigate whether the observed replica bound remains appropriate with the owner; no replica target or controller change is proposed."
+          ]
+        },
+        "baseline_summary": "Requested and current HPA replica counts remained at a configured bound at every collected evaluation point in the assessment window. This does not prove continuous pinning between samples, low demand, unmet demand, saturation or SLO impact.",
+        "guarded_summary": "Requested and current HPA replica counts remained at a configured bound at every collected evaluation point in the assessment window. This does not prove continuous pinning between samples, low demand, unmet demand, saturation or SLO impact."
+      },
+      "provenance": {
+        "id": "AKS-AS-003",
+        "version": "2.0.0",
+        "digest": "b1fde20fccf7620b29df2056348ac4d95c4a6131ae814b0b1cf00386165a5480",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": [
+          {
+            "id": "hpa_current_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_current_replicas{__scope__}"
+          },
+          {
+            "id": "hpa_desired_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_desired_replicas{__scope__}"
+          },
+          {
+            "id": "hpa_max_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_max_replicas{__scope__}"
+          },
+          {
+            "id": "hpa_min_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_min_replicas{__scope__}"
+          }
+        ]
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-AS-003"
+        ],
+        "pack_parameters": {
+          "AKS-AS-003": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-AS-003": "b1fde20fccf7620b29df2056348ac4d95c4a6131ae814b0b1cf00386165a5480"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-AS-004",
+        "version": "2.0.0",
+        "family": "autoscaler",
+        "evaluator": "controller-responsibility",
+        "evidence_kind": "inventory",
+        "title": "Review controller ownership and activation",
+        "purpose": "Investigate current KEDA ownership, generated HPA chains, activation and multiple controllers without interpreting trigger values or collecting authentication.",
+        "sources": [],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {},
+          "guarded": {}
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped metadata with observed HPA/VPA/KEDA APIs",
+            "Exact workload/controller UIDs and resolved KEDA generated-HPA ownership",
+            "Explicit trigger types, metric types, minima/maxima, polling and cooldown"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped metadata with observed HPA/VPA/KEDA APIs",
+            "Exact workload/controller UIDs and resolved KEDA generated-HPA ownership",
+            "Explicit trigger types, metric types, minima/maxima, polling and cooldown"
+          ]
+        },
+        "limitations": [
+          "A generated HPA and its KEDA owner are one chain, not two competing HPAs.",
+          "A zero minimum is an investigation only, not safe zero capacity or observed activation."
+        ],
+        "prerequisites": [
+          "Verify exact workload/controller UIDs, approved source scope and owner-declared availability and SLO policy.",
+          "For KEDA, verify activation, trigger authentication and generated HPA behavior in operator tools; trigger values and credentials are never collected by the advisor."
+        ],
+        "risks": [
+          "Current settings and sampled extrema do not establish controller health or safe resource/replica reductions.",
+          "Scale-to-zero can violate cold-start, state, quorum, throughput or availability requirements."
+        ],
+        "validation": [
+          "Correlate approved controller/demand history with representative peak load, startup, failover and owner-declared SLOs.",
+          "Canary any separately approved change one dimension at a time; stop promotion on availability or throughput regression."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {
+          "multiple-controllers": "Multiple controllers target the same current workload. Review their responsibilities; this does not prove oscillation or SLO impact.",
+          "keda-chain": "KEDA owns the observed generated HPA; these are one scaling chain, not two competing HPAs. Trigger types and metric types are current configuration, not proof of demand or activation.",
+          "cpu-memory-only": "CPU/memory-only triggers cannot activate a workload from zero; review an independent activation signal and availability policy.",
+          "zero-minimum": "A declared zero minimum is only a scale-to-zero review candidate; verify activation, cold-start, state and availability requirements."
+        },
+        "actions": {
+          "baseline": [
+            "Investigate with the owner; no numeric resource request, replica target or controller change is proposed by this investigation."
+          ],
+          "guarded": [
+            "Investigate with the owner; no numeric resource request, replica target or controller change is proposed by this investigation."
+          ]
+        },
+        "baseline_summary": "Review current controller responsibilities; configuration does not prove oscillation, demand or SLO impact.",
+        "guarded_summary": "Review current controller responsibilities; configuration does not prove oscillation, demand or SLO impact."
+      },
+      "provenance": {
+        "id": "AKS-AS-004",
+        "version": "2.0.0",
+        "digest": "d68e0d2a9aee2f6056cae5b11759a856819df8cbc354d9bf5c2b36114865cacd",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": []
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-AS-004"
+        ],
+        "pack_parameters": {
+          "AKS-AS-004": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-AS-004": "d68e0d2a9aee2f6056cae5b11759a856819df8cbc354d9bf5c2b36114865cacd"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-AS-005",
+        "version": "2.0.0",
+        "family": "autoscaler",
+        "evaluator": "hpa-floor-proposal",
+        "evidence_kind": "metrics",
+        "title": "Review bounded HPA minimum replicas",
+        "purpose": "A separately default-off positive-only HPA minimum proposal preserves maximum, signals and resources under configuration-bound owner and availability review.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {
+            "hpa": [
+              "hpa_min_replicas",
+              "hpa_max_replicas",
+              "hpa_desired_replicas",
+              "hpa_current_replicas"
+            ],
+            "workload": [
+              "desired_replicas",
+              "observed_replicas",
+              "available_replicas"
+            ]
+          },
+          "guarded": {
+            "hpa": [
+              "hpa_min_replicas",
+              "hpa_max_replicas",
+              "hpa_desired_replicas",
+              "hpa_current_replicas"
+            ],
+            "workload": [
+              "desired_replicas",
+              "observed_replicas",
+              "available_replicas"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Current configuration and all seven full-grid UID-bound series may expose explicit proposal gaps, never a numeric baseline proposal"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped sources and all seven 100-percent aligned stable HPA/workload series",
+            "One unmanaged HPA and unconstrained Deployment with explicit current availability",
+            "Default-off allow_floor_reduction and exact HPA/configuration/window-bound owner review",
+            "Reviewed positive tested/minimum replicas, maximum reduction, failover reserve and disruption allowance",
+            "Independently reviewed peak, throughput, startup, zone failure and zero reliability incidents"
+          ]
+        },
+        "limitations": [
+          "KEDA-managed floors, StatefulSet/quorum, PDB matching, changed controllers, Pod budgets and unsupported scheduling/overhead are blocked.",
+          "No current-only values, references or digests establish historical evidence, source attestation or change approval.",
+          "Proposed floor is at least one and below the current floor; resources, maximum and signals remain unchanged."
+        ],
+        "prerequisites": [
+          "Obtain separate owner approval bound to this exact workload/HPA UID, proposal, configuration and observation window.",
+          "Reconfirm the reviewed load test, throughput, startup, zonal failure, failover reserve and disruption allowance for the proposed floor."
+        ],
+        "risks": [
+          "Lower warm capacity can delay scale-up or increase per-Pod load.",
+          "PDB matching, stateful quorum, KEDA-managed floors, changing histories and unsupported scheduling constraints are not supported proposals."
+        ],
+        "validation": [
+          "Canary only the HPA minimum; leave maximum, signals and CPU/memory requests unchanged. Verify availability and SLOs under peak load, startup and declared zone/failover scenarios.",
+          "Stop promotion on pending/unavailable Pods, elevated throttling, OOM/restarts, scale-up latency or throughput/SLO regression."
+        ],
+        "rollback": [
+          "Restore the original HPA minimum of __current_floor__ replicas through customer-owned delivery tooling on any guardrail regression; the advisor never changes controllers or performs rollback."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Review the structured HPA minimum proposal with the owner; this report does not approve or apply a change."
+          ],
+          "guarded": [
+            "Review the structured HPA minimum proposal with the owner; this report does not approve or apply a change."
+          ]
+        },
+        "baseline_summary": "Baseline exposes evidence gaps only; a numeric HPA floor proposal requires guarded mode and independent owner opt-in with complete configuration-bound history.",
+        "guarded_summary": "An explicitly opted-in owner policy and complete stable HPA/workload availability history permit a bounded minimum-replica proposal. Owner review declarations are not source attestation or change approval. The HPA maximum, metric targets and resource requests remain unchanged; no savings or automatic remediation is implied."
+      },
+      "provenance": {
+        "id": "AKS-AS-005",
+        "version": "2.0.0",
+        "digest": "1919c70059e05df837cdd842d72fba8d8464e2b8f6d39c25dd9f3f6967619d26",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": [
+          {
+            "id": "available_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_available_replicas{__scope__}"
+          },
+          {
+            "id": "desired_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_desired_replicas{__scope__}"
+          },
+          {
+            "id": "hpa_current_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_current_replicas{__scope__}"
+          },
+          {
+            "id": "hpa_desired_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_desired_replicas{__scope__}"
+          },
+          {
+            "id": "hpa_max_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_max_replicas{__scope__}"
+          },
+          {
+            "id": "hpa_min_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_min_replicas{__scope__}"
+          },
+          {
+            "id": "observed_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_observed_pods{__scope__}"
+          }
+        ]
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-AS-005"
+        ],
+        "pack_parameters": {
+          "AKS-AS-005": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-AS-005": "1919c70059e05df837cdd842d72fba8d8464e2b8f6d39c25dd9f3f6967619d26"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-AS-006",
+        "version": "2.0.0",
+        "family": "autoscaler",
+        "evaluator": "hpa-change-review",
+        "evidence_kind": "metrics",
+        "title": "Review changed HPA bounds and replica context",
+        "purpose": "Investigate changing sampled controller bounds/count context independently of the stable-pinning and floor-proposal gates.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {
+            "hpa": [
+              "hpa_min_replicas",
+              "hpa_max_replicas",
+              "hpa_desired_replicas",
+              "hpa_current_replicas"
+            ]
+          },
+          "guarded": {
+            "hpa": [
+              "hpa_min_replicas",
+              "hpa_max_replicas",
+              "hpa_desired_replicas",
+              "hpa_current_replicas"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped sources and four full-grid controller/workload UID-bound history series",
+            "Matching current HPA identity and structurally consistent integer count extrema"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped sources and four full-grid controller/workload UID-bound history series",
+            "Matching current HPA identity and structurally consistent integer count extrema"
+          ]
+        },
+        "limitations": [
+          "Current-only evidence cannot establish historical changes.",
+          "Changing sampled extrema do not diagnose oscillation, scaling lag or unmet demand."
+        ],
+        "prerequisites": [
+          "Verify exact workload/controller UIDs, approved source scope and owner-declared availability and SLO policy."
+        ],
+        "risks": [
+          "Current settings and sampled extrema do not establish controller health or safe resource/replica reductions."
+        ],
+        "validation": [
+          "Correlate approved controller/demand history with representative peak load, startup, failover and owner-declared SLOs.",
+          "Canary any separately approved change one dimension at a time; stop promotion on availability or throughput regression."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Investigate with the owner; no numeric resource request, replica target or controller change is proposed by this investigation."
+          ],
+          "guarded": [
+            "Investigate with the owner; no numeric resource request, replica target or controller change is proposed by this investigation."
+          ]
+        },
+        "baseline_summary": "Historical or current HPA bounds/count context changed. These sampled extrema do not establish oscillation, scaling lag, unmet demand or SLO impact. Reassess controller identity and availability before proposing a change.",
+        "guarded_summary": "Historical or current HPA bounds/count context changed. These sampled extrema do not establish oscillation, scaling lag, unmet demand or SLO impact. Reassess controller identity and availability before proposing a change."
+      },
+      "provenance": {
+        "id": "AKS-AS-006",
+        "version": "2.0.0",
+        "digest": "d6af639b6f013410e0005f8d70e1650671d646500c9839fc0ccd42dba2d95d02",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": [
+          {
+            "id": "hpa_current_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_current_replicas{__scope__}"
+          },
+          {
+            "id": "hpa_desired_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_desired_replicas{__scope__}"
+          },
+          {
+            "id": "hpa_max_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_max_replicas{__scope__}"
+          },
+          {
+            "id": "hpa_min_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "hpa",
+            "delta": false,
+            "expression": "aks_advisor:hpa_min_replicas{__scope__}"
+          }
+        ]
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-AS-006"
+        ],
+        "pack_parameters": {
+          "AKS-AS-006": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-AS-006": "d6af639b6f013410e0005f8d70e1650671d646500c9839fc0ccd42dba2d95d02"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-AS-007",
+        "version": "2.0.0",
+        "family": "autoscaler",
+        "evaluator": "vpa-bounds-review",
+        "evidence_kind": "inventory",
+        "title": "Review VPA recommendation and policy bounds",
+        "purpose": "Inspect current VPA resource targets, lower/upper/uncapped bounds and exact-container policy precedence without deriving advisor resource proposals.",
+        "sources": [],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {},
+          "guarded": {}
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped metadata with current workload/controller UIDs",
+            "One VPA with matching admitted containers and explicit coherent resource/policy bounds in mCPU or MiB"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped metadata with current workload/controller UIDs",
+            "One VPA with matching admitted containers and explicit coherent resource/policy bounds in mCPU or MiB"
+          ]
+        },
+        "limitations": [
+          "Metadata freshness does not prove VPA recommendation generation time or representative history.",
+          "A VPA target is context, not an advisor request/limit authorization."
+        ],
+        "prerequisites": [
+          "Verify exact workload/controller UIDs, approved source scope and owner-declared availability and SLO policy."
+        ],
+        "risks": [
+          "Current settings and sampled extrema do not establish controller health or safe resource/replica reductions."
+        ],
+        "validation": [
+          "Correlate approved controller/demand history with representative peak load, startup, failover and owner-declared SLOs.",
+          "Canary any separately approved change one dimension at a time; stop promotion on availability or throughput regression."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Investigate with the owner; no numeric resource request, replica target or controller change is proposed by this investigation."
+          ],
+          "guarded": [
+            "Investigate with the owner; no numeric resource request, replica target or controller change is proposed by this investigation."
+          ]
+        },
+        "baseline_summary": "Current VPA status retains resource targets and bounds, not an advisor rightsizing authorization. Metadata freshness does not establish the VPA recommendation's generation time or representative history.",
+        "guarded_summary": "Current VPA status retains resource targets and bounds, not an advisor rightsizing authorization. Metadata freshness does not establish the VPA recommendation's generation time or representative history."
+      },
+      "provenance": {
+        "id": "AKS-AS-007",
+        "version": "2.0.0",
+        "digest": "67390629e7dfd5919fecb831653b6b72117b9d8ed88c96f2cc12630a9552b1b2",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": []
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-AS-007"
+        ],
+        "pack_parameters": {
+          "AKS-AS-007": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-AS-007": "67390629e7dfd5919fecb831653b6b72117b9d8ed88c96f2cc12630a9552b1b2"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-MEM-001",
+        "version": "2.0.0",
+        "family": "memory",
+        "evaluator": "oom-investigation",
+        "evidence_kind": "metrics",
+        "title": "Investigate OOM events",
+        "purpose": "OOM events were observed in the assessment window. Investigate memory limits, workload behavior and node pressure before any resource reduction; event counts alone do not identify the cause.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {
+            "container": [
+              "oom_events"
+            ],
+            "workload_container": [
+              "replica_oom_events"
+            ]
+          },
+          "guarded": {
+            "container": [
+              "oom_events"
+            ],
+            "workload_container": [
+              "replica_oom_events"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero"
+          ]
+        },
+        "limitations": [
+          "OOM events were observed in the assessment window. Investigate memory limits, workload behavior and node pressure before any resource reduction; event counts alone do not identify the cause.",
+          "References/digests are integrity declarations, not source attestation or approval."
+        ],
+        "prerequisites": [
+          "Have the workload owner correlate OOM timing with memory limits, node pressure, restarts and application SLOs through approved tools."
+        ],
+        "risks": [
+          "Lowering memory requests or limits can worsen eviction or OOM risk.",
+          "Working-set samples can miss short peaks and do not prove a safe memory limit or request."
+        ],
+        "validation": [
+          "Review startup, peak load and failover memory behavior.",
+          "Validate any separately approved change against OOM, restarts, evictions and owner-declared SLOs."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Investigate memory reliability before considering rightsizing; no numeric memory reduction is proposed."
+          ],
+          "guarded": [
+            "Investigate memory reliability before considering rightsizing; no numeric memory reduction is proposed."
+          ]
+        },
+        "baseline_summary": "OOM events were observed in the assessment window. Investigate memory limits, workload behavior and node pressure before any resource reduction; event counts alone do not identify the cause.",
+        "guarded_summary": "OOM events were observed in the assessment window. Investigate memory limits, workload behavior and node pressure before any resource reduction; event counts alone do not identify the cause."
+      },
+      "provenance": {
+        "id": "AKS-MEM-001",
+        "version": "2.0.0",
+        "digest": "5aa9bd2eab3c67ac864d9665236a55084974dfbf400767d28a6412b5c314aaff",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": [
+          {
+            "id": "oom_events",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "container",
+            "delta": true,
+            "expression": "increase(container_oom_events_total{__scope__}[__step__s])"
+          },
+          {
+            "id": "replica_oom_events",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "workload_container",
+            "delta": true,
+            "expression": "aks_advisor:workload_container_oom_increase{__scope__,step_seconds=\"__step__\"}"
+          }
+        ]
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-MEM-001"
+        ],
+        "pack_parameters": {
+          "AKS-MEM-001": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-MEM-001": "5aa9bd2eab3c67ac864d9665236a55084974dfbf400767d28a6412b5c314aaff"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-MEM-002",
+        "version": "2.0.0",
+        "family": "memory",
+        "evaluator": "memory-safety-review",
+        "evidence_kind": "metrics",
+        "title": "Review memory safety",
+        "purpose": "Supported memory evidence and owner-reviewed scenarios pass the readiness gates. This is not a safe memory target, a waste claim or approval to change requests or limits.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {
+            "container": [
+              "memory_request",
+              "memory_limit",
+              "memory_usage",
+              "oom_events",
+              "restarts"
+            ],
+            "workload_container": [
+              "replica_memory_envelope",
+              "replica_memory_request_min",
+              "replica_memory_request_max",
+              "replica_memory_limit_min",
+              "replica_memory_limit_max",
+              "replica_oom_events",
+              "replica_restarts"
+            ],
+            "workload": [
+              "desired_replicas",
+              "available_replicas",
+              "observed_replicas",
+              "hpa_present",
+              "keda_present",
+              "vpa_present",
+              "unschedulable_pods",
+              "evictions"
+            ]
+          },
+          "guarded": {
+            "container": [
+              "memory_request",
+              "memory_limit",
+              "memory_usage",
+              "oom_events",
+              "restarts"
+            ],
+            "workload_container": [
+              "replica_memory_envelope",
+              "replica_memory_request_min",
+              "replica_memory_request_max",
+              "replica_memory_limit_min",
+              "replica_memory_limit_max",
+              "replica_oom_events",
+              "replica_restarts"
+            ],
+            "workload": [
+              "desired_replicas",
+              "available_replicas",
+              "observed_replicas",
+              "hpa_present",
+              "keda_present",
+              "vpa_present",
+              "unschedulable_pods",
+              "evictions"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero",
+            "Independent owner-reviewed window/SLO/disruption/scenario bounds",
+            "Existing QoS, admission, controller, full-grid and reliability guards"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero",
+            "Independent owner-reviewed window/SLO/disruption/scenario bounds",
+            "Existing QoS, admission, controller, full-grid and reliability guards"
+          ]
+        },
+        "limitations": [
+          "Supported memory evidence and owner-reviewed scenarios pass the readiness gates. This is not a safe memory target, a waste claim or approval to change requests or limits.",
+          "References/digests are integrity declarations, not source attestation or approval."
+        ],
+        "prerequisites": [
+          "Independently verify owner-reviewed startup, failover and eviction evidence; references and declarations are not source attestation.",
+          "Keep limits and QoS unchanged; any future target needs separate owner approval and effective-Pod validation."
+        ],
+        "risks": [
+          "Working set and sampled peaks can omit relevant memory and bursts.",
+          "Lower requests can increase node-pressure eviction risk even when the QoS class is unchanged."
+        ],
+        "validation": [
+          "Validate startup, peak load and failover against owner-declared SLOs, OOM, restarts and evictions before approving any change."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Review memory safety evidence only; no numeric memory request or limit change is proposed."
+          ],
+          "guarded": [
+            "Review memory safety evidence only; no numeric memory request or limit change is proposed."
+          ]
+        },
+        "baseline_summary": "Supported memory evidence and owner-reviewed scenarios pass the readiness gates. This is not a safe memory target, a waste claim or approval to change requests or limits.",
+        "guarded_summary": "Supported memory evidence and owner-reviewed scenarios pass the readiness gates. This is not a safe memory target, a waste claim or approval to change requests or limits."
+      },
+      "provenance": {
+        "id": "AKS-MEM-002",
+        "version": "2.0.0",
+        "digest": "a8f370ee0397ffc2b5a70ef5a767dab1065c57a74c4f9c8d7a23a8b9444b0b96",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": [
+          {
+            "id": "available_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_available_replicas{__scope__}"
+          },
+          {
+            "id": "desired_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_desired_replicas{__scope__}"
+          },
+          {
+            "id": "evictions",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "workload",
+            "delta": true,
+            "expression": "aks_advisor:workload_eviction_increase{__scope__,step_seconds=\"__step__\"}"
+          },
+          {
+            "id": "hpa_present",
+            "version": "1.0.0",
+            "unit": "boolean",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_hpa_present{__scope__}"
+          },
+          {
+            "id": "keda_present",
+            "version": "1.0.0",
+            "unit": "boolean",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_keda_present{__scope__}"
+          },
+          {
+            "id": "memory_limit",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "container",
+            "delta": false,
+            "expression": "kube_pod_container_resource_limits{__scope__,resource=\"memory\",unit=\"byte\"} / 1048576"
+          },
+          {
+            "id": "memory_request",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "container",
+            "delta": false,
+            "expression": "kube_pod_container_resource_requests{__scope__,resource=\"memory\",unit=\"byte\"} / 1048576"
+          },
+          {
+            "id": "memory_usage",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "container",
+            "delta": false,
+            "expression": "container_memory_working_set_bytes{__scope__} / 1048576"
+          },
+          {
+            "id": "observed_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_observed_pods{__scope__}"
+          },
+          {
+            "id": "oom_events",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "container",
+            "delta": true,
+            "expression": "increase(container_oom_events_total{__scope__}[__step__s])"
+          },
+          {
+            "id": "replica_memory_envelope",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_memory_max_mib{__scope__}"
+          },
+          {
+            "id": "replica_memory_limit_max",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_memory_limit_max_mib{__scope__}"
+          },
+          {
+            "id": "replica_memory_limit_min",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_memory_limit_min_mib{__scope__}"
+          },
+          {
+            "id": "replica_memory_request_max",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_memory_request_max_mib{__scope__}"
+          },
+          {
+            "id": "replica_memory_request_min",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_memory_request_min_mib{__scope__}"
+          },
+          {
+            "id": "replica_oom_events",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "workload_container",
+            "delta": true,
+            "expression": "aks_advisor:workload_container_oom_increase{__scope__,step_seconds=\"__step__\"}"
+          },
+          {
+            "id": "replica_restarts",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "workload_container",
+            "delta": true,
+            "expression": "aks_advisor:workload_container_restart_increase{__scope__,step_seconds=\"__step__\"}"
+          },
+          {
+            "id": "restarts",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "container",
+            "delta": true,
+            "expression": "increase(kube_pod_container_status_restarts_total{__scope__}[__step__s])"
+          },
+          {
+            "id": "unschedulable_pods",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_unschedulable_pods{__scope__}"
+          },
+          {
+            "id": "vpa_present",
+            "version": "1.0.0",
+            "unit": "boolean",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_vpa_present{__scope__}"
+          }
+        ]
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-MEM-002"
+        ],
+        "pack_parameters": {
+          "AKS-MEM-002": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-MEM-002": "a8f370ee0397ffc2b5a70ef5a767dab1065c57a74c4f9c8d7a23a8b9444b0b96"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-MEM-003",
+        "version": "2.0.0",
+        "family": "memory",
+        "evaluator": "memory-request-proposal",
+        "evidence_kind": "metrics",
+        "title": "Review lower memory request",
+        "purpose": "A request-only memory proposal obeys the declared owner minimum, maximum reduction and peak/startup/failover headroom. It preserves the observed memory limit and Burstable QoS; it does not prove node removability, financial savings or change approval.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {
+            "container": [
+              "memory_request",
+              "memory_limit",
+              "memory_usage",
+              "oom_events",
+              "restarts"
+            ],
+            "workload_container": [
+              "replica_memory_envelope",
+              "replica_memory_request_min",
+              "replica_memory_request_max",
+              "replica_memory_limit_min",
+              "replica_memory_limit_max",
+              "replica_oom_events",
+              "replica_restarts"
+            ],
+            "workload": [
+              "desired_replicas",
+              "available_replicas",
+              "observed_replicas",
+              "hpa_present",
+              "keda_present",
+              "vpa_present",
+              "unschedulable_pods",
+              "evictions"
+            ]
+          },
+          "guarded": {
+            "container": [
+              "memory_request",
+              "memory_limit",
+              "memory_usage",
+              "oom_events",
+              "restarts"
+            ],
+            "workload_container": [
+              "replica_memory_envelope",
+              "replica_memory_request_min",
+              "replica_memory_request_max",
+              "replica_memory_limit_min",
+              "replica_memory_limit_max",
+              "replica_oom_events",
+              "replica_restarts"
+            ],
+            "workload": [
+              "desired_replicas",
+              "available_replicas",
+              "observed_replicas",
+              "hpa_present",
+              "keda_present",
+              "vpa_present",
+              "unschedulable_pods",
+              "evictions"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero",
+            "Independent owner-reviewed window/SLO/disruption/scenario bounds",
+            "Existing QoS, admission, controller, full-grid and reliability guards"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero",
+            "Independent owner-reviewed window/SLO/disruption/scenario bounds",
+            "Existing QoS, admission, controller, full-grid and reliability guards"
+          ]
+        },
+        "limitations": [
+          "A request-only memory proposal obeys the declared owner minimum, maximum reduction and peak/startup/failover headroom. It preserves the observed memory limit and Burstable QoS; it does not prove node removability, financial savings or change approval.",
+          "References/digests are integrity declarations, not source attestation or approval."
+        ],
+        "prerequisites": [
+          "Obtain separate owner approval for this specific request-only change; enabling proposals is not approval to apply them.",
+          "Independently verify the reviewed scenario/eviction evidence, supported direct or approved-envelope history, absent overhead and current admitted settings.",
+          "Keep CPU requests, all limits and other containers unchanged; do not combine independent CPU and memory proposals in one canary."
+        ],
+        "risks": [
+          "Working-set samples can omit relevant memory and short peaks.",
+          "Lower requests reduce eviction protection and can increase node pressure or change placement despite unchanged Burstable QoS."
+        ],
+        "validation": [
+          "Canary only the approved memory request under startup, peak load and failover; confirm the limit and QoS remain unchanged.",
+          "Compare OOM, restarts, evictions, placement and owner-declared SLOs with the pre-change baseline before promotion."
+        ],
+        "rollback": [
+          "If OOM, restarts, evictions or owner-declared SLOs regress, stop promotion and restore the original __current_request_mib__ MiB memory request through the owning delivery pipeline; keep all other settings unchanged."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Propose __proposed_request_mib__ MiB memory request per replica for this container only; keep limits unchanged and obtain owner approval."
+          ],
+          "guarded": [
+            "Propose __proposed_request_mib__ MiB memory request per replica for this container only; keep limits unchanged and obtain owner approval."
+          ]
+        },
+        "baseline_summary": "A request-only memory proposal obeys the declared owner minimum, maximum reduction and peak/startup/failover headroom. It preserves the observed memory limit and Burstable QoS; it does not prove node removability, financial savings or change approval.",
+        "guarded_summary": "A request-only memory proposal obeys the declared owner minimum, maximum reduction and peak/startup/failover headroom. It preserves the observed memory limit and Burstable QoS; it does not prove node removability, financial savings or change approval."
+      },
+      "provenance": {
+        "id": "AKS-MEM-003",
+        "version": "2.0.0",
+        "digest": "4f9e63453b810bc0c85a40469d982fcedbc0861cf7b821a3b7d41e528b09d8d1",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": [
+          {
+            "id": "available_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_available_replicas{__scope__}"
+          },
+          {
+            "id": "desired_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_desired_replicas{__scope__}"
+          },
+          {
+            "id": "evictions",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "workload",
+            "delta": true,
+            "expression": "aks_advisor:workload_eviction_increase{__scope__,step_seconds=\"__step__\"}"
+          },
+          {
+            "id": "hpa_present",
+            "version": "1.0.0",
+            "unit": "boolean",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_hpa_present{__scope__}"
+          },
+          {
+            "id": "keda_present",
+            "version": "1.0.0",
+            "unit": "boolean",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_keda_present{__scope__}"
+          },
+          {
+            "id": "memory_limit",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "container",
+            "delta": false,
+            "expression": "kube_pod_container_resource_limits{__scope__,resource=\"memory\",unit=\"byte\"} / 1048576"
+          },
+          {
+            "id": "memory_request",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "container",
+            "delta": false,
+            "expression": "kube_pod_container_resource_requests{__scope__,resource=\"memory\",unit=\"byte\"} / 1048576"
+          },
+          {
+            "id": "memory_usage",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "container",
+            "delta": false,
+            "expression": "container_memory_working_set_bytes{__scope__} / 1048576"
+          },
+          {
+            "id": "observed_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_observed_pods{__scope__}"
+          },
+          {
+            "id": "oom_events",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "container",
+            "delta": true,
+            "expression": "increase(container_oom_events_total{__scope__}[__step__s])"
+          },
+          {
+            "id": "replica_memory_envelope",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_memory_max_mib{__scope__}"
+          },
+          {
+            "id": "replica_memory_limit_max",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_memory_limit_max_mib{__scope__}"
+          },
+          {
+            "id": "replica_memory_limit_min",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_memory_limit_min_mib{__scope__}"
+          },
+          {
+            "id": "replica_memory_request_max",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_memory_request_max_mib{__scope__}"
+          },
+          {
+            "id": "replica_memory_request_min",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_memory_request_min_mib{__scope__}"
+          },
+          {
+            "id": "replica_oom_events",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "workload_container",
+            "delta": true,
+            "expression": "aks_advisor:workload_container_oom_increase{__scope__,step_seconds=\"__step__\"}"
+          },
+          {
+            "id": "replica_restarts",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "workload_container",
+            "delta": true,
+            "expression": "aks_advisor:workload_container_restart_increase{__scope__,step_seconds=\"__step__\"}"
+          },
+          {
+            "id": "restarts",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "container",
+            "delta": true,
+            "expression": "increase(kube_pod_container_status_restarts_total{__scope__}[__step__s])"
+          },
+          {
+            "id": "unschedulable_pods",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_unschedulable_pods{__scope__}"
+          },
+          {
+            "id": "vpa_present",
+            "version": "1.0.0",
+            "unit": "boolean",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_vpa_present{__scope__}"
+          }
+        ]
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-MEM-003"
+        ],
+        "pack_parameters": {
+          "AKS-MEM-003": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-MEM-003": "4f9e63453b810bc0c85a40469d982fcedbc0861cf7b821a3b7d41e528b09d8d1"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-MEM-004",
+        "version": "2.0.0",
+        "family": "memory",
+        "evaluator": "pod-memory-accounting",
+        "evidence_kind": "inventory",
+        "title": "Review effective Pod memory",
+        "purpose": "Current admitted memory requests include concurrent restartable init containers, sequential initialization peaks and Pod overhead. These are scheduler request bounds, not observed usage, Pod-level limits or node-removal proof.",
+        "sources": [],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {},
+          "guarded": {}
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped Azure/Kubernetes receipts",
+            "Approved current UID-bound metadata; no history extrapolation"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped Azure/Kubernetes receipts",
+            "Approved current UID-bound metadata; no history extrapolation"
+          ]
+        },
+        "limitations": [
+          "Current admitted memory requests include concurrent restartable init containers, sequential initialization peaks and Pod overhead. These are scheduler request bounds, not observed usage, Pod-level limits or node-removal proof.",
+          "References/digests are integrity declarations, not source attestation or approval."
+        ],
+        "prerequisites": [
+          "Verify admitted quantities, native sidecar ordering and overhead."
+        ],
+        "risks": [
+          "Current accounting does not establish historical usage or packing feasibility."
+        ],
+        "validation": [
+          "Compare the current effective request with the admitted Pod configuration."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Review accounting only; no request or limit change is proposed."
+          ],
+          "guarded": [
+            "Review accounting only; no request or limit change is proposed."
+          ]
+        },
+        "baseline_summary": "Current admitted memory requests include concurrent restartable init containers, sequential initialization peaks and Pod overhead. These are scheduler request bounds, not observed usage, Pod-level limits or node-removal proof.",
+        "guarded_summary": "Current admitted memory requests include concurrent restartable init containers, sequential initialization peaks and Pod overhead. These are scheduler request bounds, not observed usage, Pod-level limits or node-removal proof."
+      },
+      "provenance": {
+        "id": "AKS-MEM-004",
+        "version": "2.0.0",
+        "digest": "06a6565d5c06f7b7d7a38848f37f9931236d18375752fbfdd03567718e899155",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": []
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-MEM-004"
+        ],
+        "pack_parameters": {
+          "AKS-MEM-004": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-MEM-004": "06a6565d5c06f7b7d7a38848f37f9931236d18375752fbfdd03567718e899155"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-MEM-005",
+        "version": "2.0.0",
+        "family": "memory",
+        "evaluator": "memory-limit-proposal",
+        "evidence_kind": "metrics",
+        "title": "Review bounded memory limit",
+        "purpose": "An explicitly opted-in, configuration-bound memory limit proposal uses complete total-memory usage, not working set alone, plus reviewed allocator/cache, startup and failover peaks. Requests, CPU and other containers remain unchanged; owner declarations are not source attestation or approval.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {
+            "container": [
+              "memory_request",
+              "memory_limit",
+              "memory_total_usage",
+              "oom_events",
+              "restarts"
+            ],
+            "workload": [
+              "desired_replicas",
+              "available_replicas",
+              "observed_replicas",
+              "hpa_present",
+              "keda_present",
+              "vpa_present",
+              "unschedulable_pods",
+              "evictions"
+            ]
+          },
+          "guarded": {
+            "container": [
+              "memory_request",
+              "memory_limit",
+              "memory_total_usage",
+              "oom_events",
+              "restarts"
+            ],
+            "workload": [
+              "desired_replicas",
+              "available_replicas",
+              "observed_replicas",
+              "hpa_present",
+              "keda_present",
+              "vpa_present",
+              "unschedulable_pods",
+              "evictions"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero",
+            "Independent owner-reviewed window/SLO/disruption/scenario bounds",
+            "Existing QoS, admission, controller, full-grid and reliability guards"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero",
+            "Independent owner-reviewed window/SLO/disruption/scenario bounds",
+            "Existing QoS, admission, controller, full-grid and reliability guards"
+          ]
+        },
+        "limitations": [
+          "An explicitly opted-in, configuration-bound memory limit proposal uses complete total-memory usage, not working set alone, plus reviewed allocator/cache, startup and failover peaks. Requests, CPU and other containers remain unchanged; owner declarations are not source attestation or approval.",
+          "References/digests are integrity declarations, not source attestation or approval."
+        ],
+        "prerequisites": [
+          "Obtain separate approval for the exact container/configuration, limit and evidence window.",
+          "Independently verify allocator/cache and full-memory scenario evidence; preserve requests and QoS."
+        ],
+        "risks": [
+          "Lower hard limits can cause OOM despite unchanged requests and Burstable QoS.",
+          "Sampled total-memory peaks are not proof that all future peaks were observed."
+        ],
+        "validation": [
+          "Canary the memory limit only under startup, peak and failover load; leave all requests unchanged.",
+          "Stop promotion on OOM, restarts, evictions or owner SLO regression."
+        ],
+        "rollback": [
+          "Restore the original __current_limit_mib__ MiB limit through customer delivery tooling on regression; the advisor never rolls back."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Review this limit-only proposal with the owner; no change is authorized or applied."
+          ],
+          "guarded": [
+            "Review this limit-only proposal with the owner; no change is authorized or applied."
+          ]
+        },
+        "baseline_summary": "An explicitly opted-in, configuration-bound memory limit proposal uses complete total-memory usage, not working set alone, plus reviewed allocator/cache, startup and failover peaks. Requests, CPU and other containers remain unchanged; owner declarations are not source attestation or approval.",
+        "guarded_summary": "An explicitly opted-in, configuration-bound memory limit proposal uses complete total-memory usage, not working set alone, plus reviewed allocator/cache, startup and failover peaks. Requests, CPU and other containers remain unchanged; owner declarations are not source attestation or approval."
+      },
+      "provenance": {
+        "id": "AKS-MEM-005",
+        "version": "2.0.0",
+        "digest": "8a8ea234def4ae4454b4d970ecb34d8a5c6f03e083f5cb81da7dbb588386d040",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": [
+          {
+            "id": "available_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_available_replicas{__scope__}"
+          },
+          {
+            "id": "desired_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_desired_replicas{__scope__}"
+          },
+          {
+            "id": "evictions",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "workload",
+            "delta": true,
+            "expression": "aks_advisor:workload_eviction_increase{__scope__,step_seconds=\"__step__\"}"
+          },
+          {
+            "id": "hpa_present",
+            "version": "1.0.0",
+            "unit": "boolean",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_hpa_present{__scope__}"
+          },
+          {
+            "id": "keda_present",
+            "version": "1.0.0",
+            "unit": "boolean",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_keda_present{__scope__}"
+          },
+          {
+            "id": "memory_limit",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "container",
+            "delta": false,
+            "expression": "kube_pod_container_resource_limits{__scope__,resource=\"memory\",unit=\"byte\"} / 1048576"
+          },
+          {
+            "id": "memory_request",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "container",
+            "delta": false,
+            "expression": "kube_pod_container_resource_requests{__scope__,resource=\"memory\",unit=\"byte\"} / 1048576"
+          },
+          {
+            "id": "memory_total_usage",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "container",
+            "delta": false,
+            "expression": "container_memory_usage_bytes{__scope__} / 1048576"
+          },
+          {
+            "id": "observed_replicas",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_observed_pods{__scope__}"
+          },
+          {
+            "id": "oom_events",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "container",
+            "delta": true,
+            "expression": "increase(container_oom_events_total{__scope__}[__step__s])"
+          },
+          {
+            "id": "restarts",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "container",
+            "delta": true,
+            "expression": "increase(kube_pod_container_status_restarts_total{__scope__}[__step__s])"
+          },
+          {
+            "id": "unschedulable_pods",
+            "version": "1.0.0",
+            "unit": "pods",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_unschedulable_pods{__scope__}"
+          },
+          {
+            "id": "vpa_present",
+            "version": "1.0.0",
+            "unit": "boolean",
+            "kind": "workload",
+            "delta": false,
+            "expression": "aks_advisor:workload_vpa_present{__scope__}"
+          }
+        ]
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-MEM-005"
+        ],
+        "pack_parameters": {
+          "AKS-MEM-005": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-MEM-005": "8a8ea234def4ae4454b4d970ecb34d8a5c6f03e083f5cb81da7dbb588386d040"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-NP-001",
+        "version": "2.0.0",
+        "family": "node-pool",
+        "evaluator": "node-pool-review",
+        "evidence_kind": "metrics",
+        "title": "Review low-utilization node pool",
+        "purpose": "Investigate qualified historical pool usage while preserving complete membership, aligned sums and constant capacity.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": 0.2
+        },
+        "queries": {
+          "baseline": {
+            "node": [
+              "node_cpu_usage",
+              "node_allocatable_cpu",
+              "node_allocatable_memory"
+            ]
+          },
+          "guarded": {
+            "node": [
+              "node_cpu_usage",
+              "node_allocatable_cpu",
+              "node_allocatable_memory"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh scoped sources",
+            "Exact pool and historical node identities",
+            "Complete historical membership",
+            "Aligned usage summed before percentiles",
+            "Full-window constant allocatable capacity"
+          ],
+          "guarded": [
+            "Complete fresh scoped sources",
+            "Exact pool and historical node identities",
+            "Complete historical membership",
+            "Aligned usage summed before percentiles",
+            "Full-window constant allocatable capacity"
+          ]
+        },
+        "limitations": [
+          "Low CPU usage is not proof a node can be removed.",
+          "Current node membership cannot reconstruct deleted-node history.",
+          "This pack does not implement NAP eligibility, packing simulation or a node-count target."
+        ],
+        "prerequisites": [
+          "Confirm pod disruption budgets and zonal resilience.",
+          "Check pending pods, daemonset overhead and scale-up latency."
+        ],
+        "risks": [
+          "Reducing warm capacity can increase scale-up latency.",
+          "Average or P95 utilization alone can hide short bursts."
+        ],
+        "validation": [
+          "Load test any separately proposed minimum capacity.",
+          "Compare P95/P99 saturation, pending pods and SLOs before and after."
+        ],
+        "rollback": [
+          "No node target is proposed; revert a separately approved capacity change through the owning delivery pipeline on regression."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Review minimum node count and autoscaler profile.",
+            "Investigate existing placement and resilience requirements."
+          ],
+          "guarded": [
+            "Review minimum node count and autoscaler profile.",
+            "Investigate existing placement and resilience requirements."
+          ]
+        },
+        "baseline_summary": "P95 CPU utilization is below the configured review threshold. This is not proof a node can be removed; validate resilience and scheduling constraints before a separately approved change.",
+        "guarded_summary": "P95 CPU utilization is below the configured review threshold. This is not proof a node can be removed; validate resilience and scheduling constraints before a separately approved change."
+      },
+      "provenance": {
+        "id": "AKS-NP-001",
+        "version": "2.0.0",
+        "digest": "bb6d38a357d12431b92179a4fcf382f9ade0f3a262c776c402cb2533c15ee747",
+        "parameters": {
+          "review_ratio": 0.2
+        },
+        "queries": [
+          {
+            "id": "node_allocatable_cpu",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "node",
+            "delta": false,
+            "expression": "aks_advisor:node_allocatable_cpu_mcores{__scope__}"
+          },
+          {
+            "id": "node_allocatable_memory",
+            "version": "1.0.0",
+            "unit": "MiB",
+            "kind": "node",
+            "delta": false,
+            "expression": "aks_advisor:node_allocatable_memory_mib{__scope__}"
+          },
+          {
+            "id": "node_cpu_usage",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "node",
+            "delta": false,
+            "expression": "aks_advisor:node_cpu_usage_mcores{__scope__}"
+          }
+        ]
+      },
+      "parameter_guidance": {
+        "review_ratio": {
+          "unit": "ratio",
+          "bounds": "0 <= review_ratio < 1",
+          "implication": "Investigation threshold only, not a utilization target or proposal bound. Equality produces no signal; safety/owner gates cannot be overridden."
+        }
+      },
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-NP-001"
+        ],
+        "pack_parameters": {
+          "AKS-NP-001": {
+            "review_ratio": 0.2
+          }
+        },
+        "pack_locks": {
+          "AKS-NP-001": "bb6d38a357d12431b92179a4fcf382f9ade0f3a262c776c402cb2533c15ee747"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-NP-002",
+        "version": "1.0.0",
+        "family": "node-pool",
+        "evaluator": "capacity-review",
+        "evidence_kind": "inventory",
+        "title": "Review capacity management and NAP prerequisites",
+        "purpose": "Classify current fixed/CAS pools and UID-bound NAP supply independently of historical pool utilization.",
+        "sources": [],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {},
+          "guarded": {}
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped Azure and Kubernetes inventory with a verified cluster fingerprint"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped Azure and Kubernetes inventory with a verified cluster fingerprint"
+          ]
+        },
+        "limitations": [
+          "Auto cluster mode does not make existing ARM pools NAP-managed. Dynamic supply requires exact NodeClaim/NodePool ownership and provider-bound Node identity.",
+          "Equal CAS bounds are configuration, not intentional reservation or a safe lower minimum.",
+          "Specialization and reserved capacity require exact-pool owner declarations; SKU strings alone do not prove hardware requirements.",
+          "Networking, identity, quota, regional SKU availability, workload/disruption fit and operational acceptance are unverified prerequisites.",
+          "Current policies and supply do not establish consolidation behavior, packing feasibility, removable nodes or cash savings."
+        ],
+        "prerequisites": [
+          "Review current Microsoft AKS NAP support for the exact version, region, networking and identity.",
+          "Preserve system capacity, Spot interruption tolerance, hardware, zoning and owner-reserved capacity.",
+          "Compare CAS tuning with a separately approved transition; do not enable NAP or disable CAS from this report."
+        ],
+        "risks": [
+          "Removing minima or migrating capacity can violate disruption, storage, specialized hardware and failover requirements.",
+          "NAP has unsupported configurations and stop/start and egress constraints; configuration eligibility alone is insufficient."
+        ],
+        "validation": [
+          "Confirm complete NAP API lists, exact owner/provider identities, node-class requirements, limits and disruption budgets.",
+          "Validate all unknown prerequisites using separately approved sanitized evidence and current AKS documentation.",
+          "Require workload-fit, pending-Pod, availability and packing evidence before a separate migration proposal."
+        ],
+        "rollback": [
+          "No change is proposed. A later approved experiment must retain original capacity and define an owner-controlled rollback."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Investigate capacity classes and missing prerequisites; no migration or node-count change is recommended."
+          ],
+          "guarded": [
+            "Investigate capacity classes and missing prerequisites; guarded mode does not authorize migration."
+          ]
+        },
+        "baseline_summary": "Current capacity configuration and declared intent support investigation only, not NAP eligibility, migration approval, lower minima, removable nodes or financial savings.",
+        "guarded_summary": "Current capacity configuration and declared intent support investigation only, not NAP eligibility, migration approval, lower minima, removable nodes or financial savings."
+      },
+      "provenance": {
+        "id": "AKS-NP-002",
+        "version": "1.0.0",
+        "digest": "96fd7b91e3b77b99e6e7c67ab1e10130f0e31664774746999231cc1467808d7b",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": []
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-NP-002"
+        ],
+        "pack_parameters": {
+          "AKS-NP-002": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-NP-002": "96fd7b91e3b77b99e6e7c67ab1e10130f0e31664774746999231cc1467808d7b"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-REL-001",
+        "version": "2.0.0",
+        "family": "reliability",
+        "evaluator": "restart-investigation",
+        "evidence_kind": "metrics",
+        "title": "Investigate restarts",
+        "purpose": "Container restarts were observed in the assessment window. Correlate them with owner-declared SLOs and approved operational evidence; the count alone does not establish memory pressure, an OOM cause or an application failure.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {
+            "container": [
+              "restarts"
+            ],
+            "workload_container": [
+              "replica_restarts"
+            ]
+          },
+          "guarded": {
+            "container": [
+              "restarts"
+            ],
+            "workload_container": [
+              "replica_restarts"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero"
+          ]
+        },
+        "limitations": [
+          "Container restarts were observed in the assessment window. Correlate them with owner-declared SLOs and approved operational evidence; the count alone does not establish memory pressure, an OOM cause or an application failure.",
+          "References/digests are integrity declarations, not source attestation or approval."
+        ],
+        "prerequisites": [
+          "Have the workload owner distinguish expected restarts from probe, application, OOM or node-related failures using approved tools."
+        ],
+        "risks": [
+          "Restart counts do not identify their cause or prove SLO impact.",
+          "Resource changes without cause analysis can worsen reliability."
+        ],
+        "validation": [
+          "Correlate restart timing with changes and owner-declared SLOs.",
+          "Validate any separately approved change under startup, peak load and failover conditions, checking OOM and restart behavior."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Investigate restart causes before considering memory rightsizing; no resource change is proposed."
+          ],
+          "guarded": [
+            "Investigate restart causes before considering memory rightsizing; no resource change is proposed."
+          ]
+        },
+        "baseline_summary": "Container restarts were observed in the assessment window. Correlate them with owner-declared SLOs and approved operational evidence; the count alone does not establish memory pressure, an OOM cause or an application failure.",
+        "guarded_summary": "Container restarts were observed in the assessment window. Correlate them with owner-declared SLOs and approved operational evidence; the count alone does not establish memory pressure, an OOM cause or an application failure."
+      },
+      "provenance": {
+        "id": "AKS-REL-001",
+        "version": "2.0.0",
+        "digest": "d15a8c1b06e1f3a28c28023b5db85ea5872174b0a399f6ec73e76c8509909d5e",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": [
+          {
+            "id": "replica_restarts",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "workload_container",
+            "delta": true,
+            "expression": "aks_advisor:workload_container_restart_increase{__scope__,step_seconds=\"__step__\"}"
+          },
+          {
+            "id": "restarts",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "container",
+            "delta": true,
+            "expression": "increase(kube_pod_container_status_restarts_total{__scope__}[__step__s])"
+          }
+        ]
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-REL-001"
+        ],
+        "pack_parameters": {
+          "AKS-REL-001": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-REL-001": "d15a8c1b06e1f3a28c28023b5db85ea5872174b0a399f6ec73e76c8509909d5e"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-REL-002",
+        "version": "2.0.0",
+        "family": "reliability",
+        "evaluator": "termination-context",
+        "evidence_kind": "inventory",
+        "title": "Review reported termination context",
+        "purpose": "Current UID-bound last-termination status reports a reason and exit code. It does not establish the cause of all restarts, historical frequency, node pressure or SLO impact; exit code 137 alone is not proof of OOM.",
+        "sources": [],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {},
+          "guarded": {}
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped Azure/Kubernetes receipts",
+            "Approved current UID-bound metadata; no history extrapolation"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped Azure/Kubernetes receipts",
+            "Approved current UID-bound metadata; no history extrapolation"
+          ]
+        },
+        "limitations": [
+          "Current UID-bound last-termination status reports a reason and exit code. It does not establish the cause of all restarts, historical frequency, node pressure or SLO impact; exit code 137 alone is not proof of OOM.",
+          "References/digests are integrity declarations, not source attestation or approval."
+        ],
+        "prerequisites": [
+          "Confirm the exact current Pod/container and reported termination time."
+        ],
+        "risks": [
+          "Retained last-state metadata is not a complete incident history."
+        ],
+        "validation": [
+          "Correlate approved incident/change evidence with owner-declared SLOs."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Investigate reported context; no resource change is proposed."
+          ],
+          "guarded": [
+            "Investigate reported context; no resource change is proposed."
+          ]
+        },
+        "baseline_summary": "Current UID-bound last-termination status reports a reason and exit code. It does not establish the cause of all restarts, historical frequency, node pressure or SLO impact; exit code 137 alone is not proof of OOM.",
+        "guarded_summary": "Current UID-bound last-termination status reports a reason and exit code. It does not establish the cause of all restarts, historical frequency, node pressure or SLO impact; exit code 137 alone is not proof of OOM."
+      },
+      "provenance": {
+        "id": "AKS-REL-002",
+        "version": "2.0.0",
+        "digest": "929ec47b9f67b3bf82e3d40bc375e220a7e9a9e66010e9fbe278899cb4ea589f",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": []
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-REL-002"
+        ],
+        "pack_parameters": {
+          "AKS-REL-002": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-REL-002": "929ec47b9f67b3bf82e3d40bc375e220a7e9a9e66010e9fbe278899cb4ea589f"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-REL-003",
+        "version": "2.0.0",
+        "family": "reliability",
+        "evaluator": "eviction-investigation",
+        "evidence_kind": "metrics",
+        "title": "Investigate workload evictions",
+        "purpose": "Identity-bound workload eviction counts were observed over the declared window. They are reported once per workload, not multiplied by containers; counts do not establish node-pressure causes or SLO impact.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {
+            "workload": [
+              "evictions"
+            ]
+          },
+          "guarded": {
+            "workload": [
+              "evictions"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero"
+          ],
+          "guarded": [
+            "Complete fresh exact-scoped sources and aligned metric quality",
+            "Exact historical identities and complete required history; missing is not zero"
+          ]
+        },
+        "limitations": [
+          "Identity-bound workload eviction counts were observed over the declared window. They are reported once per workload, not multiplied by containers; counts do not establish node-pressure causes or SLO impact.",
+          "References/digests are integrity declarations, not source attestation or approval."
+        ],
+        "prerequisites": [
+          "Verify the approved historical eviction producer and workload identity."
+        ],
+        "risks": [
+          "Evictions may have multiple causes; missing history is not zero."
+        ],
+        "validation": [
+          "Review approved incident metadata and availability evidence before reductions."
+        ],
+        "rollback": [
+          "If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Investigate workload eviction risk; no numeric change is proposed."
+          ],
+          "guarded": [
+            "Investigate workload eviction risk; no numeric change is proposed."
+          ]
+        },
+        "baseline_summary": "Identity-bound workload eviction counts were observed over the declared window. They are reported once per workload, not multiplied by containers; counts do not establish node-pressure causes or SLO impact.",
+        "guarded_summary": "Identity-bound workload eviction counts were observed over the declared window. They are reported once per workload, not multiplied by containers; counts do not establish node-pressure causes or SLO impact."
+      },
+      "provenance": {
+        "id": "AKS-REL-003",
+        "version": "2.0.0",
+        "digest": "26ae8db918931762d9b10ef12206ef979401239ca10bdb59f915682b35c347ce",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": [
+          {
+            "id": "evictions",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "workload",
+            "delta": true,
+            "expression": "aks_advisor:workload_eviction_increase{__scope__,step_seconds=\"__step__\"}"
+          }
+        ]
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-REL-003"
+        ],
+        "pack_parameters": {
+          "AKS-REL-003": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-REL-003": "26ae8db918931762d9b10ef12206ef979401239ca10bdb59f915682b35c347ce"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-RQ-001",
+        "version": "2.0.0",
+        "family": "cpu",
+        "evaluator": "missing-cpu-request",
+        "evidence_kind": "inventory",
+        "title": "Review missing CPU request",
+        "purpose": "Investigate an explicitly observed absent or zero admitted CPU request without choosing a target.",
+        "sources": [],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {},
+          "guarded": {}
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh scoped Azure and Kubernetes receipts",
+            "Explicit current admitted request observation"
+          ],
+          "guarded": [
+            "Complete fresh scoped Azure and Kubernetes receipts",
+            "Explicit current admitted request observation"
+          ]
+        },
+        "limitations": [
+          "Omitted or unobserved request state is unknown, not absent.",
+          "This review does not select a request or establish savings."
+        ],
+        "prerequisites": [
+          "Collect representative CPU usage before selecting a value."
+        ],
+        "risks": [
+          "An arbitrarily low request can cause contention or poor placement."
+        ],
+        "validation": [
+          "Load test and monitor throttling and latency."
+        ],
+        "rollback": [
+          "No numeric change is proposed; restore any separately approved change through the owning delivery pipeline."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Use VPA recommendation mode or historical percentiles to propose a request."
+          ],
+          "guarded": [
+            "Use VPA recommendation mode or historical percentiles to propose a request."
+          ]
+        },
+        "baseline_summary": "No positive CPU request was explicitly observed. Requests support reliable scheduling, rightsizing and cost attribution. This is an investigation, not a numeric target.",
+        "guarded_summary": "No positive CPU request was explicitly observed. Requests support reliable scheduling, rightsizing and cost attribution. This is an investigation, not a numeric target."
+      },
+      "provenance": {
+        "id": "AKS-RQ-001",
+        "version": "2.0.0",
+        "digest": "5ad78cbaccf1bb5a22dcce6a4cf28baaf58e89134f76369715b27b64f8944823",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": []
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-RQ-001"
+        ],
+        "pack_parameters": {
+          "AKS-RQ-001": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-RQ-001": "5ad78cbaccf1bb5a22dcce6a4cf28baaf58e89134f76369715b27b64f8944823"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-RQ-002",
+        "version": "2.1.0",
+        "family": "cpu",
+        "evaluator": "cpu-request-review",
+        "evidence_kind": "metrics",
+        "title": "Review CPU request",
+        "purpose": "Compare observed CPU usage with the admitted request, then independently evaluate a policy-bounded reduction.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": 0.4
+        },
+        "queries": {
+          "baseline": {
+            "container": [
+              "cpu_usage",
+              "cpu_request"
+            ],
+            "unresolved_container": [
+              "cpu_usage",
+              "cpu_request"
+            ],
+            "workload_container": [
+              "replica_cpu_envelope",
+              "replica_cpu_request_min",
+              "replica_cpu_request_max"
+            ]
+          },
+          "guarded": {
+            "container": [
+              "cpu_usage",
+              "cpu_request",
+              "cpu_throttling",
+              "oom_events"
+            ],
+            "workload_container": [
+              "replica_cpu_envelope",
+              "replica_cpu_request_min",
+              "replica_cpu_request_max",
+              "replica_cpu_throttling",
+              "replica_oom_events"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh scoped Azure, Kubernetes and Prometheus receipts",
+            "Exact cluster/workload identity and declared direct or approved replica-envelope usage",
+            "Observed positive admitted CPU request and qualified P95 usage",
+            "Configured observation duration, coverage, freshness and resolution"
+          ],
+          "guarded": [
+            "All baseline evidence, qualified P99/observed peaks, throttling and OOM history",
+            "Known compatible autoscalers and no observed OOM or workload eviction veto",
+            "Owner-reviewed window, disruption policy, environment, minimum, headroom and reduction bounds"
+          ]
+        },
+        "limitations": [
+          "Low CPU usage is not a safe reduction target or proof a node can be removed.",
+          "Requests are not CPU limits; a request ratio is not saturation.",
+          "Current identities cannot reconstruct missing history or deleted membership.",
+          "Replica-envelope statistics are conservative per-replica values, not workload-total percentiles.",
+          "Returned evaluation-point coverage is not raw scrape completeness."
+        ],
+        "prerequisites": [
+          "Confirm the metric window contains peak and business-critical periods.",
+          "Review P99 usage, throttling, startup and failover behavior."
+        ],
+        "risks": [
+          "Historical usage might not represent future peaks.",
+          "Lower requests can change placement and noisy-neighbor behavior."
+        ],
+        "validation": [
+          "Run VPA in Off mode and compare recommendations.",
+          "Canary an independently approved request change and verify SLOs under load."
+        ],
+        "rollback": [
+          "Restore the previous CPU request of __current_cpu_request__ mCPU in source configuration through the owning delivery pipeline.",
+          "Stop promotion if SLOs, throttling, OOM or restarts regress; remeasure before proposing another change."
+        ],
+        "baseline_rollback": [
+          "No numeric change is proposed; do not apply a baseline investigation."
+        ],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Review observed usage, owner requirements and missing guarded evidence."
+          ],
+          "guarded": [
+            "Open a review PR with the proposed request and rollback criteria."
+          ]
+        },
+        "baseline_summary": "Observed P95 CPU usage is below the configured fraction of the current admitted request. This is an investigation, not a safe reduction target; owner policy, peaks and reliability must be reviewed independently.",
+        "guarded_summary": "Historical CPU usage is below the request. The proposal respects observed peaks, declared headroom and owner policy; validate it through a separately approved canary."
+      },
+      "provenance": {
+        "id": "AKS-RQ-002",
+        "version": "2.1.0",
+        "digest": "b347d11ef3b28bf5b7e851d3d01cff46b461a8d9ae120e4fdab983513ab66344",
+        "parameters": {
+          "review_ratio": 0.4
+        },
+        "queries": [
+          {
+            "id": "cpu_request",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "container",
+            "delta": false,
+            "expression": "kube_pod_container_resource_requests{__scope__,resource=\"cpu\",unit=\"core\"} * 1000"
+          },
+          {
+            "id": "cpu_throttling",
+            "version": "1.0.0",
+            "unit": "ratio",
+            "kind": "container",
+            "delta": false,
+            "expression": "rate(container_cpu_cfs_throttled_periods_total{__scope__}[5m]) / rate(container_cpu_cfs_periods_total{__scope__}[5m])"
+          },
+          {
+            "id": "cpu_usage",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "container",
+            "delta": false,
+            "expression": "rate(container_cpu_usage_seconds_total{__scope__}[5m]) * 1000"
+          },
+          {
+            "id": "oom_events",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "container",
+            "delta": true,
+            "expression": "increase(container_oom_events_total{__scope__}[__step__s])"
+          },
+          {
+            "id": "replica_cpu_envelope",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_cpu_max_mcores{__scope__}"
+          },
+          {
+            "id": "replica_cpu_request_max",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_cpu_request_max_mcores{__scope__}"
+          },
+          {
+            "id": "replica_cpu_request_min",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_cpu_request_min_mcores{__scope__}"
+          },
+          {
+            "id": "replica_cpu_throttling",
+            "version": "1.0.0",
+            "unit": "ratio",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_cpu_throttling_max{__scope__}"
+          },
+          {
+            "id": "replica_oom_events",
+            "version": "1.0.0",
+            "unit": "events",
+            "kind": "workload_container",
+            "delta": true,
+            "expression": "aks_advisor:workload_container_oom_increase{__scope__,step_seconds=\"__step__\"}"
+          }
+        ]
+      },
+      "parameter_guidance": {
+        "review_ratio": {
+          "unit": "ratio",
+          "bounds": "0 < review_ratio < 1",
+          "implication": "Investigation threshold only, not a utilization target or proposal bound. Equality produces no signal; safety/owner gates cannot be overridden."
+        }
+      },
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-RQ-002"
+        ],
+        "pack_parameters": {
+          "AKS-RQ-002": {
+            "review_ratio": 0.4
+          }
+        },
+        "pack_locks": {
+          "AKS-RQ-002": "b347d11ef3b28bf5b7e851d3d01cff46b461a8d9ae120e4fdab983513ab66344"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-RQ-003",
+        "version": "2.0.0",
+        "family": "cpu",
+        "evaluator": "cpu-request-risk",
+        "evidence_kind": "metrics",
+        "title": "Review CPU request risk",
+        "purpose": "Correlate high observed usage relative to an admitted request with throttling, limits and SLOs; do not infer saturation.",
+        "sources": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ],
+        "parameters": {
+          "review_ratio": 0.9
+        },
+        "queries": {
+          "baseline": {
+            "container": [
+              "cpu_usage",
+              "cpu_request",
+              "cpu_throttling"
+            ],
+            "workload_container": [
+              "replica_cpu_envelope",
+              "replica_cpu_request_min",
+              "replica_cpu_request_max",
+              "replica_cpu_throttling"
+            ]
+          },
+          "guarded": {
+            "container": [
+              "cpu_usage",
+              "cpu_request",
+              "cpu_throttling"
+            ],
+            "workload_container": [
+              "replica_cpu_envelope",
+              "replica_cpu_request_min",
+              "replica_cpu_request_max",
+              "replica_cpu_throttling"
+            ]
+          }
+        },
+        "required_evidence": {
+          "baseline": [
+            "Complete fresh scoped sources",
+            "Observed positive admitted request",
+            "Qualified P95 CPU and throttling evidence"
+          ],
+          "guarded": [
+            "Complete fresh scoped sources",
+            "Observed positive admitted request",
+            "Qualified P95 CPU and throttling evidence"
+          ]
+        },
+        "limitations": [
+          "Requests are not CPU limits; a request ratio does not establish saturation.",
+          "This independent review never proposes resources, replicas or financial savings."
+        ],
+        "prerequisites": [
+          "Correlate saturation with latency and error SLOs."
+        ],
+        "risks": [
+          "Densification can amplify contention."
+        ],
+        "validation": [
+          "Load test at peak concurrency and failover conditions."
+        ],
+        "rollback": [
+          "No target is proposed; revert a separately approved change through its owning delivery pipeline if guardrails regress."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Review CPU request/limit policy and horizontal scaling signal."
+          ],
+          "guarded": [
+            "Review CPU request/limit policy and horizontal scaling signal."
+          ]
+        },
+        "baseline_summary": "P95 CPU usage is close to or above the request. Requests are not CPU limits; this ratio alone does not establish saturation. Review throttling, limits and SLOs before denser placement.",
+        "guarded_summary": "P95 CPU usage is close to or above the request. Requests are not CPU limits; this ratio alone does not establish saturation. Review throttling, limits and SLOs before denser placement."
+      },
+      "provenance": {
+        "id": "AKS-RQ-003",
+        "version": "2.0.0",
+        "digest": "3686fb298e7a8ccb1e776d818e87608eae7630b790e07f2b980cd30d139724be",
+        "parameters": {
+          "review_ratio": 0.9
+        },
+        "queries": [
+          {
+            "id": "cpu_request",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "container",
+            "delta": false,
+            "expression": "kube_pod_container_resource_requests{__scope__,resource=\"cpu\",unit=\"core\"} * 1000"
+          },
+          {
+            "id": "cpu_throttling",
+            "version": "1.0.0",
+            "unit": "ratio",
+            "kind": "container",
+            "delta": false,
+            "expression": "rate(container_cpu_cfs_throttled_periods_total{__scope__}[5m]) / rate(container_cpu_cfs_periods_total{__scope__}[5m])"
+          },
+          {
+            "id": "cpu_usage",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "container",
+            "delta": false,
+            "expression": "rate(container_cpu_usage_seconds_total{__scope__}[5m]) * 1000"
+          },
+          {
+            "id": "replica_cpu_envelope",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_cpu_max_mcores{__scope__}"
+          },
+          {
+            "id": "replica_cpu_request_max",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_cpu_request_max_mcores{__scope__}"
+          },
+          {
+            "id": "replica_cpu_request_min",
+            "version": "1.0.0",
+            "unit": "mCPU",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_cpu_request_min_mcores{__scope__}"
+          },
+          {
+            "id": "replica_cpu_throttling",
+            "version": "1.0.0",
+            "unit": "ratio",
+            "kind": "workload_container",
+            "delta": false,
+            "expression": "aks_advisor:workload_container_cpu_throttling_max{__scope__}"
+          }
+        ]
+      },
+      "parameter_guidance": {
+        "review_ratio": {
+          "unit": "ratio",
+          "bounds": "review_ratio > 0",
+          "implication": "Investigation threshold only, not a utilization target or proposal bound. Equality produces no signal; safety/owner gates cannot be overridden."
+        }
+      },
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-RQ-003"
+        ],
+        "pack_parameters": {
+          "AKS-RQ-003": {
+            "review_ratio": 0.9
+          }
+        },
+        "pack_locks": {
+          "AKS-RQ-003": "3686fb298e7a8ccb1e776d818e87608eae7630b790e07f2b980cd30d139724be"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    },
+    {
+      "manifest": {
+        "schema_version": "1.0",
+        "id": "AKS-SCHED-001",
+        "version": "1.0.0",
+        "family": "scheduling",
+        "evaluator": "scheduling-review",
+        "evidence_kind": "inventory",
+        "title": "Investigate current placement constraints",
+        "purpose": "Explain observed placement restrictions separately from resource usage and vertical eligibility.",
+        "sources": [],
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": {
+          "baseline": {},
+          "guarded": {}
+        },
+        "required_evidence": {
+          "baseline": [
+            "Fresh complete scoped inventory with exact cluster, Namespace, Pod and controller UIDs"
+          ],
+          "guarded": [
+            "Fresh complete scoped inventory with exact cluster, Namespace, Pod and controller UIDs"
+          ]
+        },
+        "limitations": [
+          "Current metadata is not historical scheduling behavior, a packing simulation or proof of stranded capacity.",
+          "Projected labels cannot prove selector matches or absence. Namespace PDB candidates are not matched budgets.",
+          "Tolerations permit placement but do not require it. Soft preferences are distinct from hard constraints.",
+          "Volume bindings, CSI topology, Pod/IP slots, priority/preemption, daemon requests and availability need independent review."
+        ],
+        "prerequisites": [
+          "Review the admitted Pod, matching node labels/taints, volume topology and actual PDB selectors with its owner."
+        ],
+        "risks": [
+          "Relaxing affinity, topology, taints or disruption policy can violate isolation, availability or storage requirements."
+        ],
+        "validation": [
+          "Correlate each observed restriction with approved pending-Pod history and scheduler capacity evidence.",
+          "Check daemon and init/sidecar overhead, Pod/IP slots, priorities, volumes and zonal failover before any packing claim.",
+          "Keep hard requirements and soft preferences separate; verify unknown fields rather than assuming absence."
+        ],
+        "rollback": [
+          "No change is proposed. Any later owner-approved experiment requires a separate canary and exact configuration rollback."
+        ],
+        "baseline_rollback": [],
+        "summary_variants": {},
+        "actions": {
+          "baseline": [
+            "Investigate current placement restrictions; do not remove nodes or relax policy from this report."
+          ],
+          "guarded": [
+            "Investigate current placement restrictions; guarded mode does not authorize a scheduling change."
+          ]
+        },
+        "baseline_summary": "Observed current constraints may restrict placement. These are review candidates, not proof of stranded capacity, scheduler failure, PDB matching or removable nodes.",
+        "guarded_summary": "Observed current constraints may restrict placement. These are review candidates, not proof of stranded capacity, scheduler failure, PDB matching or removable nodes."
+      },
+      "provenance": {
+        "id": "AKS-SCHED-001",
+        "version": "1.0.0",
+        "digest": "420359fdf0a9ef15bef7836a1544ceaa729e2bac461bb97f6a81830c10c5f71b",
+        "parameters": {
+          "review_ratio": null
+        },
+        "queries": []
+      },
+      "parameter_guidance": {},
+      "synthetic_example": {
+        "mode": "baseline",
+        "packs": [
+          "AKS-SCHED-001"
+        ],
+        "pack_parameters": {
+          "AKS-SCHED-001": {
+            "review_ratio": null
+          }
+        },
+        "pack_locks": {
+          "AKS-SCHED-001": "420359fdf0a9ef15bef7836a1544ceaa729e2bac461bb97f6a81830c10c5f71b"
+        },
+        "thresholds": {
+          "minimum_coverage_ratio": 0.85,
+          "minimum_observation_days": 30,
+          "maximum_evidence_age_hours": 24.0,
+          "maximum_metric_step_seconds": 300,
+          "minimum_replicas_for_autoscaling_review": 2
+        },
+        "excluded_namespaces": [
+          "kube-system",
+          "gatekeeper-system"
+        ],
+        "environment_risk": {
+          "production": "high",
+          "nonproduction": "medium"
+        },
+        "enable_estimated_savings": false
+      }
+    }
+  ],
+  "glossary": {
+    "baseline": "Qualified investigations only; no numeric resource or replica proposals.",
+    "guarded": "Guarded mode is not approval. Numeric proposals require independent owner policy, complete identity-bound evidence, reliability gates and a one-dimensional canary/rollback. Configuration never enables owner opt-ins or changes a cluster.",
+    "coverage": "Returned evaluation points, not proof of raw scrape completeness.",
+    "identity": "Historical UIDs and exact Azure IDs; current names cannot backfill history.",
+    "unknown": "Missing or unsupported evidence is not zero or proof of health.",
+    "query-only": "Executable exports measure signals; they do not pass assessment gates.",
+    "provenance": "Pack/query versions and digests bind replay, not source attestation.",
+    "mCPU": "One thousandth of a CPU core.",
+    "MiB": "1,048,576 bytes; working set and full usage are distinct measurements.",
+    "ratio": "Dimensionless fraction; not a universal utilization target.",
+    "events": "Complete interval counts; missing intervals are not zero.",
+    "pods": "Sampled replica counts, not availability or safe capacity by themselves.",
+    "boolean": "Explicit observed state; missing observations remain unknown."
+  },
+  "guarded_notice": "Guarded mode is not approval. Numeric proposals require independent owner policy, complete identity-bound evidence, reliability gates and a one-dimensional canary/rollback. Configuration never enables owner opt-ins or changes a cluster."
+}

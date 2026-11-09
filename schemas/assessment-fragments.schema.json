@@ -1,0 +1,2039 @@
+{
+  "$defs": {
+    "AzureClusterInventory": {
+      "additionalProperties": false,
+      "properties": {
+        "cost_analysis_enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cost Analysis Enabled"
+        },
+        "fleet_ids": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fleet Ids"
+        },
+        "keda_enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Keda Enabled"
+        },
+        "kubernetes_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Kubernetes Version"
+        },
+        "location": {
+          "minLength": 1,
+          "title": "Location",
+          "type": "string"
+        },
+        "managed_prometheus_enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Managed Prometheus Enabled"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "node_pools": {
+          "items": {
+            "$ref": "#/$defs/AzureNodePoolInventory"
+          },
+          "title": "Node Pools",
+          "type": "array"
+        },
+        "node_provisioning_mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Provisioning Mode"
+        },
+        "resource_group": {
+          "minLength": 1,
+          "title": "Resource Group",
+          "type": "string"
+        },
+        "resource_id": {
+          "minLength": 1,
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "sku_tier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sku Tier"
+        },
+        "subscription_id": {
+          "minLength": 1,
+          "title": "Subscription Id",
+          "type": "string"
+        },
+        "tags": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "object"
+        },
+        "vpa_enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Vpa Enabled"
+        }
+      },
+      "required": [
+        "resource_id",
+        "name",
+        "subscription_id",
+        "resource_group",
+        "location",
+        "node_pools"
+      ],
+      "title": "AzureClusterInventory",
+      "type": "object"
+    },
+    "AzureInventorySnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "clusters": {
+          "items": {
+            "$ref": "#/$defs/AzureClusterInventory"
+          },
+          "title": "Clusters",
+          "type": "array"
+        },
+        "collection": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "query_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Query Version",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "const": "azure-resource-graph",
+          "default": "azure-resource-graph",
+          "title": "Source",
+          "type": "string"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "generated_at",
+        "collection",
+        "clusters"
+      ],
+      "title": "AzureInventorySnapshot",
+      "type": "object"
+    },
+    "AzureNodePoolInventory": {
+      "additionalProperties": false,
+      "properties": {
+        "autoscaling_enabled": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Autoscaling Enabled"
+        },
+        "max_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Count"
+        },
+        "min_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Count"
+        },
+        "mode": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Mode"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "node_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Count"
+        },
+        "os_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Os Type"
+        },
+        "resource_id": {
+          "minLength": 1,
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "spot": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Spot"
+        },
+        "vm_size": {
+          "minLength": 1,
+          "title": "Vm Size",
+          "type": "string"
+        },
+        "zones": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Zones"
+        }
+      },
+      "required": [
+        "resource_id",
+        "name",
+        "vm_size"
+      ],
+      "title": "AzureNodePoolInventory",
+      "type": "object"
+    },
+    "CollectionError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "unauthorized",
+            "forbidden",
+            "timeout",
+            "throttled",
+            "unavailable",
+            "invalid-response",
+            "response-budget-exceeded",
+            "identity-mismatch"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "code"
+      ],
+      "title": "CollectionError",
+      "type": "object"
+    },
+    "CollectionStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "title": "CollectionStatus",
+      "type": "string"
+    },
+    "CollectorResult": {
+      "additionalProperties": false,
+      "properties": {
+        "collector": {
+          "minLength": 1,
+          "title": "Collector",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "completed_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Completed Scope",
+          "type": "array"
+        },
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/CollectionError"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "pagination_complete": {
+          "default": false,
+          "title": "Pagination Complete",
+          "type": "boolean"
+        },
+        "requested_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requested Scope",
+          "type": "array"
+        },
+        "retry_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Retry Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Observed At"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CollectionStatus"
+        }
+      },
+      "required": [
+        "collector",
+        "status",
+        "requested_scope",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "CollectorResult",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "KubernetesMetadataSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "api_availability": {
+          "additionalProperties": {
+            "enum": [
+              "available",
+              "absent",
+              "unsupported"
+            ],
+            "type": "string"
+          },
+          "title": "Api Availability",
+          "type": "object"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cluster Uid"
+        },
+        "collection": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/KubernetesNodeIdentity"
+          },
+          "title": "Nodes",
+          "type": "array"
+        },
+        "resource_versions": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Resource Versions",
+          "type": "object"
+        },
+        "resources": {
+          "items": {
+            "$ref": "#/$defs/KubernetesObjectMetadata"
+          },
+          "title": "Resources",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "const": "kubernetes-metadata",
+          "default": "kubernetes-metadata",
+          "title": "Source",
+          "type": "string"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "workload_bindings": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Workload Bindings",
+          "type": "object"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "generated_at",
+        "collection",
+        "api_availability",
+        "resources"
+      ],
+      "title": "KubernetesMetadataSnapshot",
+      "type": "object"
+    },
+    "KubernetesNodeIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "azure_resource_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Azure Resource Id"
+        },
+        "node_pool_resource_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Pool Resource Id"
+        },
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "provider_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider Id"
+        },
+        "state": {
+          "enum": [
+            "matched",
+            "unknown",
+            "mismatch"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "node_uid",
+        "state"
+      ],
+      "title": "KubernetesNodeIdentity",
+      "type": "object"
+    },
+    "KubernetesObjectMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "api_version": {
+          "minLength": 1,
+          "title": "Api Version",
+          "type": "string"
+        },
+        "attributes": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Attributes",
+          "type": "object"
+        },
+        "kind": {
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "object"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "namespace": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace"
+        },
+        "owner_references": {
+          "items": {
+            "additionalProperties": {
+              "$ref": "#/$defs/JsonValue"
+            },
+            "type": "object"
+          },
+          "title": "Owner References",
+          "type": "array"
+        },
+        "spec": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Spec",
+          "type": "object"
+        },
+        "status": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Status",
+          "type": "object"
+        },
+        "uid": {
+          "minLength": 1,
+          "title": "Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "api_version",
+        "kind",
+        "name",
+        "uid"
+      ],
+      "title": "KubernetesObjectMetadata",
+      "type": "object"
+    },
+    "MemoryLimitPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allocator_cache_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Allocator Cache Reviewed"
+        },
+        "allow_limit_reduction": {
+          "default": false,
+          "title": "Allow Limit Reduction",
+          "type": "boolean"
+        },
+        "configuration_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configuration Digest"
+        },
+        "evidence_reference": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "failover_total_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failover Total Peak Mib"
+        },
+        "headroom_factor": {
+          "minimum": 1,
+          "title": "Headroom Factor",
+          "type": "number"
+        },
+        "maximum_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Reduction Ratio",
+          "type": "number"
+        },
+        "minimum_limit_mib": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Limit Mib",
+          "type": "number"
+        },
+        "startup_total_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Startup Total Peak Mib"
+        }
+      },
+      "required": [
+        "minimum_limit_mib",
+        "maximum_reduction_ratio",
+        "headroom_factor",
+        "evidence_reference"
+      ],
+      "title": "MemoryLimitPolicy",
+      "type": "object"
+    },
+    "MemorySafetyPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_request_reduction": {
+          "default": false,
+          "title": "Allow Request Reduction",
+          "type": "boolean"
+        },
+        "eviction_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Eviction Events"
+        },
+        "evidence_reference": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "failover_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failover Peak Mib"
+        },
+        "headroom_factor": {
+          "minimum": 1,
+          "title": "Headroom Factor",
+          "type": "number"
+        },
+        "maximum_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Reduction Ratio",
+          "type": "number"
+        },
+        "minimum_request_mib": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Request Mib",
+          "type": "number"
+        },
+        "qos_class": {
+          "anyOf": [
+            {
+              "enum": [
+                "Guaranteed",
+                "Burstable",
+                "BestEffort"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qos Class"
+        },
+        "startup_peak_mib": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Startup Peak Mib"
+        }
+      },
+      "required": [
+        "minimum_request_mib",
+        "maximum_reduction_ratio",
+        "headroom_factor",
+        "evidence_reference"
+      ],
+      "title": "MemorySafetyPolicy",
+      "type": "object"
+    },
+    "MetricEntity": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "container": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Container"
+        },
+        "hpa_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hpa Uid"
+        },
+        "kind": {
+          "default": "container",
+          "enum": [
+            "container",
+            "workload",
+            "workload_container",
+            "hpa",
+            "node",
+            "node_pool",
+            "unresolved_container"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "membership_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Membership Digest"
+        },
+        "namespace": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace"
+        },
+        "node_pool_resource_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Pool Resource Id"
+        },
+        "node_resource_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Resource Id"
+        },
+        "node_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Uid"
+        },
+        "pod": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod"
+        },
+        "pod_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod Uid"
+        },
+        "workload": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload"
+        },
+        "workload_kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Kind"
+        },
+        "workload_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Uid"
+        }
+      },
+      "required": [
+        "cluster_resource_id"
+      ],
+      "title": "MetricEntity",
+      "type": "object"
+    },
+    "MetricObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "entity": {
+          "$ref": "#/$defs/MetricEntity"
+        },
+        "issues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "latest_sample_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Latest Sample At"
+        },
+        "maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum"
+        },
+        "metric": {
+          "minLength": 1,
+          "title": "Metric",
+          "type": "string"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum"
+        },
+        "p50": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P50"
+        },
+        "p95": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P95"
+        },
+        "p99": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P99"
+        },
+        "quality": {
+          "$ref": "#/$defs/MetricQuality"
+        },
+        "total": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total"
+        }
+      },
+      "required": [
+        "entity",
+        "metric",
+        "quality"
+      ],
+      "title": "MetricObservation",
+      "type": "object"
+    },
+    "MetricQuality": {
+      "additionalProperties": false,
+      "properties": {
+        "maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "query_expression": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query Expression"
+        },
+        "query_version": {
+          "minLength": 1,
+          "title": "Query Version",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "step_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Step Seconds",
+          "type": "integer"
+        },
+        "unit": {
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "window": {
+          "$ref": "#/$defs/MetricWindow"
+        }
+      },
+      "required": [
+        "source",
+        "query_version",
+        "step_seconds",
+        "observed_at",
+        "window",
+        "unit"
+      ],
+      "title": "MetricQuality",
+      "type": "object"
+    },
+    "MetricQueryPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_evaluations": {
+          "minimum": 0,
+          "title": "Expected Evaluations",
+          "type": "integer"
+        },
+        "logical_queries": {
+          "minimum": 0,
+          "title": "Logical Queries",
+          "type": "integer"
+        },
+        "maximum_series": {
+          "minimum": 1,
+          "title": "Maximum Series",
+          "type": "integer"
+        },
+        "requests": {
+          "minimum": 0,
+          "title": "Requests",
+          "type": "integer"
+        },
+        "unique_queries": {
+          "minimum": 0,
+          "title": "Unique Queries",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "logical_queries",
+        "unique_queries",
+        "requests",
+        "expected_evaluations",
+        "maximum_series"
+      ],
+      "title": "MetricQueryPlan",
+      "type": "object"
+    },
+    "MetricWindow": {
+      "additionalProperties": false,
+      "properties": {
+        "coverage_ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Coverage Ratio",
+          "type": "number"
+        },
+        "end": {
+          "format": "date-time",
+          "title": "End",
+          "type": "string"
+        },
+        "sample_count": {
+          "minimum": 0,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "start": {
+          "format": "date-time",
+          "title": "Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "sample_count",
+        "coverage_ratio"
+      ],
+      "title": "MetricWindow",
+      "type": "object"
+    },
+    "PoolIntentBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "classification": {
+          "enum": [
+            "specialized",
+            "intentionally-reserved"
+          ],
+          "title": "Classification",
+          "type": "string"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "owner": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Owner",
+          "type": "string"
+        },
+        "pool_resource_id": {
+          "minLength": 1,
+          "title": "Pool Resource Id",
+          "type": "string"
+        },
+        "reference": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cluster_resource_id",
+        "pool_resource_id",
+        "owner",
+        "classification",
+        "reference"
+      ],
+      "title": "PoolIntentBinding",
+      "type": "object"
+    },
+    "PrometheusMetricsSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "collection": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "observations": {
+          "items": {
+            "$ref": "#/$defs/MetricObservation"
+          },
+          "title": "Observations",
+          "type": "array"
+        },
+        "query_end": {
+          "format": "date-time",
+          "title": "Query End",
+          "type": "string"
+        },
+        "query_plan": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetricQueryPlan"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "query_start": {
+          "format": "date-time",
+          "title": "Query Start",
+          "type": "string"
+        },
+        "query_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Query Version",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "const": "prometheus",
+          "default": "prometheus",
+          "title": "Source",
+          "type": "string"
+        },
+        "source_name": {
+          "minLength": 1,
+          "title": "Source Name",
+          "type": "string"
+        },
+        "source_profile": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SourceDefinition"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "step_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Step Seconds",
+          "type": "integer"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "source_name",
+        "generated_at",
+        "query_start",
+        "query_end",
+        "step_seconds",
+        "collection",
+        "observations"
+      ],
+      "title": "PrometheusMetricsSnapshot",
+      "type": "object"
+    },
+    "ReplicaSafetyPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_floor_reduction": {
+          "default": false,
+          "title": "Allow Floor Reduction",
+          "type": "boolean"
+        },
+        "configuration_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configuration Digest"
+        },
+        "eviction_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Eviction Events"
+        },
+        "evidence_reference": {
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "failover_reserve_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Failover Reserve Replicas"
+        },
+        "hpa_uid": {
+          "minLength": 1,
+          "title": "Hpa Uid",
+          "type": "string"
+        },
+        "maximum_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Reduction Ratio",
+          "type": "number"
+        },
+        "maximum_unavailable_replicas": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Unavailable Replicas"
+        },
+        "minimum_available_replicas": {
+          "minimum": 1,
+          "title": "Minimum Available Replicas",
+          "type": "integer"
+        },
+        "oom_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Oom Events"
+        },
+        "peak_load_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Peak Load Reviewed"
+        },
+        "reliability_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reliability Reviewed"
+        },
+        "restart_events": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Restart Events"
+        },
+        "startup_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Startup Reviewed"
+        },
+        "tested_replicas": {
+          "minimum": 1,
+          "title": "Tested Replicas",
+          "type": "integer"
+        },
+        "throughput_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Throughput Reviewed"
+        },
+        "zone_failure_reviewed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Zone Failure Reviewed"
+        }
+      },
+      "required": [
+        "hpa_uid",
+        "minimum_available_replicas",
+        "tested_replicas",
+        "maximum_reduction_ratio",
+        "evidence_reference"
+      ],
+      "title": "ReplicaSafetyPolicy",
+      "type": "object"
+    },
+    "SourceDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "characterization": {
+          "const": "synthetic",
+          "title": "Characterization",
+          "type": "string"
+        },
+        "characterized_versions": {
+          "additionalProperties": {
+            "items": {
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.]+)?$",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "propertyNames": {
+            "enum": [
+              "prometheus",
+              "kube-state-metrics",
+              "cadvisor",
+              "kubernetes"
+            ]
+          },
+          "title": "Characterized Versions",
+          "type": "object"
+        },
+        "id": {
+          "enum": [
+            "identity-enriched",
+            "cadvisor-ksm"
+          ],
+          "title": "Id",
+          "type": "string"
+        },
+        "identity": {
+          "enum": [
+            "historical",
+            "name-only"
+          ],
+          "title": "Identity",
+          "type": "string"
+        },
+        "joins": {
+          "const": "none",
+          "title": "Joins",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "query_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Query Ids",
+          "type": "array"
+        },
+        "transports": {
+          "items": {
+            "enum": [
+              "prometheus",
+              "azure-managed-prometheus"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Transports",
+          "type": "array"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "identity",
+        "transports",
+        "labels",
+        "query_ids",
+        "characterized_versions",
+        "characterization",
+        "joins",
+        "limitations"
+      ],
+      "title": "SourceDefinition",
+      "type": "object"
+    },
+    "WorkloadAssessmentBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "minLength": 1,
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "history_reference": {
+          "minLength": 1,
+          "title": "History Reference",
+          "type": "string"
+        },
+        "hpa_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hpa Uid"
+        },
+        "namespace": {
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "minLength": 1,
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "maxItems": 10000,
+          "minItems": 1,
+          "title": "Pod Uids",
+          "type": "array"
+        },
+        "safety_policy": {
+          "$ref": "#/$defs/WorkloadSafetyPolicy"
+        },
+        "source_name": {
+          "minLength": 1,
+          "title": "Source Name",
+          "type": "string"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "workload": {
+          "minLength": 1,
+          "title": "Workload",
+          "type": "string"
+        },
+        "workload_kind": {
+          "enum": [
+            "Deployment",
+            "StatefulSet"
+          ],
+          "title": "Workload Kind",
+          "type": "string"
+        },
+        "workload_uid": {
+          "minLength": 1,
+          "title": "Workload Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "namespace",
+        "namespace_uid",
+        "workload_kind",
+        "workload",
+        "workload_uid",
+        "pod_uids",
+        "source_name",
+        "history_reference",
+        "safety_policy"
+      ],
+      "title": "WorkloadAssessmentBinding",
+      "type": "object"
+    },
+    "WorkloadSafetyPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_headroom_factor": {
+          "minimum": 1,
+          "title": "Cpu Headroom Factor",
+          "type": "number"
+        },
+        "disruption_reviewed": {
+          "title": "Disruption Reviewed",
+          "type": "boolean"
+        },
+        "maximum_cpu_reduction_ratio": {
+          "exclusiveMaximum": 1,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Cpu Reduction Ratio",
+          "type": "number"
+        },
+        "maximum_cpu_throttled_ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Maximum Cpu Throttled Ratio",
+          "type": "number"
+        },
+        "memory": {
+          "additionalProperties": {
+            "$ref": "#/$defs/MemorySafetyPolicy"
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Memory",
+          "type": "object"
+        },
+        "memory_limits": {
+          "additionalProperties": {
+            "$ref": "#/$defs/MemoryLimitPolicy"
+          },
+          "propertyNames": {
+            "minLength": 1
+          },
+          "title": "Memory Limits",
+          "type": "object"
+        },
+        "minimum_cpu_request_mcores": {
+          "exclusiveMinimum": 0,
+          "title": "Minimum Cpu Request Mcores",
+          "type": "number"
+        },
+        "owner": {
+          "minLength": 1,
+          "title": "Owner",
+          "type": "string"
+        },
+        "replicas": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReplicaSafetyPolicy"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "reviewed_window_end": {
+          "format": "date-time",
+          "title": "Reviewed Window End",
+          "type": "string"
+        },
+        "reviewed_window_start": {
+          "format": "date-time",
+          "title": "Reviewed Window Start",
+          "type": "string"
+        },
+        "slo_reference": {
+          "minLength": 1,
+          "title": "Slo Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "owner",
+        "slo_reference",
+        "reviewed_window_start",
+        "reviewed_window_end",
+        "disruption_reviewed",
+        "minimum_cpu_request_mcores",
+        "maximum_cpu_reduction_ratio",
+        "cpu_headroom_factor",
+        "maximum_cpu_throttled_ratio"
+      ],
+      "title": "WorkloadSafetyPolicy",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "azure": {
+      "items": {
+        "$ref": "#/$defs/AzureInventorySnapshot"
+      },
+      "maxItems": 1000,
+      "minItems": 1,
+      "title": "Azure",
+      "type": "array"
+    },
+    "kubernetes": {
+      "items": {
+        "$ref": "#/$defs/KubernetesMetadataSnapshot"
+      },
+      "title": "Kubernetes",
+      "type": "array"
+    },
+    "metrics": {
+      "items": {
+        "$ref": "#/$defs/PrometheusMetricsSnapshot"
+      },
+      "title": "Metrics",
+      "type": "array"
+    },
+    "pool_intents": {
+      "items": {
+        "$ref": "#/$defs/PoolIntentBinding"
+      },
+      "title": "Pool Intents",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "window_end": {
+      "format": "date-time",
+      "title": "Window End",
+      "type": "string"
+    },
+    "window_start": {
+      "format": "date-time",
+      "title": "Window Start",
+      "type": "string"
+    },
+    "workload_assessments": {
+      "items": {
+        "$ref": "#/$defs/WorkloadAssessmentBinding"
+      },
+      "title": "Workload Assessments",
+      "type": "array"
+    }
+  },
+  "required": [
+    "window_start",
+    "window_end",
+    "azure"
+  ],
+  "title": "AssessmentFragments",
+  "type": "object"
+}

@@ -1,0 +1,28 @@
+schema_version: "1.0"
+id: AKS-RQ-001
+version: "2.0.0"
+family: cpu
+evaluator: missing-cpu-request
+evidence_kind: inventory
+title: Review missing CPU request
+purpose: Investigate an explicitly observed absent or zero admitted CPU request without choosing a target.
+sources: []
+parameters: {}
+queries:
+  baseline: {}
+  guarded: {}
+required_evidence:
+  baseline: [Complete fresh scoped Azure and Kubernetes receipts, Explicit current admitted request observation]
+  guarded: [Complete fresh scoped Azure and Kubernetes receipts, Explicit current admitted request observation]
+limitations:
+  - Omitted or unobserved request state is unknown, not absent.
+  - This review does not select a request or establish savings.
+prerequisites: [Collect representative CPU usage before selecting a value.]
+risks: [An arbitrarily low request can cause contention or poor placement.]
+validation: [Load test and monitor throttling and latency.]
+rollback: [No numeric change is proposed; restore any separately approved change through the owning delivery pipeline.]
+actions:
+  baseline: [Use VPA recommendation mode or historical percentiles to propose a request.]
+  guarded: [Use VPA recommendation mode or historical percentiles to propose a request.]
+baseline_summary: No positive CPU request was explicitly observed. Requests support reliable scheduling, rightsizing and cost attribution. This is an investigation, not a numeric target.
+guarded_summary: No positive CPU request was explicitly observed. Requests support reliable scheduling, rightsizing and cost attribution. This is an investigation, not a numeric target.

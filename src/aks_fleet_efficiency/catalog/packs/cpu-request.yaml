@@ -1,0 +1,55 @@
+schema_version: "1.0"
+id: AKS-RQ-002
+version: "2.1.0"
+family: cpu
+evaluator: cpu-request-review
+title: Review CPU request
+purpose: Compare observed CPU usage with the admitted request, then independently evaluate a policy-bounded reduction.
+sources:
+  - prometheus
+  - azure-managed-prometheus
+parameters:
+  review_ratio: 0.4
+queries:
+  baseline:
+    container: [cpu_usage, cpu_request]
+    unresolved_container: [cpu_usage, cpu_request]
+    workload_container: [replica_cpu_envelope, replica_cpu_request_min, replica_cpu_request_max]
+  guarded:
+    container: [cpu_usage, cpu_request, cpu_throttling, oom_events]
+    workload_container: [replica_cpu_envelope, replica_cpu_request_min, replica_cpu_request_max, replica_cpu_throttling, replica_oom_events]
+required_evidence:
+  baseline:
+    - Complete fresh scoped Azure, Kubernetes and Prometheus receipts
+    - Exact cluster/workload identity and declared direct or approved replica-envelope usage
+    - Observed positive admitted CPU request and qualified P95 usage
+    - Configured observation duration, coverage, freshness and resolution
+  guarded:
+    - All baseline evidence, qualified P99/observed peaks, throttling and OOM history
+    - Known compatible autoscalers and no observed OOM or workload eviction veto
+    - Owner-reviewed window, disruption policy, environment, minimum, headroom and reduction bounds
+limitations:
+  - Low CPU usage is not a safe reduction target or proof a node can be removed.
+  - Requests are not CPU limits; a request ratio is not saturation.
+  - Current identities cannot reconstruct missing history or deleted membership.
+  - Replica-envelope statistics are conservative per-replica values, not workload-total percentiles.
+  - Returned evaluation-point coverage is not raw scrape completeness.
+prerequisites:
+  - Confirm the metric window contains peak and business-critical periods.
+  - Review P99 usage, throttling, startup and failover behavior.
+risks:
+  - Historical usage might not represent future peaks.
+  - Lower requests can change placement and noisy-neighbor behavior.
+validation:
+  - Run VPA in Off mode and compare recommendations.
+  - Canary an independently approved request change and verify SLOs under load.
+rollback:
+  - Restore the previous CPU request of __current_cpu_request__ mCPU in source configuration through the owning delivery pipeline.
+  - Stop promotion if SLOs, throttling, OOM or restarts regress; remeasure before proposing another change.
+baseline_rollback:
+  - No numeric change is proposed; do not apply a baseline investigation.
+actions:
+  baseline: ["Review observed usage, owner requirements and missing guarded evidence."]
+  guarded: [Open a review PR with the proposed request and rollback criteria.]
+baseline_summary: Observed P95 CPU usage is below the configured fraction of the current admitted request. This is an investigation, not a safe reduction target; owner policy, peaks and reliability must be reviewed independently.
+guarded_summary: Historical CPU usage is below the request. The proposal respects observed peaks, declared headroom and owner policy; validate it through a separately approved canary.

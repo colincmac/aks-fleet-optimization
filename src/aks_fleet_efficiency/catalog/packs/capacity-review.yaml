@@ -1,0 +1,44 @@
+schema_version: '1.0'
+id: AKS-NP-002
+version: 1.0.0
+family: node-pool
+evaluator: capacity-review
+evidence_kind: inventory
+title: Review capacity management and NAP prerequisites
+purpose: Classify current fixed/CAS pools and UID-bound NAP supply independently of historical pool utilization.
+sources: []
+parameters: {}
+queries:
+  baseline: {}
+  guarded: {}
+required_evidence:
+  baseline:
+  - Complete fresh exact-scoped Azure and Kubernetes inventory with a verified cluster fingerprint
+  guarded:
+  - Complete fresh exact-scoped Azure and Kubernetes inventory with a verified cluster fingerprint
+limitations:
+- Auto cluster mode does not make existing ARM pools NAP-managed. Dynamic supply requires exact NodeClaim/NodePool ownership and provider-bound Node identity.
+- Equal CAS bounds are configuration, not intentional reservation or a safe lower minimum.
+- Specialization and reserved capacity require exact-pool owner declarations; SKU strings alone do not prove hardware requirements.
+- Networking, identity, quota, regional SKU availability, workload/disruption fit and operational acceptance are unverified prerequisites.
+- Current policies and supply do not establish consolidation behavior, packing feasibility, removable nodes or cash savings.
+prerequisites:
+- Review current Microsoft AKS NAP support for the exact version, region, networking and identity.
+- Preserve system capacity, Spot interruption tolerance, hardware, zoning and owner-reserved capacity.
+- Compare CAS tuning with a separately approved transition; do not enable NAP or disable CAS from this report.
+risks:
+- Removing minima or migrating capacity can violate disruption, storage, specialized hardware and failover requirements.
+- NAP has unsupported configurations and stop/start and egress constraints; configuration eligibility alone is insufficient.
+validation:
+- Confirm complete NAP API lists, exact owner/provider identities, node-class requirements, limits and disruption budgets.
+- Validate all unknown prerequisites using separately approved sanitized evidence and current AKS documentation.
+- Require workload-fit, pending-Pod, availability and packing evidence before a separate migration proposal.
+rollback:
+- No change is proposed. A later approved experiment must retain original capacity and define an owner-controlled rollback.
+actions:
+  baseline:
+  - Investigate capacity classes and missing prerequisites; no migration or node-count change is recommended.
+  guarded:
+  - Investigate capacity classes and missing prerequisites; guarded mode does not authorize migration.
+baseline_summary: Current capacity configuration and declared intent support investigation only, not NAP eligibility, migration approval, lower minima, removable nodes or financial savings.
+guarded_summary: Current capacity configuration and declared intent support investigation only, not NAP eligibility, migration approval, lower minima, removable nodes or financial savings.

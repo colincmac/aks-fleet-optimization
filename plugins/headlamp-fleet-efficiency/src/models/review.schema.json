@@ -1,0 +1,1874 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/OptimizationRecommendation",
+  "definitions": {
+    "OptimizationRecommendation": {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "const": "optimization.aks.io/v1alpha1"
+        },
+        "kind": {
+          "type": "string",
+          "const": "OptimizationRecommendation"
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            },
+            "uid": {
+              "type": "string"
+            },
+            "resourceVersion": {
+              "type": "string"
+            },
+            "generation": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "name",
+            "namespace",
+            "uid",
+            "resourceVersion",
+            "generation"
+          ],
+          "additionalProperties": {}
+        },
+        "spec": {
+          "type": "object",
+          "properties": {
+            "finding": {
+              "$ref": "#/definitions/Recommendation"
+            },
+            "inspection": {
+              "$ref": "#/definitions/InspectionOperatorInspection"
+            },
+            "type": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "VPA",
+                "Deterministic",
+                "AI-assisted"
+              ]
+            },
+            "target": {
+              "type": "object",
+              "properties": {
+                "clusterResourceId": {
+                  "type": "string"
+                },
+                "namespace": {
+                  "type": "string"
+                },
+                "apiVersion": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "uid": {
+                  "type": "string"
+                },
+                "container": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "clusterResourceId",
+                "namespace",
+                "apiVersion",
+                "kind",
+                "name",
+                "uid",
+                "container"
+              ],
+              "additionalProperties": false
+            },
+            "generatedAt": {
+              "type": "string"
+            },
+            "expiresAt": {
+              "type": "string"
+            },
+            "evidenceCollectedAt": {
+              "type": "string"
+            },
+            "evidenceVersion": {
+              "type": "string"
+            },
+            "maxEvidenceAgeHours": {
+              "type": "number"
+            },
+            "completeness": {
+              "type": "string",
+              "enum": [
+                "complete",
+                "partial",
+                "unknown"
+              ]
+            },
+            "observationWindow": {
+              "type": "object",
+              "properties": {
+                "start": {
+                  "type": "string"
+                },
+                "end": {
+                  "type": "string"
+                },
+                "coverageRatio": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "start",
+                "end",
+                "coverageRatio"
+              ],
+              "additionalProperties": false
+            },
+            "risk": {
+              "type": "object",
+              "properties": {
+                "level": {
+                  "type": "string",
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ]
+                },
+                "reasons": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "requiredChecks": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "restart": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "level",
+                "reasons",
+                "requiredChecks",
+                "restart"
+              ],
+              "additionalProperties": false
+            },
+            "checks": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "Pass",
+                      "Fail",
+                      "Unknown"
+                    ]
+                  },
+                  "detail": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "state",
+                  "detail"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "approvalsRequired": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "sourceRevision": {
+              "type": "string"
+            },
+            "implementation": {
+              "type": "object",
+              "properties": {
+                "owner": {
+                  "type": "string"
+                },
+                "repository": {
+                  "type": "string"
+                },
+                "configurationPath": {
+                  "type": "string"
+                },
+                "baseBranch": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "owner",
+                "repository",
+                "configurationPath",
+                "baseBranch"
+              ],
+              "additionalProperties": false
+            },
+            "vpa": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "namespace": {
+                  "type": "string"
+                },
+                "bounds": {
+                  "$ref": "#/definitions/VpaBounds"
+                },
+                "updateMode": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "namespace"
+              ],
+              "additionalProperties": false
+            },
+            "ai": {
+              "type": "object",
+              "properties": {
+                "generator": {
+                  "type": "string"
+                },
+                "model": {
+                  "type": "string"
+                },
+                "analyzedAt": {
+                  "type": "string"
+                },
+                "evidenceVersion": {
+                  "type": "string"
+                },
+                "policyVersion": {
+                  "type": "string"
+                },
+                "explanation": {
+                  "type": "string"
+                },
+                "alternatives": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "limitations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "humanValidation": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "confidence": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "generator",
+                "model",
+                "analyzedAt",
+                "evidenceVersion",
+                "policyVersion",
+                "explanation",
+                "alternatives",
+                "limitations",
+                "humanValidation",
+                "confidence"
+              ],
+              "additionalProperties": false
+            },
+            "relatedResources": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "apiVersion": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "type": "string"
+                  },
+                  "namespace": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "plugin": {
+                    "type": "string",
+                    "enum": [
+                      "keda",
+                      "karpenter"
+                    ]
+                  }
+                },
+                "required": [
+                  "apiVersion",
+                  "kind",
+                  "name",
+                  "plugin"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "finding",
+            "type",
+            "source",
+            "target",
+            "generatedAt",
+            "expiresAt",
+            "evidenceCollectedAt",
+            "evidenceVersion",
+            "maxEvidenceAgeHours",
+            "completeness",
+            "observationWindow",
+            "risk",
+            "checks",
+            "approvalsRequired",
+            "sourceRevision"
+          ],
+          "additionalProperties": false
+        },
+        "status": {
+          "type": "object",
+          "properties": {
+            "phase": {
+              "$ref": "#/definitions/Phase"
+            },
+            "observedGeneration": {
+              "type": "number"
+            },
+            "evidenceVersion": {
+              "type": "string"
+            },
+            "sourceConfiguration": {
+              "type": "string",
+              "enum": [
+                "Unchanged",
+                "Changed",
+                "Unknown"
+              ]
+            },
+            "supersededBy": {
+              "type": "string"
+            },
+            "approvals": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "role": {
+                    "type": "string"
+                  },
+                  "actor": {
+                    "type": "string"
+                  },
+                  "generation": {
+                    "type": "number"
+                  },
+                  "evidenceVersion": {
+                    "type": "string"
+                  },
+                  "sourceRevision": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "role",
+                  "actor",
+                  "generation",
+                  "evidenceVersion",
+                  "sourceRevision"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "pullRequest": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "type": "string",
+                  "enum": [
+                    "NotCreated",
+                    "Open",
+                    "Merged",
+                    "Closed",
+                    "Failed"
+                  ]
+                },
+                "number": {
+                  "type": "number"
+                },
+                "url": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            "validation": {
+              "type": "object",
+              "properties": {
+                "state": {
+                  "$ref": "#/definitions/ValidationState"
+                },
+                "deployedAt": {
+                  "type": "string"
+                },
+                "window": {
+                  "type": "string"
+                },
+                "rollback": {
+                  "type": "string"
+                },
+                "metrics": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "baseline": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "current": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "unit": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "baseline",
+                      "current",
+                      "unit"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "required": [
+                "state"
+              ],
+              "additionalProperties": false
+            },
+            "timeline": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/AuditEvent"
+              }
+            }
+          },
+          "required": [
+            "phase",
+            "observedGeneration",
+            "evidenceVersion",
+            "sourceConfiguration",
+            "approvals",
+            "pullRequest",
+            "validation",
+            "timeline"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    "Recommendation": {
+      "type": "object",
+      "properties": {
+        "category": {
+          "$ref": "#/definitions/Category"
+        },
+        "cluster_name": {
+          "$ref": "#/definitions/ClusterName1"
+        },
+        "confidence": {
+          "$ref": "#/definitions/Confidence"
+        },
+        "currency": {
+          "$ref": "#/definitions/Currency"
+        },
+        "current_limits": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ResourceLimits"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "current_replica_floor": {
+          "$ref": "#/definitions/CurrentReplicaFloor"
+        },
+        "current_requests": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ResourceRequests"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "estimated_monthly_savings": {
+          "$ref": "#/definitions/EstimatedMonthlySavings"
+        },
+        "evidence": {
+          "$ref": "#/definitions/Evidence"
+        },
+        "id": {
+          "$ref": "#/definitions/Id3"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata"
+        },
+        "namespace": {
+          "$ref": "#/definitions/Namespace1"
+        },
+        "owner": {
+          "$ref": "#/definitions/Owner"
+        },
+        "prerequisites": {
+          "$ref": "#/definitions/Prerequisites"
+        },
+        "proposed_actions": {
+          "$ref": "#/definitions/ProposedActions"
+        },
+        "proposed_limits": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ResourceLimits"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "proposed_replica_floor": {
+          "$ref": "#/definitions/ProposedReplicaFloor"
+        },
+        "proposed_requests": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ResourceRequests"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resource_id": {
+          "$ref": "#/definitions/ResourceId1"
+        },
+        "risks": {
+          "$ref": "#/definitions/Risks"
+        },
+        "rollback_steps": {
+          "$ref": "#/definitions/RollbackSteps"
+        },
+        "rule_id": {
+          "$ref": "#/definitions/RuleId1"
+        },
+        "rule_version": {
+          "$ref": "#/definitions/RuleVersion1"
+        },
+        "severity": {
+          "$ref": "#/definitions/Severity"
+        },
+        "summary": {
+          "$ref": "#/definitions/Summary"
+        },
+        "title": {
+          "$ref": "#/definitions/Title"
+        },
+        "validation_steps": {
+          "$ref": "#/definitions/ValidationSteps"
+        },
+        "workload": {
+          "$ref": "#/definitions/Workload1"
+        }
+      },
+      "required": [
+        "category",
+        "cluster_name",
+        "confidence",
+        "evidence",
+        "id",
+        "resource_id",
+        "rule_id",
+        "rule_version",
+        "severity",
+        "summary",
+        "title"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `AnalysisReport`'s JSON-Schema via the `definition` \"Recommendation\"."
+    },
+    "Category": {
+      "type": "string"
+    },
+    "ClusterName1": {
+      "type": "string"
+    },
+    "Confidence": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "description": "This interface was referenced by `AnalysisReport`'s JSON-Schema via the `definition` \"Confidence\"."
+    },
+    "Currency": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "ResourceLimits": {
+      "type": "object",
+      "properties": {
+        "memory_mib": {
+          "$ref": "#/definitions/MemoryMib"
+        }
+      },
+      "required": [
+        "memory_mib"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `AnalysisReport`'s JSON-Schema via the `definition` \"ResourceLimits\"."
+    },
+    "MemoryMib": {
+      "type": "number"
+    },
+    "CurrentReplicaFloor": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "ResourceRequests": {
+      "type": "object",
+      "properties": {
+        "cpu_mcores": {
+          "$ref": "#/definitions/CpuMcores"
+        },
+        "memory_mib": {
+          "$ref": "#/definitions/MemoryMib1"
+        }
+      },
+      "additionalProperties": false,
+      "description": "This interface was referenced by `AnalysisReport`'s JSON-Schema via the `definition` \"ResourceRequests\"."
+    },
+    "CpuMcores": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "MemoryMib1": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "EstimatedMonthlySavings": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "Evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Evidence1"
+      }
+    },
+    "Evidence1": {
+      "type": "object",
+      "properties": {
+        "metric": {
+          "$ref": "#/definitions/Metric"
+        },
+        "source": {
+          "$ref": "#/definitions/Source"
+        },
+        "unit": {
+          "$ref": "#/definitions/Unit1"
+        },
+        "value": {
+          "$ref": "#/definitions/Value"
+        }
+      },
+      "required": [
+        "metric",
+        "source",
+        "value"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `AnalysisReport`'s JSON-Schema via the `definition` \"Evidence\"."
+    },
+    "Metric": {
+      "type": "string"
+    },
+    "Source": {
+      "type": "string"
+    },
+    "Unit1": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Value": {
+      "type": [
+        "number",
+        "string",
+        "boolean",
+        "null"
+      ]
+    },
+    "Id3": {
+      "type": "string"
+    },
+    "Metadata": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "Namespace1": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Owner": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "Prerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ProposedActions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ProposedReplicaFloor": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "ResourceId1": {
+      "type": "string"
+    },
+    "Risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "RollbackSteps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "RuleId1": {
+      "type": "string"
+    },
+    "RuleVersion1": {
+      "type": "string"
+    },
+    "Severity": {
+      "type": "string",
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "description": "This interface was referenced by `AnalysisReport`'s JSON-Schema via the `definition` \"Severity\"."
+    },
+    "Summary": {
+      "type": "string"
+    },
+    "Title": {
+      "type": "string"
+    },
+    "ValidationSteps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "Workload1": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "InspectionOperatorInspection": {
+      "type": "object",
+      "properties": {
+        "capabilities": {
+          "$ref": "#/definitions/InspectionCapabilities"
+        },
+        "card": {
+          "$ref": "#/definitions/InspectionOperatorCard"
+        },
+        "mode": {
+          "$ref": "#/definitions/InspectionMode2"
+        },
+        "resolved_queries": {
+          "$ref": "#/definitions/InspectionResolvedQueries"
+        }
+      },
+      "required": [
+        "capabilities",
+        "card",
+        "mode"
+      ],
+      "additionalProperties": false
+    },
+    "InspectionCapabilities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/InspectionSourceCapability"
+      }
+    },
+    "InspectionSourceCapability": {
+      "type": "object",
+      "properties": {
+        "checks": {
+          "$ref": "#/definitions/InspectionChecks"
+        },
+        "cluster_resource_id": {
+          "$ref": "#/definitions/InspectionClusterResourceId"
+        },
+        "mode": {
+          "$ref": "#/definitions/InspectionMode"
+        },
+        "notice": {
+          "$ref": "#/definitions/InspectionNotice"
+        },
+        "observed_at": {
+          "$ref": "#/definitions/InspectionObservedAt"
+        },
+        "pack_id": {
+          "$ref": "#/definitions/InspectionPackId"
+        },
+        "source": {
+          "$ref": "#/definitions/InspectionSource"
+        },
+        "source_profile": {
+          "$ref": "#/definitions/InspectionSourceDefinition"
+        },
+        "status": {
+          "$ref": "#/definitions/InspectionStatus1"
+        }
+      },
+      "required": [
+        "checks",
+        "cluster_resource_id",
+        "mode",
+        "observed_at",
+        "pack_id",
+        "source",
+        "source_profile",
+        "status"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"SourceCapability\"."
+    },
+    "InspectionChecks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/InspectionCapabilityCheck"
+      },
+      "minItems": 1
+    },
+    "InspectionCapabilityCheck": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/InspectionCode"
+        },
+        "reason_codes": {
+          "$ref": "#/definitions/InspectionReasonCodes"
+        },
+        "status": {
+          "$ref": "#/definitions/InspectionStatus"
+        }
+      },
+      "required": [
+        "code",
+        "reason_codes",
+        "status"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"CapabilityCheck\"."
+    },
+    "InspectionCode": {
+      "type": "string"
+    },
+    "InspectionReasonCodes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "InspectionStatus": {
+      "type": "string",
+      "enum": [
+        "available",
+        "unavailable",
+        "unknown",
+        "unsupported"
+      ]
+    },
+    "InspectionClusterResourceId": {
+      "type": "string"
+    },
+    "InspectionMode": {
+      "type": "string",
+      "enum": [
+        "baseline",
+        "guarded"
+      ]
+    },
+    "InspectionNotice": {
+      "type": "string",
+      "const": "Metric capability is not source attestation or safe-change approval."
+    },
+    "InspectionObservedAt": {
+      "type": "string"
+    },
+    "InspectionPackId": {
+      "type": "string"
+    },
+    "InspectionSource": {
+      "type": "string"
+    },
+    "InspectionSourceDefinition": {
+      "type": "object",
+      "properties": {
+        "characterization": {
+          "$ref": "#/definitions/InspectionCharacterization"
+        },
+        "characterized_versions": {
+          "$ref": "#/definitions/InspectionCharacterizedVersions"
+        },
+        "id": {
+          "$ref": "#/definitions/InspectionId"
+        },
+        "identity": {
+          "$ref": "#/definitions/InspectionIdentity"
+        },
+        "joins": {
+          "$ref": "#/definitions/InspectionJoins"
+        },
+        "labels": {
+          "$ref": "#/definitions/InspectionLabels"
+        },
+        "limitations": {
+          "$ref": "#/definitions/InspectionLimitations"
+        },
+        "query_ids": {
+          "$ref": "#/definitions/InspectionQueryIds"
+        },
+        "transports": {
+          "$ref": "#/definitions/InspectionTransports"
+        },
+        "version": {
+          "$ref": "#/definitions/InspectionVersion"
+        }
+      },
+      "required": [
+        "characterization",
+        "characterized_versions",
+        "id",
+        "identity",
+        "joins",
+        "labels",
+        "limitations",
+        "query_ids",
+        "transports",
+        "version"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"SourceDefinition\"."
+    },
+    "InspectionCharacterization": {
+      "type": "string",
+      "const": "synthetic"
+    },
+    "InspectionCharacterizedVersions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "InspectionId": {
+      "type": "string",
+      "enum": [
+        "identity-enriched",
+        "cadvisor-ksm"
+      ]
+    },
+    "InspectionIdentity": {
+      "type": "string",
+      "enum": [
+        "historical",
+        "name-only"
+      ]
+    },
+    "InspectionJoins": {
+      "type": "string",
+      "const": "none"
+    },
+    "InspectionLabels": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "InspectionLimitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "InspectionQueryIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "InspectionTransports": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ]
+      },
+      "minItems": 1
+    },
+    "InspectionVersion": {
+      "type": "string"
+    },
+    "InspectionStatus1": {
+      "type": "string",
+      "enum": [
+        "available",
+        "unavailable",
+        "unknown",
+        "unsupported"
+      ]
+    },
+    "InspectionOperatorCard": {
+      "type": "object",
+      "properties": {
+        "manifest": {
+          "$ref": "#/definitions/InspectionPackManifest"
+        },
+        "parameter_guidance": {
+          "$ref": "#/definitions/InspectionParameterGuidance"
+        },
+        "provenance": {
+          "$ref": "#/definitions/InspectionPackProvenance"
+        },
+        "synthetic_example": {
+          "$ref": "#/definitions/InspectionAdvisorConfig"
+        }
+      },
+      "required": [
+        "manifest",
+        "parameter_guidance",
+        "provenance",
+        "synthetic_example"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"OperatorCard\"."
+    },
+    "InspectionPackManifest": {
+      "type": "object",
+      "properties": {
+        "actions": {
+          "$ref": "#/definitions/InspectionActions"
+        },
+        "baseline_rollback": {
+          "$ref": "#/definitions/InspectionBaselineRollback"
+        },
+        "baseline_summary": {
+          "$ref": "#/definitions/InspectionBaselineSummary"
+        },
+        "evaluator": {
+          "$ref": "#/definitions/InspectionEvaluator"
+        },
+        "evidence_kind": {
+          "$ref": "#/definitions/InspectionEvidenceKind"
+        },
+        "family": {
+          "$ref": "#/definitions/InspectionFamily"
+        },
+        "guarded_summary": {
+          "$ref": "#/definitions/InspectionGuardedSummary"
+        },
+        "id": {
+          "$ref": "#/definitions/InspectionId1"
+        },
+        "limitations": {
+          "$ref": "#/definitions/InspectionLimitations1"
+        },
+        "parameters": {
+          "$ref": "#/definitions/InspectionPackParameters"
+        },
+        "prerequisites": {
+          "$ref": "#/definitions/InspectionPrerequisites"
+        },
+        "purpose": {
+          "$ref": "#/definitions/InspectionPurpose"
+        },
+        "queries": {
+          "$ref": "#/definitions/InspectionQueries"
+        },
+        "required_evidence": {
+          "$ref": "#/definitions/InspectionRequiredEvidence"
+        },
+        "risks": {
+          "$ref": "#/definitions/InspectionRisks"
+        },
+        "rollback": {
+          "$ref": "#/definitions/InspectionRollback"
+        },
+        "schema_version": {
+          "$ref": "#/definitions/InspectionSchemaVersion"
+        },
+        "sources": {
+          "$ref": "#/definitions/InspectionSources"
+        },
+        "summary_variants": {
+          "$ref": "#/definitions/InspectionSummaryVariants"
+        },
+        "title": {
+          "$ref": "#/definitions/InspectionTitle"
+        },
+        "validation": {
+          "$ref": "#/definitions/InspectionValidation"
+        },
+        "version": {
+          "$ref": "#/definitions/InspectionVersion1"
+        }
+      },
+      "required": [
+        "actions",
+        "baseline_summary",
+        "evaluator",
+        "family",
+        "guarded_summary",
+        "id",
+        "limitations",
+        "parameters",
+        "prerequisites",
+        "purpose",
+        "queries",
+        "required_evidence",
+        "risks",
+        "rollback",
+        "sources",
+        "title",
+        "validation",
+        "version"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"PackManifest\"."
+    },
+    "InspectionActions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "InspectionBaselineRollback": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "InspectionBaselineSummary": {
+      "type": "string"
+    },
+    "InspectionEvaluator": {
+      "type": "string",
+      "enum": [
+        "cpu-request-review",
+        "missing-cpu-request",
+        "cpu-request-risk",
+        "node-pool-review",
+        "scheduling-review",
+        "capacity-review",
+        "oom-investigation",
+        "memory-safety-review",
+        "memory-request-proposal",
+        "pod-memory-accounting",
+        "memory-limit-proposal",
+        "restart-investigation",
+        "termination-context",
+        "eviction-investigation",
+        "fixed-replica-review",
+        "autoscaler-interaction",
+        "hpa-pinning",
+        "controller-responsibility",
+        "hpa-floor-proposal",
+        "hpa-change-review",
+        "vpa-bounds-review"
+      ]
+    },
+    "InspectionEvidenceKind": {
+      "type": "string",
+      "enum": [
+        "metrics",
+        "inventory"
+      ]
+    },
+    "InspectionFamily": {
+      "type": "string",
+      "enum": [
+        "cpu",
+        "node-pool",
+        "memory",
+        "reliability",
+        "autoscaler",
+        "scheduling"
+      ]
+    },
+    "InspectionGuardedSummary": {
+      "type": "string"
+    },
+    "InspectionId1": {
+      "type": "string"
+    },
+    "InspectionLimitations1": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "InspectionPackParameters": {
+      "type": "object",
+      "properties": {
+        "review_ratio": {
+          "$ref": "#/definitions/InspectionReviewRatio"
+        }
+      },
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionPackParameters1`'s JSON-Schema definition via the `patternProperty` \"^AKS-[A-Z]+-[0-9]{3}$\".\n\nThis interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"PackParameters\"."
+    },
+    "InspectionReviewRatio": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "InspectionPrerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "InspectionPurpose": {
+      "type": "string"
+    },
+    "InspectionQueries": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "InspectionRequiredEvidence": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "InspectionRisks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "InspectionRollback": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "InspectionSchemaVersion": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "InspectionSources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "prometheus",
+          "azure-managed-prometheus"
+        ]
+      }
+    },
+    "InspectionSummaryVariants": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "InspectionTitle": {
+      "type": "string"
+    },
+    "InspectionValidation": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "InspectionVersion1": {
+      "type": "string"
+    },
+    "InspectionParameterGuidance": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/InspectionParameterGuidance1"
+      }
+    },
+    "InspectionParameterGuidance1": {
+      "type": "object",
+      "properties": {
+        "bounds": {
+          "$ref": "#/definitions/InspectionBounds"
+        },
+        "implication": {
+          "$ref": "#/definitions/InspectionImplication"
+        },
+        "unit": {
+          "$ref": "#/definitions/InspectionUnit"
+        }
+      },
+      "required": [
+        "bounds",
+        "implication",
+        "unit"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"ParameterGuidance\"."
+    },
+    "InspectionBounds": {
+      "type": "string"
+    },
+    "InspectionImplication": {
+      "type": "string"
+    },
+    "InspectionUnit": {
+      "type": "string"
+    },
+    "InspectionPackProvenance": {
+      "type": "object",
+      "properties": {
+        "digest": {
+          "$ref": "#/definitions/InspectionDigest"
+        },
+        "id": {
+          "$ref": "#/definitions/InspectionId2"
+        },
+        "parameters": {
+          "$ref": "#/definitions/InspectionPackParameters"
+        },
+        "queries": {
+          "$ref": "#/definitions/InspectionQueries1"
+        },
+        "version": {
+          "$ref": "#/definitions/InspectionVersion3"
+        }
+      },
+      "required": [
+        "digest",
+        "id",
+        "parameters",
+        "queries",
+        "version"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"PackProvenance\"."
+    },
+    "InspectionDigest": {
+      "type": "string"
+    },
+    "InspectionId2": {
+      "type": "string"
+    },
+    "InspectionQueries1": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/InspectionQueryAsset"
+      }
+    },
+    "InspectionQueryAsset": {
+      "type": "object",
+      "properties": {
+        "delta": {
+          "$ref": "#/definitions/InspectionDelta"
+        },
+        "expression": {
+          "$ref": "#/definitions/InspectionExpression"
+        },
+        "id": {
+          "$ref": "#/definitions/InspectionId3"
+        },
+        "kind": {
+          "$ref": "#/definitions/InspectionKind"
+        },
+        "unit": {
+          "$ref": "#/definitions/InspectionUnit1"
+        },
+        "version": {
+          "$ref": "#/definitions/InspectionVersion2"
+        }
+      },
+      "required": [
+        "delta",
+        "expression",
+        "id",
+        "kind",
+        "unit",
+        "version"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"QueryAsset\"."
+    },
+    "InspectionDelta": {
+      "type": "boolean"
+    },
+    "InspectionExpression": {
+      "type": "string"
+    },
+    "InspectionId3": {
+      "type": "string"
+    },
+    "InspectionKind": {
+      "type": "string",
+      "enum": [
+        "container",
+        "workload_container",
+        "unresolved_container",
+        "node",
+        "workload",
+        "hpa"
+      ]
+    },
+    "InspectionUnit1": {
+      "type": "string",
+      "enum": [
+        "mCPU",
+        "MiB",
+        "ratio",
+        "events",
+        "pods",
+        "boolean"
+      ]
+    },
+    "InspectionVersion2": {
+      "type": "string"
+    },
+    "InspectionVersion3": {
+      "type": "string"
+    },
+    "InspectionAdvisorConfig": {
+      "type": "object",
+      "properties": {
+        "enable_estimated_savings": {
+          "$ref": "#/definitions/InspectionEnableEstimatedSavings"
+        },
+        "environment_risk": {
+          "$ref": "#/definitions/InspectionEnvironmentRisk"
+        },
+        "excluded_namespaces": {
+          "$ref": "#/definitions/InspectionExcludedNamespaces"
+        },
+        "mode": {
+          "$ref": "#/definitions/InspectionMode1"
+        },
+        "pack_locks": {
+          "$ref": "#/definitions/InspectionPackLocks"
+        },
+        "pack_parameters": {
+          "$ref": "#/definitions/InspectionPackParameters1"
+        },
+        "packs": {
+          "$ref": "#/definitions/InspectionPacks"
+        },
+        "thresholds": {
+          "$ref": "#/definitions/InspectionThresholds"
+        }
+      },
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"AdvisorConfig\"."
+    },
+    "InspectionEnableEstimatedSavings": {
+      "type": "boolean"
+    },
+    "InspectionEnvironmentRisk": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "InspectionExcludedNamespaces": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "InspectionMode1": {
+      "type": "string",
+      "enum": [
+        "baseline",
+        "guarded"
+      ]
+    },
+    "InspectionPackLocks": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "description": "This interface was referenced by `InspectionPackLocks`'s JSON-Schema definition via the `patternProperty` \"^AKS-[A-Z]+-[0-9]{3}$\"."
+      }
+    },
+    "InspectionPackParameters1": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/InspectionPackParameters"
+      }
+    },
+    "InspectionPacks": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "InspectionThresholds": {
+      "type": "object",
+      "properties": {
+        "maximum_evidence_age_hours": {
+          "$ref": "#/definitions/InspectionMaximumEvidenceAgeHours"
+        },
+        "maximum_metric_step_seconds": {
+          "$ref": "#/definitions/InspectionMaximumMetricStepSeconds"
+        },
+        "minimum_coverage_ratio": {
+          "$ref": "#/definitions/InspectionMinimumCoverageRatio"
+        },
+        "minimum_observation_days": {
+          "$ref": "#/definitions/InspectionMinimumObservationDays"
+        },
+        "minimum_replicas_for_autoscaling_review": {
+          "$ref": "#/definitions/InspectionMinimumReplicasForAutoscalingReview"
+        }
+      },
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"Thresholds\"."
+    },
+    "InspectionMaximumEvidenceAgeHours": {
+      "type": "number"
+    },
+    "InspectionMaximumMetricStepSeconds": {
+      "type": "number"
+    },
+    "InspectionMinimumCoverageRatio": {
+      "type": "number"
+    },
+    "InspectionMinimumObservationDays": {
+      "type": "number"
+    },
+    "InspectionMinimumReplicasForAutoscalingReview": {
+      "type": "number"
+    },
+    "InspectionMode2": {
+      "type": "string",
+      "enum": [
+        "baseline",
+        "guarded"
+      ]
+    },
+    "InspectionResolvedQueries": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/InspectionRenderedQuery"
+      }
+    },
+    "InspectionRenderedQuery": {
+      "type": "object",
+      "properties": {
+        "entity_digest": {
+          "$ref": "#/definitions/InspectionEntityDigest"
+        },
+        "expression": {
+          "$ref": "#/definitions/InspectionExpression1"
+        },
+        "expression_digest": {
+          "$ref": "#/definitions/InspectionExpressionDigest"
+        },
+        "metric": {
+          "$ref": "#/definitions/InspectionMetric"
+        },
+        "source": {
+          "$ref": "#/definitions/InspectionSource1"
+        },
+        "step_seconds": {
+          "$ref": "#/definitions/InspectionStepSeconds"
+        },
+        "version": {
+          "$ref": "#/definitions/InspectionVersion4"
+        }
+      },
+      "required": [
+        "entity_digest",
+        "expression",
+        "expression_digest",
+        "metric",
+        "source",
+        "step_seconds",
+        "version"
+      ],
+      "additionalProperties": false,
+      "description": "This interface was referenced by `InspectionOperatorInspection`'s JSON-Schema via the `definition` \"RenderedQuery\"."
+    },
+    "InspectionEntityDigest": {
+      "type": "string"
+    },
+    "InspectionExpression1": {
+      "type": "string"
+    },
+    "InspectionExpressionDigest": {
+      "type": "string"
+    },
+    "InspectionMetric": {
+      "type": "string"
+    },
+    "InspectionSource1": {
+      "type": "string"
+    },
+    "InspectionStepSeconds": {
+      "type": "number"
+    },
+    "InspectionVersion4": {
+      "type": "string"
+    },
+    "VpaBounds": {
+      "type": "object",
+      "properties": {
+        "containerName": {
+          "type": "string"
+        },
+        "lowerBound": {
+          "$ref": "#/definitions/Requests"
+        },
+        "target": {
+          "$ref": "#/definitions/Requests"
+        },
+        "upperBound": {
+          "$ref": "#/definitions/Requests"
+        },
+        "uncappedTarget": {
+          "$ref": "#/definitions/Requests"
+        }
+      },
+      "required": [
+        "containerName"
+      ],
+      "additionalProperties": false
+    },
+    "Requests": {
+      "type": "object",
+      "properties": {
+        "cpu": {
+          "type": "string"
+        },
+        "memory": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Phase": {
+      "type": "string",
+      "enum": [
+        "AwaitingApproval",
+        "Approved",
+        "Rejected",
+        "Deferred",
+        "Observing",
+        "Exception",
+        "Cancelled",
+        "PullRequestOpen",
+        "Validating",
+        "Completed"
+      ]
+    },
+    "ValidationState": {
+      "type": "string",
+      "enum": [
+        "NotStarted",
+        "Collecting",
+        "Healthy",
+        "Warning",
+        "Failed",
+        "RolledBack",
+        "Inconclusive"
+      ]
+    },
+    "AuditEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "actor": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "generation": {
+          "type": "number"
+        },
+        "evidenceVersion": {
+          "type": "string"
+        },
+        "deferUntil": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "actor",
+        "timestamp",
+        "action",
+        "reason",
+        "generation",
+        "evidenceVersion"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

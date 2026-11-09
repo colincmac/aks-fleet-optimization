@@ -1,0 +1,37 @@
+schema_version: '1.0'
+id: AKS-AS-006
+version: 2.0.0
+family: autoscaler
+evaluator: hpa-change-review
+evidence_kind: metrics
+title: Review changed HPA bounds and replica context
+purpose: Investigate changing sampled controller bounds/count context independently of the stable-pinning and floor-proposal gates.
+sources: [prometheus, azure-managed-prometheus]
+parameters: {}
+queries:
+  baseline: &queries
+    hpa: [hpa_min_replicas, hpa_max_replicas, hpa_desired_replicas, hpa_current_replicas]
+  guarded: *queries
+required_evidence:
+  baseline: &evidence
+  - Complete fresh exact-scoped sources and four full-grid controller/workload UID-bound history series
+  - Matching current HPA identity and structurally consistent integer count extrema
+  guarded: *evidence
+limitations:
+- Current-only evidence cannot establish historical changes.
+- Changing sampled extrema do not diagnose oscillation, scaling lag or unmet demand.
+prerequisites:
+- Verify exact workload/controller UIDs, approved source scope and owner-declared availability and SLO policy.
+risks:
+- Current settings and sampled extrema do not establish controller health or safe resource/replica reductions.
+validation:
+- Correlate approved controller/demand history with representative peak load, startup, failover and owner-declared SLOs.
+- Canary any separately approved change one dimension at a time; stop promotion on availability or throughput regression.
+rollback:
+- If a separately approved change regresses guardrails, stop promotion and revert its Git commit through the owning delivery pipeline.
+actions:
+  baseline: &actions
+  - Investigate with the owner; no numeric resource request, replica target or controller change is proposed by this investigation.
+  guarded: *actions
+baseline_summary: Historical or current HPA bounds/count context changed. These sampled extrema do not establish oscillation, scaling lag, unmet demand or SLO impact. Reassess controller identity and availability before proposing a change.
+guarded_summary: Historical or current HPA bounds/count context changed. These sampled extrema do not establish oscillation, scaling lag, unmet demand or SLO impact. Reassess controller identity and availability before proposing a change.

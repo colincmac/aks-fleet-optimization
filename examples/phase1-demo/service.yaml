@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: advisor-demo-web
+  namespace: fleet-advisor-demo
+  labels:
+    app.kubernetes.io/name: advisor-demo-web
+    app.kubernetes.io/managed-by: containerization-assist
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: advisor-demo-web
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
