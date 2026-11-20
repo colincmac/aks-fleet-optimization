@@ -1,0 +1,194 @@
+schema_version: '1.0'
+queries:
+  hpa_min_replicas:
+    file: hpa-min-replicas.promql
+    version: 1.0.0
+    unit: pods
+    kind: hpa
+  hpa_max_replicas:
+    file: hpa-max-replicas.promql
+    version: 1.0.0
+    unit: pods
+    kind: hpa
+  hpa_desired_replicas:
+    file: hpa-desired-replicas.promql
+    version: 1.0.0
+    unit: pods
+    kind: hpa
+  hpa_current_replicas:
+    file: hpa-current-replicas.promql
+    version: 1.0.0
+    unit: pods
+    kind: hpa
+  node_cpu_usage:
+    file: node-cpu-usage.promql
+    version: 1.0.0
+    unit: mCPU
+    kind: node
+  node_allocatable_cpu:
+    file: node-allocatable-cpu.promql
+    version: 1.0.0
+    unit: mCPU
+    kind: node
+  node_allocatable_memory:
+    file: node-allocatable-memory.promql
+    version: 1.0.0
+    unit: MiB
+    kind: node
+  cpu_usage:
+    file: cpu-usage.promql
+    version: 1.0.0
+    unit: mCPU
+  cpu_request:
+    file: cpu-request.promql
+    version: 1.0.0
+    unit: mCPU
+  cpu_throttling:
+    file: cpu-throttling.promql
+    version: 1.0.0
+    unit: ratio
+  oom_events:
+    file: oom-events.promql
+    version: 1.0.0
+    unit: events
+    delta: true
+  replica_cpu_envelope:
+    file: replica-cpu-envelope.promql
+    version: 1.0.0
+    unit: mCPU
+    kind: workload_container
+  replica_cpu_request_min:
+    file: replica-cpu-request-min.promql
+    version: 1.0.0
+    unit: mCPU
+    kind: workload_container
+  replica_cpu_request_max:
+    file: replica-cpu-request-max.promql
+    version: 1.0.0
+    unit: mCPU
+    kind: workload_container
+  replica_cpu_throttling:
+    file: replica-cpu-throttling.promql
+    version: 1.0.0
+    unit: ratio
+    kind: workload_container
+  replica_oom_events:
+    file: replica-oom-events.promql
+    version: 1.0.0
+    unit: events
+    kind: workload_container
+    delta: true
+  replica_memory_envelope:
+    file: replica-memory-envelope.promql
+    version: 1.0.0
+    unit: MiB
+    kind: workload_container
+    delta: false
+  replica_memory_request_min:
+    file: replica-memory-request-min.promql
+    version: 1.0.0
+    unit: MiB
+    kind: workload_container
+    delta: false
+  replica_memory_request_max:
+    file: replica-memory-request-max.promql
+    version: 1.0.0
+    unit: MiB
+    kind: workload_container
+    delta: false
+  replica_memory_limit_min:
+    file: replica-memory-limit-min.promql
+    version: 1.0.0
+    unit: MiB
+    kind: workload_container
+    delta: false
+  replica_memory_limit_max:
+    file: replica-memory-limit-max.promql
+    version: 1.0.0
+    unit: MiB
+    kind: workload_container
+    delta: false
+  replica_restarts:
+    file: replica-restarts.promql
+    version: 1.0.0
+    unit: events
+    kind: workload_container
+    delta: true
+  evictions:
+    file: evictions.promql
+    version: 1.0.0
+    unit: events
+    kind: workload
+    delta: true
+  memory_total_usage:
+    file: memory-total-usage.promql
+    version: 1.0.0
+    unit: MiB
+    kind: container
+    delta: false
+  memory_usage:
+    file: memory-usage.promql
+    version: 1.0.0
+    unit: MiB
+    kind: container
+    delta: false
+  memory_request:
+    file: memory-request.promql
+    version: 1.0.0
+    unit: MiB
+    kind: container
+    delta: false
+  memory_limit:
+    file: memory-limit.promql
+    version: 1.0.0
+    unit: MiB
+    kind: container
+    delta: false
+  restarts:
+    file: restarts.promql
+    version: 1.0.0
+    unit: events
+    kind: container
+    delta: true
+  desired_replicas:
+    file: desired-replicas.promql
+    version: 1.0.0
+    unit: pods
+    kind: workload
+    delta: false
+  available_replicas:
+    file: available-replicas.promql
+    version: 1.0.0
+    unit: pods
+    kind: workload
+    delta: false
+  observed_replicas:
+    file: observed-replicas.promql
+    version: 1.0.0
+    unit: pods
+    kind: workload
+    delta: false
+  unschedulable_pods:
+    file: unschedulable-pods.promql
+    version: 1.0.0
+    unit: pods
+    kind: workload
+    delta: false
+  hpa_present:
+    file: hpa-present.promql
+    version: 1.0.0
+    unit: boolean
+    kind: workload
+    delta: false
+  keda_present:
+    file: keda-present.promql
+    version: 1.0.0
+    unit: boolean
+    kind: workload
+    delta: false
+  vpa_present:
+    file: vpa-present.promql
+    version: 1.0.0
+    unit: boolean
+    kind: workload
+    delta: false

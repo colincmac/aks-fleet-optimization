@@ -1,0 +1,246 @@
+{
+  "$defs": {
+    "CapabilityCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown",
+            "unsupported"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "status",
+        "reason_codes"
+      ],
+      "title": "CapabilityCheck",
+      "type": "object"
+    },
+    "SourceCapability": {
+      "additionalProperties": false,
+      "properties": {
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/CapabilityCheck"
+          },
+          "minItems": 1,
+          "title": "Checks",
+          "type": "array"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "baseline",
+            "guarded"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "notice": {
+          "const": "Metric capability is not source attestation or safe-change approval.",
+          "default": "Metric capability is not source attestation or safe-change approval.",
+          "title": "Notice",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "pack_id": {
+          "minLength": 1,
+          "title": "Pack Id",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "source_profile": {
+          "$ref": "#/$defs/SourceDefinition"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown",
+            "unsupported"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pack_id",
+        "mode",
+        "source",
+        "cluster_resource_id",
+        "observed_at",
+        "source_profile",
+        "status",
+        "checks"
+      ],
+      "title": "SourceCapability",
+      "type": "object"
+    },
+    "SourceDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "characterization": {
+          "const": "synthetic",
+          "title": "Characterization",
+          "type": "string"
+        },
+        "characterized_versions": {
+          "additionalProperties": {
+            "items": {
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.]+)?$",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "propertyNames": {
+            "enum": [
+              "prometheus",
+              "kube-state-metrics",
+              "cadvisor",
+              "kubernetes"
+            ]
+          },
+          "title": "Characterized Versions",
+          "type": "object"
+        },
+        "id": {
+          "enum": [
+            "identity-enriched",
+            "cadvisor-ksm"
+          ],
+          "title": "Id",
+          "type": "string"
+        },
+        "identity": {
+          "enum": [
+            "historical",
+            "name-only"
+          ],
+          "title": "Identity",
+          "type": "string"
+        },
+        "joins": {
+          "const": "none",
+          "title": "Joins",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "query_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Query Ids",
+          "type": "array"
+        },
+        "transports": {
+          "items": {
+            "enum": [
+              "prometheus",
+              "azure-managed-prometheus"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Transports",
+          "type": "array"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "identity",
+        "transports",
+        "labels",
+        "query_ids",
+        "characterized_versions",
+        "characterization",
+        "joins",
+        "limitations"
+      ],
+      "title": "SourceDefinition",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "capabilities": {
+      "items": {
+        "$ref": "#/$defs/SourceCapability"
+      },
+      "title": "Capabilities",
+      "type": "array"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "mode": {
+      "const": "offline",
+      "default": "offline",
+      "title": "Mode",
+      "type": "string"
+    }
+  },
+  "required": [
+    "generated_at",
+    "capabilities"
+  ],
+  "title": "SourceCapabilityReport",
+  "type": "object"
+}

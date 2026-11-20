@@ -1,0 +1,172 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "allocation_policy": {
+      "enum": [
+        "none",
+        "reviewed-shares",
+        "source-native"
+      ],
+      "title": "Allocation Policy",
+      "type": "string"
+    },
+    "characterization": {
+      "const": "synthetic",
+      "title": "Characterization",
+      "type": "string"
+    },
+    "characterized_versions": {
+      "additionalProperties": {
+        "items": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._()-]{0,127}$",
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "title": "Characterized Versions",
+      "type": "object"
+    },
+    "cost_basis": {
+      "enum": [
+        "actual",
+        "amortized",
+        "effective",
+        "source-declared"
+      ],
+      "title": "Cost Basis",
+      "type": "string"
+    },
+    "evidence_kind": {
+      "enum": [
+        "ledger",
+        "allocation",
+        "recommendation"
+      ],
+      "title": "Evidence Kind",
+      "type": "string"
+    },
+    "granularities": {
+      "items": {
+        "enum": [
+          "resource",
+          "cluster",
+          "namespace",
+          "workload",
+          "container",
+          "asset"
+        ],
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Granularities",
+      "type": "array"
+    },
+    "id": {
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "title": "Id",
+      "type": "string"
+    },
+    "identity": {
+      "enum": [
+        "exact-historical",
+        "current-only",
+        "name-only"
+      ],
+      "title": "Identity",
+      "type": "string"
+    },
+    "limitations": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Limitations",
+      "type": "array"
+    },
+    "pricing_provenance": {
+      "enum": [
+        "billing-ledger",
+        "reviewed",
+        "not-applicable"
+      ],
+      "title": "Pricing Provenance",
+      "type": "string"
+    },
+    "producer_version_kind": {
+      "enum": [
+        "dataset",
+        "product",
+        "projection"
+      ],
+      "title": "Producer Version Kind",
+      "type": "string"
+    },
+    "projection_format": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Projection Format",
+      "type": "string"
+    },
+    "provider": {
+      "enum": [
+        "azure-cost-management",
+        "finops-toolkit",
+        "aks-cost-analysis",
+        "opencost",
+        "kubecost",
+        "operator-reviewed"
+      ],
+      "title": "Provider",
+      "type": "string"
+    },
+    "reconciliation": {
+      "enum": [
+        "ledger-row-partition",
+        "aggregate-attribution",
+        "recommendation-only"
+      ],
+      "title": "Reconciliation",
+      "type": "string"
+    },
+    "specification_version": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "pattern": "\\S",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Specification Version"
+    },
+    "version": {
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "provider",
+    "evidence_kind",
+    "projection_format",
+    "producer_version_kind",
+    "pricing_provenance",
+    "cost_basis",
+    "granularities",
+    "identity",
+    "allocation_policy",
+    "reconciliation",
+    "characterized_versions",
+    "characterization",
+    "limitations"
+  ],
+  "title": "FinancialSourceDefinition",
+  "type": "object"
+}

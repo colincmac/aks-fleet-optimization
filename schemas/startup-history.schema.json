@@ -1,0 +1,1293 @@
+{
+  "$defs": {
+    "CollectionError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "unauthorized",
+            "forbidden",
+            "timeout",
+            "throttled",
+            "unavailable",
+            "invalid-response",
+            "response-budget-exceeded",
+            "identity-mismatch"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "code"
+      ],
+      "title": "CollectionError",
+      "type": "object"
+    },
+    "CollectionStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "title": "CollectionStatus",
+      "type": "string"
+    },
+    "CollectorResult": {
+      "additionalProperties": false,
+      "properties": {
+        "collector": {
+          "minLength": 1,
+          "title": "Collector",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "completed_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Completed Scope",
+          "type": "array"
+        },
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/CollectionError"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "pagination_complete": {
+          "default": false,
+          "title": "Pagination Complete",
+          "type": "boolean"
+        },
+        "requested_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requested Scope",
+          "type": "array"
+        },
+        "retry_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Retry Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Observed At"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CollectionStatus"
+        }
+      },
+      "required": [
+        "collector",
+        "status",
+        "requested_scope",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "CollectorResult",
+      "type": "object"
+    },
+    "CurrentContainerAttempt": {
+      "additionalProperties": false,
+      "properties": {
+        "container_id_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Container Id Digest"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "pod_to_attempt_start_seconds": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod To Attempt Start Seconds"
+        },
+        "restart_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Restart Count"
+        },
+        "started_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Started At"
+        },
+        "state": {
+          "enum": [
+            "running",
+            "waiting",
+            "terminated",
+            "unknown"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "state"
+      ],
+      "title": "CurrentContainerAttempt",
+      "type": "object"
+    },
+    "MetricEntity": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "container": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Container"
+        },
+        "hpa_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hpa Uid"
+        },
+        "kind": {
+          "default": "container",
+          "enum": [
+            "container",
+            "workload",
+            "workload_container",
+            "hpa",
+            "node",
+            "node_pool",
+            "unresolved_container"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "membership_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Membership Digest"
+        },
+        "namespace": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace"
+        },
+        "node_pool_resource_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Pool Resource Id"
+        },
+        "node_resource_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Resource Id"
+        },
+        "node_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Uid"
+        },
+        "pod": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod"
+        },
+        "pod_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod Uid"
+        },
+        "workload": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload"
+        },
+        "workload_kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Kind"
+        },
+        "workload_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Uid"
+        }
+      },
+      "required": [
+        "cluster_resource_id"
+      ],
+      "title": "MetricEntity",
+      "type": "object"
+    },
+    "MetricObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "entity": {
+          "$ref": "#/$defs/MetricEntity"
+        },
+        "issues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "latest_sample_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Latest Sample At"
+        },
+        "maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum"
+        },
+        "metric": {
+          "minLength": 1,
+          "title": "Metric",
+          "type": "string"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum"
+        },
+        "p50": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P50"
+        },
+        "p95": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P95"
+        },
+        "p99": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P99"
+        },
+        "quality": {
+          "$ref": "#/$defs/MetricQuality"
+        },
+        "total": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Total"
+        }
+      },
+      "required": [
+        "entity",
+        "metric",
+        "quality"
+      ],
+      "title": "MetricObservation",
+      "type": "object"
+    },
+    "MetricQuality": {
+      "additionalProperties": false,
+      "properties": {
+        "maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "query_asset_version": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query Asset Version"
+        },
+        "query_expression": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query Expression"
+        },
+        "query_version": {
+          "minLength": 1,
+          "title": "Query Version",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "step_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Step Seconds",
+          "type": "integer"
+        },
+        "unit": {
+          "minLength": 1,
+          "title": "Unit",
+          "type": "string"
+        },
+        "window": {
+          "$ref": "#/$defs/MetricWindow"
+        }
+      },
+      "required": [
+        "source",
+        "query_version",
+        "step_seconds",
+        "observed_at",
+        "window",
+        "unit"
+      ],
+      "title": "MetricQuality",
+      "type": "object"
+    },
+    "MetricQueryPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_evaluations": {
+          "minimum": 0,
+          "title": "Expected Evaluations",
+          "type": "integer"
+        },
+        "logical_queries": {
+          "minimum": 0,
+          "title": "Logical Queries",
+          "type": "integer"
+        },
+        "maximum_series": {
+          "minimum": 1,
+          "title": "Maximum Series",
+          "type": "integer"
+        },
+        "requests": {
+          "minimum": 0,
+          "title": "Requests",
+          "type": "integer"
+        },
+        "unique_queries": {
+          "minimum": 0,
+          "title": "Unique Queries",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "logical_queries",
+        "unique_queries",
+        "requests",
+        "expected_evaluations",
+        "maximum_series"
+      ],
+      "title": "MetricQueryPlan",
+      "type": "object"
+    },
+    "MetricWindow": {
+      "additionalProperties": false,
+      "properties": {
+        "coverage_ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Coverage Ratio",
+          "type": "number"
+        },
+        "end": {
+          "format": "date-time",
+          "title": "End",
+          "type": "string"
+        },
+        "sample_count": {
+          "minimum": 0,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "start": {
+          "format": "date-time",
+          "title": "Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "sample_count",
+        "coverage_ratio"
+      ],
+      "title": "MetricWindow",
+      "type": "object"
+    },
+    "PodContainerAttempts": {
+      "additionalProperties": false,
+      "properties": {
+        "application_startup_duration_seconds": {
+          "default": null,
+          "title": "Application Startup Duration Seconds",
+          "type": "null"
+        },
+        "basis": {
+          "const": "supplied-current-container-attempt",
+          "default": "supplied-current-container-attempt",
+          "title": "Basis",
+          "type": "string"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "minLength": 1,
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "collection": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "containers": {
+          "items": {
+            "$ref": "#/$defs/CurrentContainerAttempt"
+          },
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Containers",
+          "type": "array"
+        },
+        "first_startup": {
+          "const": "unknown",
+          "default": "unknown",
+          "title": "First Startup",
+          "type": "string"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "mapping_reference": {
+          "const": "kubernetes-core-v1@v1.36.0",
+          "default": "kubernetes-core-v1@v1.36.0",
+          "title": "Mapping Reference",
+          "type": "string"
+        },
+        "metadata_generated_at": {
+          "format": "date-time",
+          "title": "Metadata Generated At",
+          "type": "string"
+        },
+        "namespace": {
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "minLength": 1,
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "pod_created_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod Created At"
+        },
+        "pod_resource_version": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod Resource Version"
+        },
+        "pod_uid": {
+          "minLength": 1,
+          "title": "Pod Uid",
+          "type": "string"
+        },
+        "post_startup_demand": {
+          "default": null,
+          "title": "Post Startup Demand",
+          "type": "null"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "workload_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Uid"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "namespace",
+        "namespace_uid",
+        "pod_uid",
+        "metadata_generated_at",
+        "collection",
+        "containers"
+      ],
+      "title": "PodContainerAttempts",
+      "type": "object"
+    },
+    "PrometheusMetricsSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "collection": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "observations": {
+          "items": {
+            "$ref": "#/$defs/MetricObservation"
+          },
+          "title": "Observations",
+          "type": "array"
+        },
+        "query_end": {
+          "format": "date-time",
+          "title": "Query End",
+          "type": "string"
+        },
+        "query_plan": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MetricQueryPlan"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "query_start": {
+          "format": "date-time",
+          "title": "Query Start",
+          "type": "string"
+        },
+        "query_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Query Version",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "const": "prometheus",
+          "default": "prometheus",
+          "title": "Source",
+          "type": "string"
+        },
+        "source_name": {
+          "minLength": 1,
+          "title": "Source Name",
+          "type": "string"
+        },
+        "source_profile": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SourceDefinition"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "step_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Step Seconds",
+          "type": "integer"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "source_name",
+        "generated_at",
+        "query_start",
+        "query_end",
+        "step_seconds",
+        "collection",
+        "observations"
+      ],
+      "title": "PrometheusMetricsSnapshot",
+      "type": "object"
+    },
+    "SourceDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "characterization": {
+          "const": "synthetic",
+          "title": "Characterization",
+          "type": "string"
+        },
+        "characterized_versions": {
+          "additionalProperties": {
+            "items": {
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.]+)?$",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "propertyNames": {
+            "enum": [
+              "prometheus",
+              "kube-state-metrics",
+              "cadvisor",
+              "kubernetes"
+            ]
+          },
+          "title": "Characterized Versions",
+          "type": "object"
+        },
+        "id": {
+          "enum": [
+            "identity-enriched",
+            "cadvisor-ksm"
+          ],
+          "title": "Id",
+          "type": "string"
+        },
+        "identity": {
+          "enum": [
+            "historical",
+            "name-only"
+          ],
+          "title": "Identity",
+          "type": "string"
+        },
+        "joins": {
+          "const": "none",
+          "title": "Joins",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "query_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Query Ids",
+          "type": "array"
+        },
+        "transports": {
+          "items": {
+            "enum": [
+              "prometheus",
+              "azure-managed-prometheus"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Transports",
+          "type": "array"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "identity",
+        "transports",
+        "labels",
+        "query_ids",
+        "characterized_versions",
+        "characterization",
+        "joins",
+        "limitations"
+      ],
+      "title": "SourceDefinition",
+      "type": "object"
+    },
+    "StartupLifecycleSample": {
+      "additionalProperties": false,
+      "properties": {
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "metadata_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Metadata Digest",
+          "type": "string"
+        },
+        "observation": {
+          "$ref": "#/$defs/PodContainerAttempts"
+        },
+        "observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Observed At"
+        },
+        "ready": {
+          "enum": [
+            "True",
+            "False",
+            "Unknown"
+          ],
+          "title": "Ready",
+          "type": "string"
+        }
+      },
+      "required": [
+        "observed_at",
+        "metadata_digest",
+        "observation",
+        "ready"
+      ],
+      "title": "StartupLifecycleSample",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "application_startup_duration_seconds": {
+      "default": null,
+      "title": "Application Startup Duration Seconds",
+      "type": "null"
+    },
+    "basis": {
+      "const": "sampled-pod-readiness-proxy",
+      "default": "sampled-pod-readiness-proxy",
+      "title": "Basis",
+      "type": "string"
+    },
+    "cluster_resource_id": {
+      "minLength": 1,
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "minLength": 1,
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "container": {
+      "minLength": 1,
+      "title": "Container",
+      "type": "string"
+    },
+    "evaluated_at": {
+      "format": "date-time",
+      "title": "Evaluated At",
+      "type": "string"
+    },
+    "first_startup": {
+      "const": "unknown",
+      "default": "unknown",
+      "title": "First Startup",
+      "type": "string"
+    },
+    "issues": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Issues",
+      "type": "array"
+    },
+    "maximum_source_age_seconds": {
+      "exclusiveMinimum": 0,
+      "title": "Maximum Source Age Seconds",
+      "type": "integer"
+    },
+    "namespace": {
+      "minLength": 1,
+      "title": "Namespace",
+      "type": "string"
+    },
+    "namespace_uid": {
+      "minLength": 1,
+      "title": "Namespace Uid",
+      "type": "string"
+    },
+    "pod_to_observed_ready_lower_seconds": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pod To Observed Ready Lower Seconds"
+    },
+    "pod_to_observed_ready_upper_seconds": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pod To Observed Ready Upper Seconds"
+    },
+    "pod_uid": {
+      "minLength": 1,
+      "title": "Pod Uid",
+      "type": "string"
+    },
+    "post_readiness_cpu_p95_mcpu": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Post Readiness Cpu P95 Mcpu"
+    },
+    "post_readiness_memory_p99_mib": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Post Readiness Memory P99 Mib"
+    },
+    "samples": {
+      "items": {
+        "$ref": "#/$defs/StartupLifecycleSample"
+      },
+      "maxItems": 10000,
+      "title": "Samples",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_admission": {
+      "const": "unverified_saved_native_observations",
+      "default": "unverified_saved_native_observations",
+      "title": "Source Admission",
+      "type": "string"
+    },
+    "status": {
+      "default": "blocked",
+      "enum": [
+        "observed_transition",
+        "not_observed",
+        "blocked"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "step_seconds": {
+      "exclusiveMinimum": 0,
+      "maximum": 300,
+      "title": "Step Seconds",
+      "type": "integer"
+    },
+    "tenant_id": {
+      "minLength": 1,
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "usage": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PrometheusMetricsSnapshot"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "usage_issues": {
+      "items": {
+        "minLength": 1,
+        "type": "string"
+      },
+      "title": "Usage Issues",
+      "type": "array"
+    },
+    "window_end": {
+      "format": "date-time",
+      "title": "Window End",
+      "type": "string"
+    },
+    "window_start": {
+      "format": "date-time",
+      "title": "Window Start",
+      "type": "string"
+    },
+    "workload_uid": {
+      "minLength": 1,
+      "title": "Workload Uid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "namespace",
+    "namespace_uid",
+    "workload_uid",
+    "pod_uid",
+    "container",
+    "window_start",
+    "window_end",
+    "step_seconds",
+    "evaluated_at",
+    "maximum_source_age_seconds",
+    "samples"
+  ],
+  "title": "StartupHistoryEvidence",
+  "type": "object"
+}

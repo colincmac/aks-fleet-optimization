@@ -1,0 +1,46 @@
+{
+  "schema_version": "azure-cost-details-projection-v1",
+  "producer_version": "2025.05.01",
+  "cost_basis": "actual",
+  "tenant_id": "00000000-0000-0000-0000-000000000000",
+  "subscription_ids": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "period": {
+    "start": "2026-09-29T00:00:00Z",
+    "end": "2026-10-29T00:00:00Z"
+  },
+  "source_reference": "synthetic-azure-actual-export",
+  "source_observed_at": "2026-10-29T00:00:00Z",
+  "export_complete": true,
+  "rows": [
+    {
+      "row_id": "row-1",
+      "subscription_id": "00000000-0000-0000-0000-000000000000",
+      "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic",
+      "period_start": "2026-09-29T00:00:00Z",
+      "period_end": "2026-10-29T00:00:00Z",
+      "cost_in_billing_currency": "100.00",
+      "billing_currency": "USD",
+      "charge_category": "compute",
+      "meter_category": "Virtual Machines",
+      "charge_type": "Usage",
+      "pricing_model": "Reservation",
+      "benefit_id": "synthetic-reservation"
+    }
+  ],
+  "bindings": [
+    {
+      "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic",
+      "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+      "cluster_uid": "cluster-uid",
+      "pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/apps",
+      "valid_period": {
+        "start": "2026-09-29T00:00:00Z",
+        "end": "2026-10-29T00:00:00Z"
+      },
+      "identity_basis": "exact-historical",
+      "reference": "synthetic-historical-binding"
+    }
+  ]
+}

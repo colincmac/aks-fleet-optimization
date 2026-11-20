@@ -1,0 +1,66 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aks-fleet-efficiency-advisor"
+version = "0.1.0"
+description = "Evidence-first AKS fleet efficiency assessment scaffold"
+readme = "README.md"
+requires-python = ">=3.15"
+license = { text = "MIT" }
+authors = [{ name = "AKS Fleet Efficiency Advisor contributors" }]
+dependencies = [
+  "croniter>=6.0,<7",
+  "pydantic>=2.9,<3",
+  "PyYAML>=6.0,<7",
+  "typer>=0.12,<1",
+]
+
+[project.optional-dependencies]
+azure = [
+  "azure-identity>=1.19,<2",
+  "azure-mgmt-resourcegraph>=8.0,<9",
+]
+kubernetes = ["kubernetes>=37.0.1,<38"]
+metrics = ["httpx>=0.28.1,<0.29"]
+dev = [
+  "build>=1.2,<2",
+  "packaging>=24,<27",
+  "setuptools>=68",
+  "wheel>=0.45,<1",
+  "pytest>=8.3,<10",
+  "pytest-cov>=6,<7",
+  "ruff>=0.17.3,<1",
+  "mypy>=1.20.2,<2",
+  "types-PyYAML>=6.0,<7",
+  "types-croniter>=6.0,<7",
+]
+
+[project.scripts]
+aks-fleet-advisor = "aks_fleet_efficiency.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"aks_fleet_efficiency.catalog" = ["*.yaml", "packs/*.yaml", "queries/*.promql", "sources/*.yaml", "cost_sources/*.yaml", "recordings/*.yaml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+
+[tool.uv.extra-build-variables]
+pyyaml = { PYYAML_FORCE_LIBYAML = "0" }
+
+[tool.ruff]
+target-version = "py315"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "RUF"]
+
+[tool.mypy]
+python_version = "3.15"
+strict = true
+packages = ["aks_fleet_efficiency"]

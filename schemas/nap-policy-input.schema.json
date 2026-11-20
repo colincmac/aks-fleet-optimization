@@ -1,0 +1,383 @@
+{
+  "$defs": {
+    "CollectionError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "unauthorized",
+            "forbidden",
+            "timeout",
+            "throttled",
+            "unavailable",
+            "invalid-response",
+            "response-budget-exceeded",
+            "identity-mismatch"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "code"
+      ],
+      "title": "CollectionError",
+      "type": "object"
+    },
+    "CollectionStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "title": "CollectionStatus",
+      "type": "string"
+    },
+    "CollectorResult": {
+      "additionalProperties": false,
+      "properties": {
+        "collector": {
+          "minLength": 1,
+          "title": "Collector",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "completed_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Completed Scope",
+          "type": "array"
+        },
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/CollectionError"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "pagination_complete": {
+          "default": false,
+          "title": "Pagination Complete",
+          "type": "boolean"
+        },
+        "requested_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requested Scope",
+          "type": "array"
+        },
+        "retry_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Retry Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Observed At"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CollectionStatus"
+        }
+      },
+      "required": [
+        "collector",
+        "status",
+        "requested_scope",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "CollectorResult",
+      "type": "object"
+    },
+    "SuppliedNapBudget": {
+      "additionalProperties": false,
+      "properties": {
+        "duration": {
+          "anyOf": [
+            {
+              "maxLength": 64,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration"
+        },
+        "nodes": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Nodes",
+          "type": "string"
+        },
+        "reasons": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "Empty",
+                  "Underutilized",
+                  "Drifted",
+                  "Unhealthy"
+                ],
+                "type": "string"
+              },
+              "maxItems": 4,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reasons"
+        },
+        "schedule": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Schedule"
+        }
+      },
+      "required": [
+        "nodes"
+      ],
+      "title": "SuppliedNapBudget",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "budgets": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/SuppliedNapBudget"
+          },
+          "maxItems": 50,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Budgets"
+    },
+    "cluster_resource_id": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "collection": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "consolidate_after": {
+      "anyOf": [
+        {
+          "maxLength": 64,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Consolidate After"
+    },
+    "consolidation_policy": {
+      "anyOf": [
+        {
+          "enum": [
+            "WhenEmpty",
+            "WhenEmptyOrUnderutilized",
+            "Balanced"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Consolidation Policy"
+    },
+    "generation": {
+      "anyOf": [
+        {
+          "maximum": 9223372036854775807,
+          "minimum": 1,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Generation"
+    },
+    "node_count": {
+      "anyOf": [
+        {
+          "maximum": 100000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Node Count"
+    },
+    "nodepool_uid": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Nodepool Uid",
+      "type": "string"
+    },
+    "object_version": {
+      "anyOf": [
+        {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Object Version"
+    },
+    "observed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Observed At"
+    },
+    "reference": {
+      "const": "azure-v1.15.2/karpenter-v1.15.1",
+      "default": "azure-v1.15.2/karpenter-v1.15.1",
+      "title": "Reference",
+      "type": "string"
+    },
+    "replicas": {
+      "anyOf": [
+        {
+          "maximum": 9223372036854775807,
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Replicas"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "supply_mode": {
+      "enum": [
+        "static",
+        "dynamic",
+        "unknown"
+      ],
+      "title": "Supply Mode",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "nodepool_uid",
+    "supply_mode"
+  ],
+  "title": "NapPolicyInput",
+  "type": "object"
+}

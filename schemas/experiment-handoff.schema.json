@@ -1,0 +1,393 @@
+{
+  "$defs": {
+    "ExperimentCriterion": {
+      "additionalProperties": false,
+      "properties": {
+        "measure_ref": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Measure Ref",
+          "type": "string"
+        },
+        "operator": {
+          "enum": [
+            "lt",
+            "lte",
+            "gt",
+            "gte",
+            "eq"
+          ],
+          "title": "Operator",
+          "type": "string"
+        },
+        "threshold": {
+          "title": "Threshold",
+          "type": "number"
+        },
+        "unit": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "measure_ref",
+        "operator",
+        "threshold",
+        "unit"
+      ],
+      "title": "ExperimentCriterion",
+      "type": "object"
+    },
+    "ExperimentHandoffCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence_refs": {
+          "items": {
+            "pattern": "^[a-f0-9]{64}$",
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Evidence Refs",
+          "type": "array"
+        },
+        "kind": {
+          "enum": [
+            "baseline",
+            "canary",
+            "observe",
+            "abort",
+            "rollback",
+            "no_change"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "description"
+      ],
+      "title": "ExperimentHandoffCheck",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ai_experiment_digest": {
+      "anyOf": [
+        {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ai Experiment Digest"
+    },
+    "ai_state": {
+      "anyOf": [
+        {
+          "const": "unverified_experiment",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ai State"
+    },
+    "alternatives": {
+      "items": {
+        "const": "retain_current_configuration",
+        "type": "string"
+      },
+      "maxItems": 1,
+      "minItems": 1,
+      "title": "Alternatives",
+      "type": "array"
+    },
+    "baseline_configuration_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Baseline Configuration Digest",
+      "type": "string"
+    },
+    "baseline_window_end": {
+      "format": "date-time",
+      "title": "Baseline Window End",
+      "type": "string"
+    },
+    "baseline_window_start": {
+      "format": "date-time",
+      "title": "Baseline Window Start",
+      "type": "string"
+    },
+    "basis": {
+      "const": "portable-experiment-handoff",
+      "default": "portable-experiment-handoff",
+      "title": "Basis",
+      "type": "string"
+    },
+    "checks": {
+      "items": {
+        "$ref": "#/$defs/ExperimentHandoffCheck"
+      },
+      "maxItems": 6,
+      "minItems": 6,
+      "title": "Checks",
+      "type": "array"
+    },
+    "cluster_resource_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "controller": {
+      "enum": [
+        "none",
+        "hpa",
+        "vpa",
+        "keda",
+        "nap",
+        "fixed"
+      ],
+      "title": "Controller",
+      "type": "string"
+    },
+    "criteria": {
+      "items": {
+        "$ref": "#/$defs/ExperimentCriterion"
+      },
+      "maxItems": 32,
+      "minItems": 1,
+      "title": "Criteria",
+      "type": "array"
+    },
+    "dimension": {
+      "enum": [
+        "cpu_request",
+        "memory_request",
+        "memory_limit",
+        "replica_floor",
+        "controller_configuration",
+        "evidence_only"
+      ],
+      "title": "Dimension",
+      "type": "string"
+    },
+    "execution_authority": {
+      "const": "none",
+      "default": "none",
+      "title": "Execution Authority",
+      "type": "string"
+    },
+    "finding_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Finding Id",
+      "type": "string"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "hypothesis": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Hypothesis",
+      "type": "string"
+    },
+    "notice": {
+      "const": "Portable review record only; not change approval, executable configuration, proof of execution, a safe setting or financial value.",
+      "default": "Portable review record only; not change approval, executable configuration, proof of execution, a safe setting or financial value.",
+      "title": "Notice",
+      "type": "string"
+    },
+    "observation_duration_seconds": {
+      "exclusiveMinimum": 0,
+      "maximum": 2592000,
+      "title": "Observation Duration Seconds",
+      "type": "integer"
+    },
+    "owner_ref": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Owner Ref",
+      "type": "string"
+    },
+    "pack_id": {
+      "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+      "title": "Pack Id",
+      "type": "string"
+    },
+    "pack_version": {
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "title": "Pack Version",
+      "type": "string"
+    },
+    "proposal_source": {
+      "default": "none",
+      "enum": [
+        "guarded_finding",
+        "operator_supplied",
+        "none"
+      ],
+      "title": "Proposal Source",
+      "type": "string"
+    },
+    "proposed_unit": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "pattern": "\\S",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Proposed Unit"
+    },
+    "proposed_value": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Proposed Value"
+    },
+    "representative_scenarios": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "maxItems": 32,
+      "minItems": 1,
+      "title": "Representative Scenarios",
+      "type": "array"
+    },
+    "reviewer_ref": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Reviewer Ref",
+      "type": "string"
+    },
+    "rollback_reference": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Rollback Reference",
+      "type": "string"
+    },
+    "rollback_value_reference": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Rollback Value Reference",
+      "type": "string"
+    },
+    "run_id": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Run Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "prepared",
+        "blocked"
+      ],
+      "title": "State",
+      "type": "string"
+    },
+    "tenant_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "unchanged_dimensions": {
+      "items": {
+        "enum": [
+          "cpu_request",
+          "memory_request",
+          "memory_limit",
+          "replica_floor",
+          "controller_configuration",
+          "evidence_only"
+        ],
+        "type": "string"
+      },
+      "maxItems": 6,
+      "minItems": 1,
+      "title": "Unchanged Dimensions",
+      "type": "array"
+    },
+    "unresolved_prerequisites": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "maxItems": 32,
+      "title": "Unresolved Prerequisites",
+      "type": "array"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "run_id",
+    "finding_id",
+    "pack_id",
+    "pack_version",
+    "generated_at",
+    "baseline_window_start",
+    "baseline_window_end",
+    "baseline_configuration_digest",
+    "dimension",
+    "controller",
+    "owner_ref",
+    "reviewer_ref",
+    "hypothesis",
+    "unchanged_dimensions",
+    "representative_scenarios",
+    "criteria",
+    "observation_duration_seconds",
+    "checks",
+    "rollback_reference",
+    "rollback_value_reference",
+    "alternatives",
+    "state"
+  ],
+  "title": "ExperimentHandoff",
+  "type": "object"
+}

@@ -1,0 +1,16 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: cpu-pulse-observe
+  namespace: aks-fleet-demo
+spec:
+  targetRef: {apiVersion: apps/v1, kind: Deployment, name: cpu-pulse}
+  updatePolicy: {updateMode: "Off"}
+  resourcePolicy:
+    containerPolicies:
+      - containerName: worker
+        mode: Auto
+        controlledResources: [cpu, memory]
+        controlledValues: RequestsOnly
+        minAllowed: {cpu: 20m, memory: 24Mi}
+        maxAllowed: {cpu: 100m, memory: 48Mi}

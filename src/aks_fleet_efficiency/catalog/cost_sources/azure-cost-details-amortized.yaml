@@ -1,0 +1,19 @@
+id: azure-cost-details-amortized
+version: 1.0.0
+provider: azure-cost-management
+evidence_kind: ledger
+projection_format: azure-cost-details-projection-v1
+producer_version_kind: projection
+pricing_provenance: billing-ledger
+cost_basis: amortized
+granularities: [resource]
+identity: exact-historical
+allocation_policy: none
+reconciliation: ledger-row-partition
+characterized_versions:
+  projection: [2025.05.01]
+characterization: synthetic
+limitations:
+  - Operator-supplied sanitized projection only; no billing API client or raw export parser.
+  - Resource identity does not establish historical Kubernetes workload identity.
+  - The producer version identifies the synthetic projection producer, not a native Cost Details dataset version.

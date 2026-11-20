@@ -1,0 +1,527 @@
+{
+  "$defs": {
+    "ControllerSample_Annotated_float__FieldInfo_annotation_NoneType__required_True__metadata__Strict_strict_True___Gt_gt_0___AllowInfNan_allow_inf_nan_False_____": {
+      "additionalProperties": false,
+      "properties": {
+        "captured_at": {
+          "format": "date-time",
+          "title": "Captured At",
+          "type": "string"
+        },
+        "configuration_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Configuration Revision",
+          "type": "string"
+        },
+        "observation_ref": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Observation Ref",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "request_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Request Revision",
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/$defs/ControllerScope"
+        },
+        "value": {
+          "exclusiveMinimum": 0,
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "scope",
+        "configuration_revision",
+        "request_revision",
+        "observed_at",
+        "captured_at",
+        "observation_ref",
+        "value"
+      ],
+      "title": "ControllerSample[Annotated[float, FieldInfo(annotation=NoneType, required=True, metadata=[Strict(strict=True), Gt(gt=0), AllowInfNan(allow_inf_nan=False)])]]",
+      "type": "object"
+    },
+    "ControllerSample_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Strict_strict_True___Ge_ge_0___Le_le_2147483647_____": {
+      "additionalProperties": false,
+      "properties": {
+        "captured_at": {
+          "format": "date-time",
+          "title": "Captured At",
+          "type": "string"
+        },
+        "configuration_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Configuration Revision",
+          "type": "string"
+        },
+        "observation_ref": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Observation Ref",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "request_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Request Revision",
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/$defs/ControllerScope"
+        },
+        "value": {
+          "maximum": 2147483647,
+          "minimum": 0,
+          "title": "Value",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "scope",
+        "configuration_revision",
+        "request_revision",
+        "observed_at",
+        "captured_at",
+        "observation_ref",
+        "value"
+      ],
+      "title": "ControllerSample[Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Strict(strict=True), Ge(ge=0), Le(le=2147483647)])]]",
+      "type": "object"
+    },
+    "ControllerSample_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Strict_strict_True___Gt_gt_0___Le_le_2147483647_____": {
+      "additionalProperties": false,
+      "properties": {
+        "captured_at": {
+          "format": "date-time",
+          "title": "Captured At",
+          "type": "string"
+        },
+        "configuration_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Configuration Revision",
+          "type": "string"
+        },
+        "observation_ref": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Observation Ref",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "request_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Request Revision",
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/$defs/ControllerScope"
+        },
+        "value": {
+          "exclusiveMinimum": 0,
+          "maximum": 2147483647,
+          "title": "Value",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "scope",
+        "configuration_revision",
+        "request_revision",
+        "observed_at",
+        "captured_at",
+        "observation_ref",
+        "value"
+      ],
+      "title": "ControllerSample[Annotated[int, FieldInfo(annotation=NoneType, required=True, metadata=[Strict(strict=True), Gt(gt=0), Le(le=2147483647)])]]",
+      "type": "object"
+    },
+    "ControllerSample_DeploymentAvailability_": {
+      "additionalProperties": false,
+      "properties": {
+        "captured_at": {
+          "format": "date-time",
+          "title": "Captured At",
+          "type": "string"
+        },
+        "configuration_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Configuration Revision",
+          "type": "string"
+        },
+        "observation_ref": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Observation Ref",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "request_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Request Revision",
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/$defs/ControllerScope"
+        },
+        "value": {
+          "$ref": "#/$defs/DeploymentAvailability"
+        }
+      },
+      "required": [
+        "scope",
+        "configuration_revision",
+        "request_revision",
+        "observed_at",
+        "captured_at",
+        "observation_ref",
+        "value"
+      ],
+      "title": "ControllerSample[DeploymentAvailability]",
+      "type": "object"
+    },
+    "ControllerSample_HpaCounts_": {
+      "additionalProperties": false,
+      "properties": {
+        "captured_at": {
+          "format": "date-time",
+          "title": "Captured At",
+          "type": "string"
+        },
+        "configuration_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Configuration Revision",
+          "type": "string"
+        },
+        "observation_ref": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Observation Ref",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "request_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Request Revision",
+          "type": "string"
+        },
+        "scope": {
+          "$ref": "#/$defs/ControllerScope"
+        },
+        "value": {
+          "$ref": "#/$defs/HpaCounts"
+        }
+      },
+      "required": [
+        "scope",
+        "configuration_revision",
+        "request_revision",
+        "observed_at",
+        "captured_at",
+        "observation_ref",
+        "value"
+      ],
+      "title": "ControllerSample[HpaCounts]",
+      "type": "object"
+    },
+    "ControllerScope": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "maxLength": 512,
+          "pattern": "^\\S+$",
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "hpa_uid": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Hpa Uid",
+          "type": "string"
+        },
+        "metric_kind": {
+          "const": "Resource",
+          "title": "Metric Kind",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "producer": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Producer",
+          "type": "string"
+        },
+        "resource": {
+          "const": "cpu",
+          "title": "Resource",
+          "type": "string"
+        },
+        "target_type": {
+          "const": "Utilization",
+          "title": "Target Type",
+          "type": "string"
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "unit": {
+          "const": "percent",
+          "title": "Unit",
+          "type": "string"
+        },
+        "workload_kind": {
+          "const": "Deployment",
+          "title": "Workload Kind",
+          "type": "string"
+        },
+        "workload_uid": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Workload Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "namespace_uid",
+        "workload_uid",
+        "workload_kind",
+        "hpa_uid",
+        "metric_kind",
+        "resource",
+        "target_type",
+        "unit",
+        "producer"
+      ],
+      "title": "ControllerScope",
+      "type": "object"
+    },
+    "ControllerWindow": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "format": "date-time",
+          "title": "End",
+          "type": "string"
+        },
+        "start": {
+          "format": "date-time",
+          "title": "Start",
+          "type": "string"
+        },
+        "step_seconds": {
+          "maximum": 3600,
+          "minimum": 1,
+          "title": "Step Seconds",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "step_seconds"
+      ],
+      "title": "ControllerWindow",
+      "type": "object"
+    },
+    "DeploymentAvailability": {
+      "additionalProperties": false,
+      "properties": {
+        "available": {
+          "anyOf": [
+            {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Available"
+        },
+        "ready": {
+          "anyOf": [
+            {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ready"
+        }
+      },
+      "title": "DeploymentAvailability",
+      "type": "object"
+    },
+    "HpaCounts": {
+      "additionalProperties": false,
+      "properties": {
+        "current": {
+          "maximum": 2147483647,
+          "minimum": 0,
+          "title": "Current",
+          "type": "integer"
+        },
+        "desired": {
+          "maximum": 2147483647,
+          "minimum": 0,
+          "title": "Desired",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "desired",
+        "current"
+      ],
+      "title": "HpaCounts",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "deployment_availability": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ControllerSample_DeploymentAvailability_"
+      },
+      "maxItems": 1440,
+      "title": "Deployment Availability",
+      "type": "array"
+    },
+    "hpa_replicas": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ControllerSample_HpaCounts_"
+      },
+      "maxItems": 1440,
+      "title": "Hpa Replicas",
+      "type": "array"
+    },
+    "request_mcpu_per_pod": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ControllerSample_Annotated_float__FieldInfo_annotation_NoneType__required_True__metadata__Strict_strict_True___Gt_gt_0___AllowInfNan_allow_inf_nan_False_____"
+      },
+      "maxItems": 1440,
+      "title": "Request Mcpu Per Pod",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "signal": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ControllerSample_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Strict_strict_True___Ge_ge_0___Le_le_2147483647_____"
+      },
+      "maxItems": 1440,
+      "title": "Signal",
+      "type": "array"
+    },
+    "source_status": {
+      "enum": [
+        "complete",
+        "partial",
+        "denied"
+      ],
+      "title": "Source Status",
+      "type": "string"
+    },
+    "target": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ControllerSample_Annotated_int__FieldInfo_annotation_NoneType__required_True__metadata__Strict_strict_True___Gt_gt_0___Le_le_2147483647_____"
+      },
+      "maxItems": 1440,
+      "title": "Target",
+      "type": "array"
+    },
+    "window": {
+      "$ref": "#/$defs/ControllerWindow"
+    }
+  },
+  "required": [
+    "schema_version",
+    "window",
+    "source_status"
+  ],
+  "title": "ControllerEvidence",
+  "type": "object"
+}

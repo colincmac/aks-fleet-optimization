@@ -1,0 +1,1 @@
+aks_advisor:workload_desired_replicas{__scope__}

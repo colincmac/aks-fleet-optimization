@@ -1,0 +1,47 @@
+{
+  "mode": "guarded",
+  "packs": null,
+  "pack_parameters": {},
+  "pack_locks": {
+    "AKS-AS-001": "fac572d7cd4dd5802b9576c8dd503fa1542af662b53b565a34102f8242ea0ab0",
+    "AKS-AS-002": "bc2fc328dc8244e004bdcf6b452344a87948fb232c5021c63c1245f6ae03f376",
+    "AKS-AS-003": "129fc1650bd91b20c8a2415cd824b56913c06881d2e5db041f5e9298be088592",
+    "AKS-AS-004": "de32fe82374db00e8ee980be1abc2246ba947c9fcefd27e137a6dfb96518e14d",
+    "AKS-AS-005": "aa841b1ac664b2ad990ecb3c069a531d57cda5b04e2421341650ef5eb5a388f0",
+    "AKS-AS-006": "abf0c1f18ad7f1856d2a0dce4c76be3d0b07bc87dc620c1bc799658a00f874c0",
+    "AKS-AS-007": "94b5bc8f0b4e303252079dca55dd6ae7b6adc9e4ae8f7aa600e743d16ff409f1",
+    "AKS-MEM-001": "f69012630c4d2a464a20053c932d05b8669666311d1237b3bc198c398c3c4c42",
+    "AKS-MEM-002": "a1c26aa2a90c056b93c48279c9df977c97d9e9d9f26d6a275a8cadd414a1f52a",
+    "AKS-MEM-003": "24ac10817abfeb3f6ad2641646310ada00dd1c61113f60dd14a3985f9560d369",
+    "AKS-MEM-004": "c6cdb8cf9cc9bb99fbea9fc5fcf5a5f68c5d907dbde5e71b53d3f009fa281480",
+    "AKS-MEM-005": "bb86c88b2d765e4de7e7596fe02ac0cc2f37fa808334b802534a667b0bd5312b",
+    "AKS-NP-001": "f9209222647295f9d7c0db4518fdd6170f77f2f39567ff4ab402d345e1abebe8",
+    "AKS-NP-002": "96fd7b91e3b77b99e6e7c67ab1e10130f0e31664774746999231cc1467808d7b",
+    "AKS-NP-003": "341da7cf1a7589dcb068f3a4090306fe0e3a9591ea31634fedabeeb6c0f51124",
+    "AKS-NP-004": "99962096cbf4483b8ab0a938f7b41ed7ad00818346286e990d3bb894f733d949",
+    "AKS-REL-001": "94e2af087bbcfbab390f68d3b7c631f83f61cebca51bb83e7d55c0fe3ab2c503",
+    "AKS-REL-002": "d9e19bb911e79d39e3dcf7a4bddee292b51e092cd78ed42c244516325ddd5349",
+    "AKS-REL-003": "a210621d7cddb3b84709712cd7daf7b34a221cc97f8d270e4f120bb7998ab569",
+    "AKS-RQ-001": "64dbc1e4751804bd9f762d1bb37c2dd90d7a1b9884d138034c326136cfaa2e16",
+    "AKS-RQ-002": "d7f0b7902c6400c9b2be49472a75ee4f949ac164dd6db69f80b2b86f0ff5bd56",
+    "AKS-RQ-003": "f4f9e64dabd50569063c8b3264932bc5c0c9f0855032f91347377ef55be1cc3a",
+    "AKS-SCHED-001": "420359fdf0a9ef15bef7836a1544ceaa729e2bac461bb97f6a81830c10c5f71b",
+    "AKS-SCHED-002": "254907cebd33f0d8f68d0693dc70856de408a17924a17eace4c08e8a15d3b9cb"
+  },
+  "thresholds": {
+    "minimum_coverage_ratio": 0.85,
+    "minimum_observation_days": 30,
+    "maximum_evidence_age_hours": 24.0,
+    "maximum_metric_step_seconds": 300,
+    "minimum_replicas_for_autoscaling_review": 2
+  },
+  "excluded_namespaces": [
+    "kube-system",
+    "gatekeeper-system"
+  ],
+  "environment_risk": {
+    "production": "high",
+    "nonproduction": "medium"
+  },
+  "enable_estimated_savings": false
+}

@@ -1,0 +1,252 @@
+{
+  "$defs": {
+    "HistoricalClusterPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Cpu Gaps",
+          "type": "array"
+        },
+        "cpu_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Cpu Mcpu"
+        },
+        "members": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Members"
+        },
+        "memory_gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Memory Gaps",
+          "type": "array"
+        },
+        "memory_working_set_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Memory Working Set Mib"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        }
+      },
+      "required": [
+        "timestamp",
+        "members",
+        "cpu_mcpu",
+        "memory_working_set_mib",
+        "cpu_gaps",
+        "memory_gaps"
+      ],
+      "title": "HistoricalClusterPoint",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "capacity_interpretation": {
+      "const": "not_free_movable_or_billed_capacity",
+      "default": "not_free_movable_or_billed_capacity",
+      "title": "Capacity Interpretation",
+      "type": "string"
+    },
+    "cluster_resource_id": {
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "cpu_gaps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Cpu Gaps",
+      "type": "array"
+    },
+    "cpu_measure": {
+      "const": "rate(node_cpu_usage_seconds_total)",
+      "default": "rate(node_cpu_usage_seconds_total)",
+      "title": "Cpu Measure",
+      "type": "string"
+    },
+    "cpu_p95_mcpu": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Cpu P95 Mcpu"
+    },
+    "cpu_rate_window_seconds": {
+      "maximum": 3600,
+      "minimum": 1,
+      "title": "Cpu Rate Window Seconds",
+      "type": "integer"
+    },
+    "evaluated_at": {
+      "format": "date-time",
+      "title": "Evaluated At",
+      "type": "string"
+    },
+    "evidence_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Evidence Digest",
+      "type": "string"
+    },
+    "mapping_reference": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Mapping Reference",
+      "type": "string"
+    },
+    "maximum_source_age_seconds": {
+      "minimum": 1,
+      "title": "Maximum Source Age Seconds",
+      "type": "integer"
+    },
+    "memory_gaps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Memory Gaps",
+      "type": "array"
+    },
+    "memory_measure": {
+      "const": "node_memory_working_set_bytes",
+      "default": "node_memory_working_set_bytes",
+      "title": "Memory Measure",
+      "type": "string"
+    },
+    "memory_p99_working_set_mib": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Memory P99 Working Set Mib"
+    },
+    "points": {
+      "items": {
+        "$ref": "#/$defs/HistoricalClusterPoint"
+      },
+      "title": "Points",
+      "type": "array"
+    },
+    "profile": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Profile",
+      "type": "string"
+    },
+    "profile_version": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Profile Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source",
+      "type": "string"
+    },
+    "source_admission": {
+      "const": "unverified_saved_contributions",
+      "default": "unverified_saved_contributions",
+      "title": "Source Admission",
+      "type": "string"
+    },
+    "source_version": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source Version",
+      "type": "string"
+    },
+    "step_seconds": {
+      "maximum": 300,
+      "minimum": 1,
+      "title": "Step Seconds",
+      "type": "integer"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "window_end": {
+      "format": "date-time",
+      "title": "Window End",
+      "type": "string"
+    },
+    "window_start": {
+      "format": "date-time",
+      "title": "Window Start",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "source",
+    "source_version",
+    "profile",
+    "profile_version",
+    "mapping_reference",
+    "evidence_digest",
+    "evaluated_at",
+    "maximum_source_age_seconds",
+    "window_start",
+    "window_end",
+    "step_seconds",
+    "cpu_rate_window_seconds",
+    "cpu_p95_mcpu",
+    "memory_p99_working_set_mib",
+    "cpu_gaps",
+    "memory_gaps",
+    "points"
+  ],
+  "title": "HistoricalNodeReview",
+  "type": "object"
+}

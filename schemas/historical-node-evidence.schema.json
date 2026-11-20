@@ -1,0 +1,394 @@
+{
+  "$defs": {
+    "CollectionError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "unauthorized",
+            "forbidden",
+            "timeout",
+            "throttled",
+            "unavailable",
+            "invalid-response",
+            "response-budget-exceeded",
+            "identity-mismatch"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "code"
+      ],
+      "title": "CollectionError",
+      "type": "object"
+    },
+    "CollectionStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "title": "CollectionStatus",
+      "type": "string"
+    },
+    "CollectorResult": {
+      "additionalProperties": false,
+      "properties": {
+        "collector": {
+          "minLength": 1,
+          "title": "Collector",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "completed_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Completed Scope",
+          "type": "array"
+        },
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/CollectionError"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "pagination_complete": {
+          "default": false,
+          "title": "Pagination Complete",
+          "type": "boolean"
+        },
+        "requested_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requested Scope",
+          "type": "array"
+        },
+        "retry_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Retry Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Observed At"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CollectionStatus"
+        }
+      },
+      "required": [
+        "collector",
+        "status",
+        "requested_scope",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "CollectorResult",
+      "type": "object"
+    },
+    "HistoricalNodeContribution": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Mcpu"
+        },
+        "cpu_sampled_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Sampled At"
+        },
+        "memory_sampled_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Sampled At"
+        },
+        "memory_working_set_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Working Set Mib"
+        },
+        "node_resource_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Node Resource Id",
+          "type": "string"
+        },
+        "node_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Node Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "node_uid",
+        "node_resource_id"
+      ],
+      "title": "HistoricalNodeContribution",
+      "type": "object"
+    },
+    "HistoricalNodeIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "node_resource_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Node Resource Id",
+          "type": "string"
+        },
+        "node_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Node Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "node_uid",
+        "node_resource_id"
+      ],
+      "title": "HistoricalNodeIdentity",
+      "type": "object"
+    },
+    "HistoricalNodePoint": {
+      "additionalProperties": false,
+      "properties": {
+        "contributions": {
+          "items": {
+            "$ref": "#/$defs/HistoricalNodeContribution"
+          },
+          "maxItems": 100000,
+          "title": "Contributions",
+          "type": "array"
+        },
+        "members": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/HistoricalNodeIdentity"
+              },
+              "maxItems": 100000,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Members"
+        },
+        "membership_receipt": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        }
+      },
+      "required": [
+        "timestamp",
+        "membership_receipt",
+        "contributions"
+      ],
+      "title": "HistoricalNodePoint",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cluster_resource_id": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "cpu_measure": {
+      "const": "rate(node_cpu_usage_seconds_total)",
+      "default": "rate(node_cpu_usage_seconds_total)",
+      "title": "Cpu Measure",
+      "type": "string"
+    },
+    "cpu_rate_window_seconds": {
+      "maximum": 3600,
+      "minimum": 1,
+      "title": "Cpu Rate Window Seconds",
+      "type": "integer"
+    },
+    "cpu_receipt": {
+      "$ref": "#/$defs/CollectorResult"
+    },
+    "mapping_reference": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Mapping Reference",
+      "type": "string"
+    },
+    "memory_measure": {
+      "const": "node_memory_working_set_bytes",
+      "default": "node_memory_working_set_bytes",
+      "title": "Memory Measure",
+      "type": "string"
+    },
+    "memory_receipt": {
+      "$ref": "#/$defs/CollectorResult"
+    },
+    "points": {
+      "items": {
+        "$ref": "#/$defs/HistoricalNodePoint"
+      },
+      "maxItems": 100000,
+      "title": "Points",
+      "type": "array"
+    },
+    "profile": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Profile",
+      "type": "string"
+    },
+    "profile_version": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Profile Version",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source",
+      "type": "string"
+    },
+    "source_version": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source Version",
+      "type": "string"
+    },
+    "step_seconds": {
+      "maximum": 300,
+      "minimum": 1,
+      "title": "Step Seconds",
+      "type": "integer"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "window_end": {
+      "format": "date-time",
+      "title": "Window End",
+      "type": "string"
+    },
+    "window_start": {
+      "format": "date-time",
+      "title": "Window Start",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "source",
+    "source_version",
+    "profile",
+    "profile_version",
+    "mapping_reference",
+    "window_start",
+    "window_end",
+    "step_seconds",
+    "cpu_rate_window_seconds",
+    "cpu_receipt",
+    "memory_receipt",
+    "points"
+  ],
+  "title": "HistoricalNodeEvidence",
+  "type": "object"
+}

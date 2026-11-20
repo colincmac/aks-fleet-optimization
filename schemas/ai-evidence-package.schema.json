@@ -1,0 +1,248 @@
+{
+  "$defs": {
+    "AIAssessmentReference": {
+      "additionalProperties": false,
+      "properties": {
+        "configuration_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Configuration Digest",
+          "type": "string"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "baseline",
+            "guarded"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "scope_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Scope Id",
+          "type": "string"
+        },
+        "snapshot_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Digest",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "partial"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "valid_until": {
+          "format": "date-time",
+          "title": "Valid Until",
+          "type": "string"
+        },
+        "window_end": {
+          "format": "date-time",
+          "title": "Window End",
+          "type": "string"
+        },
+        "window_start": {
+          "format": "date-time",
+          "title": "Window Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "scope_id",
+        "snapshot_digest",
+        "configuration_digest",
+        "evaluated_at",
+        "valid_until",
+        "window_start",
+        "window_end",
+        "status",
+        "mode"
+      ],
+      "title": "AIAssessmentReference",
+      "type": "object"
+    },
+    "AIFindingSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Confidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_digests": {
+          "items": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "maxItems": 128,
+          "title": "Reason Digests",
+          "type": "array"
+        },
+        "record_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Record Id",
+          "type": "string"
+        },
+        "resource_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Resource Digest",
+          "type": "string"
+        },
+        "rule_id": {
+          "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Rule Version",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "scope_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Scope Id",
+          "type": "string"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Severity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "enum": [
+            "finding",
+            "blocked"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "record_id",
+        "run_id",
+        "scope_id",
+        "resource_digest",
+        "rule_id",
+        "rule_version",
+        "state",
+        "severity",
+        "confidence",
+        "reason_digests"
+      ],
+      "title": "AIFindingSummary",
+      "type": "object"
+    },
+    "Confidence": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "Confidence",
+      "type": "string"
+    },
+    "Severity": {
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "assessments": {
+      "items": {
+        "$ref": "#/$defs/AIAssessmentReference"
+      },
+      "maxItems": 16,
+      "minItems": 1,
+      "title": "Assessments",
+      "type": "array"
+    },
+    "expires_at": {
+      "format": "date-time",
+      "title": "Expires At",
+      "type": "string"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "notice": {
+      "const": "Pseudonymous finding summaries, not anonymous data or source attestation. Raw evidence and blocker text withheld. No AI invocation, approval or action authority.",
+      "default": "Pseudonymous finding summaries, not anonymous data or source attestation. Raw evidence and blocker text withheld. No AI invocation, approval or action authority.",
+      "title": "Notice",
+      "type": "string"
+    },
+    "records": {
+      "items": {
+        "$ref": "#/$defs/AIFindingSummary"
+      },
+      "maxItems": 128,
+      "title": "Records",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "tenant_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Tenant Digest",
+      "type": "string"
+    },
+    "ttl_seconds": {
+      "maximum": 3600,
+      "minimum": 60,
+      "title": "Ttl Seconds",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "tenant_digest",
+    "generated_at",
+    "expires_at",
+    "ttl_seconds",
+    "assessments",
+    "records"
+  ],
+  "title": "AIEvidencePackage",
+  "type": "object"
+}

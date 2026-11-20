@@ -1,0 +1,48 @@
+schema_version: '1.0'
+id: AKS-SCHED-002
+version: 1.0.0
+family: scheduling
+evaluator: optimization-constraints
+evidence_kind: inventory
+title: Review current optimization constraints
+purpose: Identify current probe, topology-spread and voluntary-disruption evidence that needs owner review before scaling, disruption or consolidation decisions.
+sources: []
+parameters: {}
+queries:
+  baseline: {}
+  guarded: {}
+required_evidence:
+  baseline:
+  - Fresh complete scoped inventory with exact cluster, Namespace, Pod, controller and PDB identities
+  - Sanitized per-container probe presence, typed topology-spread details and namespace PDB availability/status evidence
+  - Explicit current controller replica count of at least two for topology-spread findings
+  guarded:
+  - Fresh complete scoped inventory with exact cluster, Namespace, Pod, controller and PDB identities
+  - Sanitized per-container probe presence, typed topology-spread details and namespace PDB availability/status evidence
+  - Explicit current controller replica count of at least two for topology-spread findings
+limitations:
+- Unavailable PDB inventory for observed Pods produces an independent evidence gap without hiding qualified probe or topology findings.
+- Probe presence does not establish application health, correct timing or safe probe behavior; probe handlers and payloads are not collected.
+- Missing topology spread is an owner review candidate, not proof that spreading is required or that a workload is portable.
+- Omitted/defaulted replica counts remain unknown; topology findings are limited to explicitly replicated Deployment and StatefulSet workloads.
+- PDB selector matching is unknown. Zero allowed disruptions is a point-in-time voluntary-disruption constraint, not proof that a PDB is universally too strict.
+- Current metadata is not historical behavior, disruption feasibility, a node-removal plan or evidence of savings.
+prerequisites:
+- Ask the workload owner which startup, health, availability, failure-domain and disruption behavior the application requires.
+- Verify actual PDB selectors and eligible Pods with approved Kubernetes tooling before relating a budget to a workload.
+risks:
+- Adding probes without application semantics can cause restart loops or remove healthy endpoints from service.
+- Changing topology or disruption policy can reduce availability, violate storage constraints or increase correlated failure risk.
+validation:
+- Validate probe behavior during startup, steady state, dependency failure and graceful termination using owner-approved tests.
+- Validate replica placement and failure-domain behavior before any topology-policy experiment.
+- Recheck actual PDB selectors, desired healthy counts and disruptions allowed immediately before any separately approved voluntary disruption.
+rollback:
+- No configuration is generated or applied. Restore any separately approved probe, topology or PDB experiment through the owner's delivery system if validation regresses.
+actions:
+  baseline:
+  - Review the observed constraints with the workload and platform owners; do not generate or apply configuration from this finding.
+  guarded:
+  - Review the observed constraints with the workload and platform owners; guarded mode does not authorize or generate a change.
+baseline_summary: Current probe, topology or voluntary-disruption evidence may constrain scaling, disruption, consolidation or portability. The finding is an owner investigation, not a selector match, universal policy judgment or generated configuration.
+guarded_summary: Current probe, topology or voluntary-disruption evidence may constrain scaling, disruption, consolidation or portability. Guarded mode does not authorize a change or generate configuration.

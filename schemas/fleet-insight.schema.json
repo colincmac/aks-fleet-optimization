@@ -1,0 +1,2198 @@
+{
+  "$defs": {
+    "BusinessOwnerRouting": {
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "const": "routing_declaration_not_authorization",
+          "default": "routing_declaration_not_authorization",
+          "title": "Authority",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "owner_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Owner Ref"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "declared",
+            "unknown",
+            "conflicting"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "workload_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Workload Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "namespace_uid",
+        "workload_uid",
+        "status",
+        "owner_ref",
+        "reason_codes"
+      ],
+      "title": "BusinessOwnerRouting",
+      "type": "object"
+    },
+    "CapabilityCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown",
+            "unsupported"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "status",
+        "reason_codes"
+      ],
+      "title": "CapabilityCheck",
+      "type": "object"
+    },
+    "FleetArmPoolMarket": {
+      "additionalProperties": false,
+      "properties": {
+        "observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed At"
+        },
+        "pool_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "propertyNames": {
+                "enum": [
+                  "spot",
+                  "regular",
+                  "unknown"
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pool Counts"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "available",
+            "partial",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unit": {
+          "const": "observed ARM pool priority; not Nodes, NAP policy or historical fallback",
+          "default": "observed ARM pool priority; not Nodes, NAP policy or historical fallback",
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "title": "FleetArmPoolMarket",
+      "type": "object"
+    },
+    "FleetClusterInsight": {
+      "additionalProperties": false,
+      "properties": {
+        "assessment_status": {
+          "enum": [
+            "complete",
+            "partial"
+          ],
+          "title": "Assessment Status",
+          "type": "string"
+        },
+        "blocked_reason_counts": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Blocked Reason Counts",
+          "type": "object"
+        },
+        "blocked_recommendations": {
+          "minimum": 0,
+          "title": "Blocked Recommendations",
+          "type": "integer"
+        },
+        "category_counts": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Category Counts",
+          "type": "object"
+        },
+        "cluster_name": {
+          "title": "Cluster Name",
+          "type": "string"
+        },
+        "cluster_resource_id": {
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "data_quality_warnings": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Data Quality Warnings",
+          "type": "array"
+        },
+        "environment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Environment"
+        },
+        "excluded_namespaces": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Excluded Namespaces",
+          "type": "array"
+        },
+        "external_context": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FleetContextReview"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "high_or_critical": {
+          "minimum": 0,
+          "title": "High Or Critical",
+          "type": "integer"
+        },
+        "historical_usage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HistoricalNodeReview"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "location": {
+          "title": "Location",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "baseline",
+            "guarded"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "observation_window": {
+          "$ref": "#/$defs/MetricWindow"
+        },
+        "peer_group": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Peer Group",
+          "type": "string"
+        },
+        "recommendations": {
+          "minimum": 0,
+          "title": "Recommendations",
+          "type": "integer"
+        },
+        "resource_envelope": {
+          "$ref": "#/$defs/FleetResourceEnvelope"
+        },
+        "rule_counts": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Rule Counts",
+          "type": "object"
+        },
+        "source_capabilities": {
+          "items": {
+            "$ref": "#/$defs/SourceCapability"
+          },
+          "title": "Source Capabilities",
+          "type": "array"
+        },
+        "source_status_counts": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "propertyNames": {
+            "enum": [
+              "available",
+              "unavailable",
+              "unknown",
+              "unsupported"
+            ]
+          },
+          "title": "Source Status Counts",
+          "type": "object"
+        },
+        "subscription_id": {
+          "title": "Subscription Id",
+          "type": "string"
+        },
+        "supply_inventory": {
+          "$ref": "#/$defs/FleetSupplyInventory"
+        },
+        "tenant_id": {
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "workload_inventory": {
+          "$ref": "#/$defs/FleetWorkloadInventory"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "cluster_name",
+        "subscription_id",
+        "location",
+        "peer_group",
+        "assessment_status",
+        "mode",
+        "generated_at",
+        "observation_window",
+        "recommendations",
+        "blocked_recommendations",
+        "high_or_critical",
+        "source_capabilities",
+        "source_status_counts",
+        "data_quality_warnings",
+        "excluded_namespaces",
+        "supply_inventory",
+        "workload_inventory",
+        "rule_counts",
+        "category_counts",
+        "blocked_reason_counts",
+        "resource_envelope"
+      ],
+      "title": "FleetClusterInsight",
+      "type": "object"
+    },
+    "FleetContextReview": {
+      "additionalProperties": false,
+      "properties": {
+        "business_owners": {
+          "items": {
+            "$ref": "#/$defs/BusinessOwnerRouting"
+          },
+          "title": "Business Owners",
+          "type": "array"
+        },
+        "cluster_resource_id": {
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "context_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Context Digest",
+          "type": "string"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "market_history": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HistoricalMarketReview"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Source",
+          "type": "string"
+        },
+        "source_admission": {
+          "const": "unverified_saved_context",
+          "default": "unverified_saved_context",
+          "title": "Source Admission",
+          "type": "string"
+        },
+        "source_profile": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Source Profile",
+          "type": "string"
+        },
+        "source_profile_version": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Source Profile Version",
+          "type": "string"
+        },
+        "source_version": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Source Version",
+          "type": "string"
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "unmatched_owner_declarations": {
+          "minimum": 0,
+          "title": "Unmatched Owner Declarations",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "source",
+        "source_version",
+        "source_profile",
+        "source_profile_version",
+        "observed_at",
+        "evaluated_at",
+        "context_digest",
+        "business_owners",
+        "unmatched_owner_declarations",
+        "market_history"
+      ],
+      "title": "FleetContextReview",
+      "type": "object"
+    },
+    "FleetCurrentGaps": {
+      "additionalProperties": false,
+      "properties": {
+        "allocatable_minus_requests": {
+          "$ref": "#/$defs/FleetGapPair"
+        },
+        "capacity_minus_allocatable": {
+          "$ref": "#/$defs/FleetGapPair"
+        },
+        "requests_minus_usage": {
+          "const": "aligned_cluster_usage_unavailable",
+          "default": "aligned_cluster_usage_unavailable",
+          "title": "Requests Minus Usage",
+          "type": "string"
+        }
+      },
+      "title": "FleetCurrentGaps",
+      "type": "object"
+    },
+    "FleetGapDimension": {
+      "additionalProperties": false,
+      "properties": {
+        "nodes_covered": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nodes Covered"
+        },
+        "nodes_expected": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nodes Expected"
+        },
+        "pods_covered": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pods Covered"
+        },
+        "pods_expected": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pods Expected"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unqualified_inventory",
+                "invalid_node_accounting",
+                "incomplete_node_accounting",
+                "incomplete_pod_accounting",
+                "namespace_scope_mismatch"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "unqualified_inventory",
+          "title": "Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "FleetGapDimension",
+      "type": "object"
+    },
+    "FleetGapPair": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu": {
+          "$ref": "#/$defs/FleetGapDimension"
+        },
+        "cpu_unit": {
+          "const": "mCPU",
+          "default": "mCPU",
+          "title": "Cpu Unit",
+          "type": "string"
+        },
+        "memory": {
+          "$ref": "#/$defs/FleetGapDimension"
+        },
+        "memory_unit": {
+          "const": "MiB",
+          "default": "MiB",
+          "title": "Memory Unit",
+          "type": "string"
+        }
+      },
+      "title": "FleetGapPair",
+      "type": "object"
+    },
+    "FleetInsightSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "blocked_recommendations": {
+          "minimum": 0,
+          "title": "Blocked Recommendations",
+          "type": "integer"
+        },
+        "clusters": {
+          "minimum": 2,
+          "title": "Clusters",
+          "type": "integer"
+        },
+        "estimated_monthly_savings": {
+          "default": null,
+          "title": "Estimated Monthly Savings",
+          "type": "null"
+        },
+        "high_or_critical": {
+          "minimum": 0,
+          "title": "High Or Critical",
+          "type": "integer"
+        },
+        "peer_groups": {
+          "minimum": 1,
+          "title": "Peer Groups",
+          "type": "integer"
+        },
+        "recommendations": {
+          "minimum": 0,
+          "title": "Recommendations",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "clusters",
+        "peer_groups",
+        "recommendations",
+        "blocked_recommendations",
+        "high_or_critical"
+      ],
+      "title": "FleetInsightSummary",
+      "type": "object"
+    },
+    "FleetNamespaceWorkloads": {
+      "additionalProperties": false,
+      "properties": {
+        "namespace": {
+          "title": "Namespace",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Namespace Uid"
+        },
+        "observed_pods": {
+          "minimum": 0,
+          "title": "Observed Pods",
+          "type": "integer"
+        },
+        "unresolved_pods": {
+          "minimum": 0,
+          "title": "Unresolved Pods",
+          "type": "integer"
+        },
+        "workload_counts": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Workload Counts",
+          "type": "object"
+        }
+      },
+      "required": [
+        "namespace",
+        "namespace_uid",
+        "workload_counts",
+        "observed_pods",
+        "unresolved_pods"
+      ],
+      "title": "FleetNamespaceWorkloads",
+      "type": "object"
+    },
+    "FleetPeerGroupInsight": {
+      "additionalProperties": false,
+      "properties": {
+        "arm_pool_market_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "propertyNames": {
+                "enum": [
+                  "spot",
+                  "regular",
+                  "unknown"
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Arm Pool Market Counts"
+        },
+        "blocked_reason_counts": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Blocked Reason Counts",
+          "type": "object"
+        },
+        "blocked_recommendations": {
+          "minimum": 0,
+          "title": "Blocked Recommendations",
+          "type": "integer"
+        },
+        "category_counts": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Category Counts",
+          "type": "object"
+        },
+        "cluster_resource_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Cluster Resource Ids",
+          "type": "array"
+        },
+        "clusters": {
+          "minimum": 0,
+          "title": "Clusters",
+          "type": "integer"
+        },
+        "comparability_reasons": {
+          "items": {
+            "enum": [
+              "observation_windows_differ",
+              "analysis_modes_differ",
+              "pack_definitions_differ",
+              "configurations_differ"
+            ],
+            "type": "string"
+          },
+          "title": "Comparability Reasons",
+          "type": "array"
+        },
+        "comparable": {
+          "title": "Comparable",
+          "type": "boolean"
+        },
+        "high_or_critical": {
+          "minimum": 0,
+          "title": "High Or Critical",
+          "type": "integer"
+        },
+        "historical_usage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HistoricalPeerUsage"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "inventory_status_counts": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "propertyNames": {
+              "enum": [
+                "available",
+                "partial",
+                "unknown"
+              ]
+            },
+            "type": "object"
+          },
+          "propertyNames": {
+            "enum": [
+              "supply",
+              "workloads",
+              "arm_pool_market"
+            ]
+          },
+          "title": "Inventory Status Counts",
+          "type": "object"
+        },
+        "peer_group": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Peer Group",
+          "type": "string"
+        },
+        "recommendations": {
+          "minimum": 0,
+          "title": "Recommendations",
+          "type": "integer"
+        },
+        "resource_envelope": {
+          "$ref": "#/$defs/FleetResourceEnvelope"
+        },
+        "review_owner_status_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "propertyNames": {
+                "enum": [
+                  "declared",
+                  "unknown"
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Review Owner Status Counts"
+        },
+        "rule_counts": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "title": "Rule Counts",
+          "type": "object"
+        },
+        "source_status_counts": {
+          "additionalProperties": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "propertyNames": {
+            "enum": [
+              "available",
+              "unavailable",
+              "unknown",
+              "unsupported"
+            ]
+          },
+          "title": "Source Status Counts",
+          "type": "object"
+        },
+        "supply_pool_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "propertyNames": {
+                "enum": [
+                  "fixed",
+                  "cas",
+                  "nap_static",
+                  "nap_dynamic",
+                  "unknown"
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Supply Pool Counts"
+        },
+        "workload_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Workload Counts"
+        }
+      },
+      "required": [
+        "peer_group",
+        "clusters",
+        "cluster_resource_ids",
+        "comparable",
+        "comparability_reasons",
+        "recommendations",
+        "blocked_recommendations",
+        "high_or_critical",
+        "rule_counts",
+        "category_counts",
+        "blocked_reason_counts",
+        "source_status_counts",
+        "inventory_status_counts",
+        "supply_pool_counts",
+        "arm_pool_market_counts",
+        "review_owner_status_counts",
+        "workload_counts",
+        "resource_envelope"
+      ],
+      "title": "FleetPeerGroupInsight",
+      "type": "object"
+    },
+    "FleetResourceAmount": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Mcpu"
+        },
+        "cpu_unit": {
+          "const": "mCPU",
+          "default": "mCPU",
+          "title": "Cpu Unit",
+          "type": "string"
+        },
+        "memory_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Mib"
+        },
+        "memory_unit": {
+          "const": "MiB",
+          "default": "MiB",
+          "title": "Memory Unit",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "available",
+            "partial",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "title": "FleetResourceAmount",
+      "type": "object"
+    },
+    "FleetResourceEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "allocatable": {
+          "$ref": "#/$defs/FleetResourceAmount"
+        },
+        "current_gaps": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FleetCurrentGaps"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "current_only": {
+          "const": true,
+          "default": true,
+          "title": "Current Only",
+          "type": "boolean"
+        },
+        "node_capacity": {
+          "$ref": "#/$defs/FleetResourceAmount"
+        },
+        "observation_times": {
+          "items": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "title": "Observation Times",
+          "type": "array"
+        },
+        "observed_usage": {
+          "$ref": "#/$defs/FleetResourceAmount"
+        },
+        "requested": {
+          "$ref": "#/$defs/FleetResourceAmount"
+        },
+        "scope_notice": {
+          "const": "all listed Nodes; included nonterminal Pod requests; not free or movable capacity",
+          "default": "all listed Nodes; included nonterminal Pod requests; not free or movable capacity",
+          "title": "Scope Notice",
+          "type": "string"
+        }
+      },
+      "title": "FleetResourceEnvelope",
+      "type": "object"
+    },
+    "FleetSupplyInventory": {
+      "additionalProperties": false,
+      "properties": {
+        "arm_pool_market": {
+          "$ref": "#/$defs/FleetArmPoolMarket"
+        },
+        "azure_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Azure Observed At"
+        },
+        "kubernetes_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Kubernetes Observed At"
+        },
+        "pool_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "propertyNames": {
+                "enum": [
+                  "fixed",
+                  "cas",
+                  "nap_static",
+                  "nap_dynamic",
+                  "unknown"
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pool Counts"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "partial",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unit": {
+          "const": "observed current pool objects; not nodes or workload placement",
+          "default": "observed current pool objects; not nodes or workload placement",
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "FleetSupplyInventory",
+      "type": "object"
+    },
+    "FleetWorkloadInventory": {
+      "additionalProperties": false,
+      "properties": {
+        "namespace_distribution": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/FleetNamespaceWorkloads"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace Distribution"
+        },
+        "observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed At"
+        },
+        "observed_pods": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Pods"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "review_owner_status_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "propertyNames": {
+                "enum": [
+                  "declared",
+                  "unknown"
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Owner Status Counts"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "partial",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unit": {
+          "const": "distinct UID-bound current owners with listed Pods; not ready replicas",
+          "default": "distinct UID-bound current owners with listed Pods; not ready replicas",
+          "title": "Unit",
+          "type": "string"
+        },
+        "unresolved_pods": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unresolved Pods"
+        },
+        "workload_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Counts"
+        },
+        "workload_investigations": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/FleetWorkloadInvestigation"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Investigations"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "FleetWorkloadInventory",
+      "type": "object"
+    },
+    "FleetWorkloadInvestigation": {
+      "additionalProperties": false,
+      "properties": {
+        "namespace": {
+          "title": "Namespace",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "observed_supply": {
+          "$ref": "#/$defs/FleetWorkloadSupply"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "review_owner_status": {
+          "default": "unknown",
+          "enum": [
+            "declared",
+            "unknown"
+          ],
+          "title": "Review Owner Status",
+          "type": "string"
+        },
+        "scope_notice": {
+          "const": "review declaration only; not business ownership or change approval",
+          "default": "review declaration only; not business ownership or change approval",
+          "title": "Scope Notice",
+          "type": "string"
+        },
+        "workload_kind": {
+          "title": "Workload Kind",
+          "type": "string"
+        },
+        "workload_name": {
+          "title": "Workload Name",
+          "type": "string"
+        },
+        "workload_uid": {
+          "title": "Workload Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "namespace",
+        "namespace_uid",
+        "workload_uid",
+        "workload_kind",
+        "workload_name"
+      ],
+      "title": "FleetWorkloadInvestigation",
+      "type": "object"
+    },
+    "FleetWorkloadSupply": {
+      "additionalProperties": false,
+      "properties": {
+        "observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed At"
+        },
+        "pod_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "minimum": 0,
+                "type": "integer"
+              },
+              "propertyNames": {
+                "enum": [
+                  "fixed",
+                  "cas",
+                  "nap_static",
+                  "nap_dynamic",
+                  "unknown"
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod Counts"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "available",
+            "partial",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unit": {
+          "const": "listed current Pods by exact observed supply; not placement, Node market or history",
+          "default": "listed current Pods by exact observed supply; not placement, Node market or history",
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "title": "FleetWorkloadSupply",
+      "type": "object"
+    },
+    "HistoricalClusterPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Cpu Gaps",
+          "type": "array"
+        },
+        "cpu_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Cpu Mcpu"
+        },
+        "members": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Members"
+        },
+        "memory_gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Memory Gaps",
+          "type": "array"
+        },
+        "memory_working_set_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Memory Working Set Mib"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        }
+      },
+      "required": [
+        "timestamp",
+        "members",
+        "cpu_mcpu",
+        "memory_working_set_mib",
+        "cpu_gaps",
+        "memory_gaps"
+      ],
+      "title": "HistoricalClusterPoint",
+      "type": "object"
+    },
+    "HistoricalMarketCounts": {
+      "additionalProperties": false,
+      "properties": {
+        "market_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "propertyNames": {
+                "enum": [
+                  "spot",
+                  "regular",
+                  "unknown"
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Market Counts"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        }
+      },
+      "required": [
+        "timestamp",
+        "market_counts",
+        "reason_codes"
+      ],
+      "title": "HistoricalMarketCounts",
+      "type": "object"
+    },
+    "HistoricalMarketReview": {
+      "additionalProperties": false,
+      "properties": {
+        "fallback_gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Fallback Gaps",
+          "type": "array"
+        },
+        "fallback_records": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/SourceFallbackRecord"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Fallback Records"
+        },
+        "interpretation": {
+          "const": "sampled_source_market_not_inferred_fallback_or_placement",
+          "default": "sampled_source_market_not_inferred_fallback_or_placement",
+          "title": "Interpretation",
+          "type": "string"
+        },
+        "points": {
+          "items": {
+            "$ref": "#/$defs/HistoricalMarketCounts"
+          },
+          "title": "Points",
+          "type": "array"
+        },
+        "step_seconds": {
+          "title": "Step Seconds",
+          "type": "integer"
+        },
+        "window_end": {
+          "format": "date-time",
+          "title": "Window End",
+          "type": "string"
+        },
+        "window_start": {
+          "format": "date-time",
+          "title": "Window Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "window_start",
+        "window_end",
+        "step_seconds",
+        "points",
+        "fallback_records",
+        "fallback_gaps"
+      ],
+      "title": "HistoricalMarketReview",
+      "type": "object"
+    },
+    "HistoricalNodeReview": {
+      "additionalProperties": false,
+      "properties": {
+        "capacity_interpretation": {
+          "const": "not_free_movable_or_billed_capacity",
+          "default": "not_free_movable_or_billed_capacity",
+          "title": "Capacity Interpretation",
+          "type": "string"
+        },
+        "cluster_resource_id": {
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "cpu_gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Cpu Gaps",
+          "type": "array"
+        },
+        "cpu_measure": {
+          "const": "rate(node_cpu_usage_seconds_total)",
+          "default": "rate(node_cpu_usage_seconds_total)",
+          "title": "Cpu Measure",
+          "type": "string"
+        },
+        "cpu_p95_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Cpu P95 Mcpu"
+        },
+        "cpu_rate_window_seconds": {
+          "maximum": 3600,
+          "minimum": 1,
+          "title": "Cpu Rate Window Seconds",
+          "type": "integer"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "evidence_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Evidence Digest",
+          "type": "string"
+        },
+        "mapping_reference": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Mapping Reference",
+          "type": "string"
+        },
+        "maximum_source_age_seconds": {
+          "minimum": 1,
+          "title": "Maximum Source Age Seconds",
+          "type": "integer"
+        },
+        "memory_gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Memory Gaps",
+          "type": "array"
+        },
+        "memory_measure": {
+          "const": "node_memory_working_set_bytes",
+          "default": "node_memory_working_set_bytes",
+          "title": "Memory Measure",
+          "type": "string"
+        },
+        "memory_p99_working_set_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Memory P99 Working Set Mib"
+        },
+        "points": {
+          "items": {
+            "$ref": "#/$defs/HistoricalClusterPoint"
+          },
+          "title": "Points",
+          "type": "array"
+        },
+        "profile": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Profile",
+          "type": "string"
+        },
+        "profile_version": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Profile Version",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Source",
+          "type": "string"
+        },
+        "source_admission": {
+          "const": "unverified_saved_contributions",
+          "default": "unverified_saved_contributions",
+          "title": "Source Admission",
+          "type": "string"
+        },
+        "source_version": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Source Version",
+          "type": "string"
+        },
+        "step_seconds": {
+          "maximum": 300,
+          "minimum": 1,
+          "title": "Step Seconds",
+          "type": "integer"
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "window_end": {
+          "format": "date-time",
+          "title": "Window End",
+          "type": "string"
+        },
+        "window_start": {
+          "format": "date-time",
+          "title": "Window Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "source",
+        "source_version",
+        "profile",
+        "profile_version",
+        "mapping_reference",
+        "evidence_digest",
+        "evaluated_at",
+        "maximum_source_age_seconds",
+        "window_start",
+        "window_end",
+        "step_seconds",
+        "cpu_rate_window_seconds",
+        "cpu_p95_mcpu",
+        "memory_p99_working_set_mib",
+        "cpu_gaps",
+        "memory_gaps",
+        "points"
+      ],
+      "title": "HistoricalNodeReview",
+      "type": "object"
+    },
+    "HistoricalPeerUsage": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Cluster Resource Ids",
+          "type": "array"
+        },
+        "cpu_gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Cpu Gaps",
+          "type": "array"
+        },
+        "cpu_p95_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu P95 Mcpu"
+        },
+        "memory_gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Memory Gaps",
+          "type": "array"
+        },
+        "memory_p99_working_set_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory P99 Working Set Mib"
+        },
+        "source_admission": {
+          "const": "unverified_saved_contributions",
+          "default": "unverified_saved_contributions",
+          "title": "Source Admission",
+          "type": "string"
+        },
+        "step_seconds": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Step Seconds"
+        },
+        "window_end": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Window End"
+        },
+        "window_start": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Window Start"
+        }
+      },
+      "required": [
+        "cluster_resource_ids",
+        "cpu_gaps",
+        "memory_gaps"
+      ],
+      "title": "HistoricalPeerUsage",
+      "type": "object"
+    },
+    "MetricWindow": {
+      "additionalProperties": false,
+      "properties": {
+        "coverage_ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Coverage Ratio",
+          "type": "number"
+        },
+        "end": {
+          "format": "date-time",
+          "title": "End",
+          "type": "string"
+        },
+        "sample_count": {
+          "minimum": 0,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "start": {
+          "format": "date-time",
+          "title": "Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "sample_count",
+        "coverage_ratio"
+      ],
+      "title": "MetricWindow",
+      "type": "object"
+    },
+    "SourceCapability": {
+      "additionalProperties": false,
+      "properties": {
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/CapabilityCheck"
+          },
+          "minItems": 1,
+          "title": "Checks",
+          "type": "array"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "baseline",
+            "guarded"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "notice": {
+          "const": "Metric capability is not source attestation or safe-change approval.",
+          "default": "Metric capability is not source attestation or safe-change approval.",
+          "title": "Notice",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "pack_id": {
+          "minLength": 1,
+          "title": "Pack Id",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "source_profile": {
+          "$ref": "#/$defs/SourceDefinition"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown",
+            "unsupported"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pack_id",
+        "mode",
+        "source",
+        "cluster_resource_id",
+        "observed_at",
+        "source_profile",
+        "status",
+        "checks"
+      ],
+      "title": "SourceCapability",
+      "type": "object"
+    },
+    "SourceDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "characterization": {
+          "const": "synthetic",
+          "title": "Characterization",
+          "type": "string"
+        },
+        "characterized_versions": {
+          "additionalProperties": {
+            "items": {
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.]+)?$",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "propertyNames": {
+            "enum": [
+              "prometheus",
+              "kube-state-metrics",
+              "cadvisor",
+              "kubernetes"
+            ]
+          },
+          "title": "Characterized Versions",
+          "type": "object"
+        },
+        "id": {
+          "enum": [
+            "identity-enriched",
+            "cadvisor-ksm"
+          ],
+          "title": "Id",
+          "type": "string"
+        },
+        "identity": {
+          "enum": [
+            "historical",
+            "name-only"
+          ],
+          "title": "Identity",
+          "type": "string"
+        },
+        "joins": {
+          "const": "none",
+          "title": "Joins",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "query_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Query Ids",
+          "type": "array"
+        },
+        "transports": {
+          "items": {
+            "enum": [
+              "prometheus",
+              "azure-managed-prometheus"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Transports",
+          "type": "array"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "identity",
+        "transports",
+        "labels",
+        "query_ids",
+        "characterized_versions",
+        "characterization",
+        "joins",
+        "limitations"
+      ],
+      "title": "SourceDefinition",
+      "type": "object"
+    },
+    "SourceFallbackRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "from_node_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "From Node Uid",
+          "type": "string"
+        },
+        "source_reference": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        },
+        "to_node_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "To Node Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "timestamp",
+        "from_node_uid",
+        "to_node_uid",
+        "source_reference"
+      ],
+      "title": "SourceFallbackRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "blocked_reason_counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Blocked Reason Counts",
+      "type": "object"
+    },
+    "category_counts": {
+      "additionalProperties": {
+        "minimum": 0,
+        "type": "integer"
+      },
+      "title": "Category Counts",
+      "type": "object"
+    },
+    "clusters": {
+      "items": {
+        "$ref": "#/$defs/FleetClusterInsight"
+      },
+      "maxItems": 1000,
+      "minItems": 2,
+      "title": "Clusters",
+      "type": "array"
+    },
+    "comparability_reasons": {
+      "items": {
+        "enum": [
+          "observation_windows_differ",
+          "analysis_modes_differ",
+          "pack_definitions_differ",
+          "configurations_differ"
+        ],
+        "type": "string"
+      },
+      "title": "Comparability Reasons",
+      "type": "array"
+    },
+    "comparable": {
+      "title": "Comparable",
+      "type": "boolean"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "peer_groups": {
+      "items": {
+        "$ref": "#/$defs/FleetPeerGroupInsight"
+      },
+      "title": "Peer Groups",
+      "type": "array"
+    },
+    "rule_counts": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Rule Counts",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "summary": {
+      "$ref": "#/$defs/FleetInsightSummary"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "generated_at",
+    "comparable",
+    "comparability_reasons",
+    "summary",
+    "clusters",
+    "rule_counts",
+    "blocked_reason_counts",
+    "category_counts",
+    "peer_groups"
+  ],
+  "title": "FleetInsightReport",
+  "type": "object"
+}

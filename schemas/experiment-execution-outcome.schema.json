@@ -1,0 +1,147 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "after_assessment_digest": {
+      "anyOf": [
+        {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "After Assessment Digest"
+    },
+    "basis": {
+      "const": "operator-declared-experiment-outcome",
+      "default": "operator-declared-experiment-outcome",
+      "title": "Basis",
+      "type": "string"
+    },
+    "before_assessment_digest": {
+      "anyOf": [
+        {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Before Assessment Digest"
+    },
+    "cluster_resource_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "dimension": {
+      "enum": [
+        "cpu_request",
+        "memory_request",
+        "memory_limit",
+        "replica_floor",
+        "controller_configuration",
+        "evidence_only"
+      ],
+      "title": "Dimension",
+      "type": "string"
+    },
+    "evidence_references": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "maxItems": 32,
+      "title": "Evidence References",
+      "type": "array"
+    },
+    "execution_authority": {
+      "const": "none",
+      "default": "none",
+      "title": "Execution Authority",
+      "type": "string"
+    },
+    "execution_reference": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Execution Reference",
+      "type": "string"
+    },
+    "experiment_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Experiment Digest",
+      "type": "string"
+    },
+    "finding_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Finding Id",
+      "type": "string"
+    },
+    "notice": {
+      "const": "Operator-declared outcome and references only; not proof of execution, approval, service safety, finding resolution, capacity release or financial value.",
+      "default": "Operator-declared outcome and references only; not proof of execution, approval, service safety, finding resolution, capacity release or financial value.",
+      "title": "Notice",
+      "type": "string"
+    },
+    "outcome": {
+      "enum": [
+        "completed",
+        "aborted",
+        "rolled_back",
+        "inconclusive",
+        "not_executed"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "recorded_at": {
+      "format": "date-time",
+      "title": "Recorded At",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "state": {
+      "const": "operator_declared",
+      "default": "operator_declared",
+      "title": "State",
+      "type": "string"
+    },
+    "tenant_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "experiment_digest",
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "finding_id",
+    "dimension",
+    "recorded_at",
+    "outcome",
+    "execution_reference"
+  ],
+  "title": "ExperimentExecutionOutcome",
+  "type": "object"
+}

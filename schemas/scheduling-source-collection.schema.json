@@ -1,0 +1,1039 @@
+{
+  "$defs": {
+    "CollectionError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "unauthorized",
+            "forbidden",
+            "timeout",
+            "throttled",
+            "unavailable",
+            "invalid-response",
+            "response-budget-exceeded",
+            "identity-mismatch"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "code"
+      ],
+      "title": "CollectionError",
+      "type": "object"
+    },
+    "CollectionStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "title": "CollectionStatus",
+      "type": "string"
+    },
+    "CollectorResult": {
+      "additionalProperties": false,
+      "properties": {
+        "collector": {
+          "minLength": 1,
+          "title": "Collector",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "completed_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Completed Scope",
+          "type": "array"
+        },
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/CollectionError"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "pagination_complete": {
+          "default": false,
+          "title": "Pagination Complete",
+          "type": "boolean"
+        },
+        "requested_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requested Scope",
+          "type": "array"
+        },
+        "retry_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Retry Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Observed At"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CollectionStatus"
+        }
+      },
+      "required": [
+        "collector",
+        "status",
+        "requested_scope",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "CollectorResult",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "KubernetesMetadataSnapshot": {
+      "additionalProperties": false,
+      "properties": {
+        "api_availability": {
+          "additionalProperties": {
+            "enum": [
+              "available",
+              "absent",
+              "unsupported"
+            ],
+            "type": "string"
+          },
+          "title": "Api Availability",
+          "type": "object"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cluster Uid"
+        },
+        "collection": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/KubernetesNodeIdentity"
+          },
+          "title": "Nodes",
+          "type": "array"
+        },
+        "resource_versions": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Resource Versions",
+          "type": "object"
+        },
+        "resources": {
+          "items": {
+            "$ref": "#/$defs/KubernetesObjectMetadata"
+          },
+          "title": "Resources",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source": {
+          "const": "kubernetes-metadata",
+          "default": "kubernetes-metadata",
+          "title": "Source",
+          "type": "string"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "workload_bindings": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "title": "Workload Bindings",
+          "type": "object"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "generated_at",
+        "collection",
+        "api_availability",
+        "resources"
+      ],
+      "title": "KubernetesMetadataSnapshot",
+      "type": "object"
+    },
+    "KubernetesNodeIdentity": {
+      "additionalProperties": false,
+      "properties": {
+        "azure_resource_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Azure Resource Id"
+        },
+        "node_pool_resource_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Node Pool Resource Id"
+        },
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "provider_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Provider Id"
+        },
+        "state": {
+          "enum": [
+            "matched",
+            "unknown",
+            "mismatch"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "node_uid",
+        "state"
+      ],
+      "title": "KubernetesNodeIdentity",
+      "type": "object"
+    },
+    "KubernetesObjectMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "api_version": {
+          "minLength": 1,
+          "title": "Api Version",
+          "type": "string"
+        },
+        "attributes": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Attributes",
+          "type": "object"
+        },
+        "kind": {
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "object"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "namespace": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace"
+        },
+        "owner_references": {
+          "items": {
+            "additionalProperties": {
+              "$ref": "#/$defs/JsonValue"
+            },
+            "type": "object"
+          },
+          "title": "Owner References",
+          "type": "array"
+        },
+        "spec": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Spec",
+          "type": "object"
+        },
+        "status": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonValue"
+          },
+          "title": "Status",
+          "type": "object"
+        },
+        "uid": {
+          "minLength": 1,
+          "title": "Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "api_version",
+        "kind",
+        "name",
+        "uid"
+      ],
+      "title": "KubernetesObjectMetadata",
+      "type": "object"
+    },
+    "NodeReservationAudit": {
+      "additionalProperties": false,
+      "properties": {
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "node_name": {
+          "minLength": 1,
+          "title": "Node Name",
+          "type": "string"
+        },
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "observed_cpu_request_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Cpu Request Mcpu"
+        },
+        "observed_memory_request_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Memory Request Mib"
+        },
+        "observed_nonterminal_pod_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Nonterminal Pod Count"
+        },
+        "pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Pod Uids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "node_uid",
+        "node_name",
+        "pod_uids"
+      ],
+      "title": "NodeReservationAudit",
+      "type": "object"
+    },
+    "ObjectDisruptionProtection": {
+      "additionalProperties": false,
+      "properties": {
+        "effectiveness": {
+          "const": "unknown",
+          "default": "unknown",
+          "title": "Effectiveness",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "Pod",
+            "Node"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "true",
+            "false",
+            "absent",
+            "unknown"
+          ],
+          "title": "State",
+          "type": "string"
+        },
+        "uid": {
+          "minLength": 1,
+          "title": "Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "uid",
+        "state"
+      ],
+      "title": "ObjectDisruptionProtection",
+      "type": "object"
+    },
+    "SchedulingCompletenessAudit": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "const": "sanitized-metadata-reservation-audit",
+          "default": "sanitized-metadata-reservation-audit",
+          "title": "Basis",
+          "type": "string"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "minLength": 1,
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "collection": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "fit_status": {
+          "const": "blocked",
+          "default": "blocked",
+          "title": "Fit Status",
+          "type": "string"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "maximum_source_age_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Maximum Source Age Seconds",
+          "type": "integer"
+        },
+        "metadata_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Metadata Digest",
+          "type": "string"
+        },
+        "metadata_generated_at": {
+          "format": "date-time",
+          "title": "Metadata Generated At",
+          "type": "string"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/NodeReservationAudit"
+          },
+          "title": "Nodes",
+          "type": "array"
+        },
+        "pending_pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Pending Pod Uids",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "terminal_pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Terminal Pod Uids",
+          "type": "array"
+        },
+        "unobserved_dimensions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unobserved Dimensions",
+          "type": "array"
+        },
+        "unresolved_assignment_pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unresolved Assignment Pod Uids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "metadata_digest",
+        "metadata_generated_at",
+        "evaluated_at",
+        "maximum_source_age_seconds",
+        "collection",
+        "nodes",
+        "pending_pod_uids",
+        "unresolved_assignment_pod_uids",
+        "terminal_pod_uids",
+        "issues"
+      ],
+      "title": "SchedulingCompletenessAudit",
+      "type": "object"
+    },
+    "SchedulingListObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "failed_attempts": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Failed Attempts",
+          "type": "integer"
+        },
+        "observed_objects": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Observed Objects",
+          "type": "integer"
+        },
+        "pagination_complete": {
+          "default": false,
+          "title": "Pagination Complete",
+          "type": "boolean"
+        },
+        "resource": {
+          "enum": [
+            "v1/namespaces",
+            "v1/nodes",
+            "v1/pods"
+          ],
+          "title": "Resource",
+          "type": "string"
+        },
+        "resource_version": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resource Version"
+        },
+        "source_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Observed At"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "successful_pages": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Successful Pages",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "resource",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "SchedulingListObservation",
+      "type": "object"
+    },
+    "SchedulingNodeShape": {
+      "additionalProperties": false,
+      "properties": {
+        "allocatable_pod_slots": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Allocatable Pod Slots"
+        },
+        "architecture": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Architecture"
+        },
+        "conditions": {
+          "additionalProperties": {
+            "enum": [
+              "True",
+              "False",
+              "Unknown"
+            ],
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "Ready",
+              "MemoryPressure",
+              "DiskPressure",
+              "PIDPressure",
+              "NetworkUnavailable"
+            ]
+          },
+          "title": "Conditions",
+          "type": "object"
+        },
+        "features": {
+          "additionalProperties": {
+            "enum": [
+              "present",
+              "absent",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "host_network",
+              "host_ports",
+              "volumes",
+              "resource_claims",
+              "scheduling_gates",
+              "node_selector",
+              "affinity",
+              "topology_spread",
+              "tolerations",
+              "priority_class",
+              "runtime_class",
+              "pod_resource_budget",
+              "init_containers",
+              "pod_overhead",
+              "extended_resources",
+              "hugepages",
+              "ephemeral_storage",
+              "taints",
+              "cordoned"
+            ]
+          },
+          "title": "Features",
+          "type": "object"
+        },
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "os_name": {
+          "enum": [
+            "linux",
+            "windows",
+            "unknown"
+          ],
+          "title": "Os Name",
+          "type": "string"
+        },
+        "resource_version": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Version"
+        }
+      },
+      "required": [
+        "node_uid",
+        "resource_version",
+        "os_name",
+        "architecture",
+        "allocatable_pod_slots",
+        "features",
+        "conditions"
+      ],
+      "title": "SchedulingNodeShape",
+      "type": "object"
+    },
+    "SchedulingObjectObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "approved_projection_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Approved Projection Digest",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "Pod",
+            "Node"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "protection": {
+          "$ref": "#/$defs/ObjectDisruptionProtection"
+        },
+        "shape": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SchedulingPodShape"
+            },
+            {
+              "$ref": "#/$defs/SchedulingNodeShape"
+            }
+          ],
+          "title": "Shape"
+        },
+        "uid": {
+          "minLength": 1,
+          "title": "Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "uid",
+        "approved_projection_digest",
+        "shape",
+        "protection"
+      ],
+      "title": "SchedulingObjectObservation",
+      "type": "object"
+    },
+    "SchedulingPodShape": {
+      "additionalProperties": false,
+      "properties": {
+        "features": {
+          "additionalProperties": {
+            "enum": [
+              "present",
+              "absent",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "host_network",
+              "host_ports",
+              "volumes",
+              "resource_claims",
+              "scheduling_gates",
+              "node_selector",
+              "affinity",
+              "topology_spread",
+              "tolerations",
+              "priority_class",
+              "runtime_class",
+              "pod_resource_budget",
+              "init_containers",
+              "pod_overhead",
+              "extended_resources",
+              "hugepages",
+              "ephemeral_storage",
+              "taints",
+              "cordoned"
+            ]
+          },
+          "title": "Features",
+          "type": "object"
+        },
+        "os_name": {
+          "enum": [
+            "linux",
+            "windows",
+            "unknown"
+          ],
+          "title": "Os Name",
+          "type": "string"
+        },
+        "pod_uid": {
+          "minLength": 1,
+          "title": "Pod Uid",
+          "type": "string"
+        },
+        "resource_version": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Version"
+        },
+        "scheduler_name": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Scheduler Name"
+        }
+      },
+      "required": [
+        "pod_uid",
+        "resource_version",
+        "os_name",
+        "scheduler_name",
+        "features"
+      ],
+      "title": "SchedulingPodShape",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "audit": {
+      "$ref": "#/$defs/SchedulingCompletenessAudit"
+    },
+    "execution_binding": {
+      "const": "executed_injected_reader_unverified_source",
+      "default": "executed_injected_reader_unverified_source",
+      "title": "Execution Binding",
+      "type": "string"
+    },
+    "fit_status": {
+      "const": "blocked",
+      "default": "blocked",
+      "title": "Fit Status",
+      "type": "string"
+    },
+    "lists": {
+      "items": {
+        "$ref": "#/$defs/SchedulingListObservation"
+      },
+      "maxItems": 3,
+      "title": "Lists",
+      "type": "array"
+    },
+    "mapping_reference": {
+      "const": "kubernetes-core-v1@v1.36.0",
+      "default": "kubernetes-core-v1@v1.36.0",
+      "title": "Mapping Reference",
+      "type": "string"
+    },
+    "metadata": {
+      "$ref": "#/$defs/KubernetesMetadataSnapshot"
+    },
+    "observations": {
+      "items": {
+        "$ref": "#/$defs/SchedulingObjectObservation"
+      },
+      "maxItems": 100000,
+      "title": "Observations",
+      "type": "array"
+    },
+    "producer_version": {
+      "const": "1.0.0",
+      "default": "1.0.0",
+      "title": "Producer Version",
+      "type": "string"
+    },
+    "protection_annotation_key": {
+      "const": "karpenter.sh/do-not-disrupt",
+      "default": "karpenter.sh/do-not-disrupt",
+      "title": "Protection Annotation Key",
+      "type": "string"
+    },
+    "scheduler_admission": {
+      "const": "unverified",
+      "default": "unverified",
+      "title": "Scheduler Admission",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "metadata",
+    "audit",
+    "observations",
+    "lists"
+  ],
+  "title": "SchedulingSourceCollection",
+  "type": "object"
+}

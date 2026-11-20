@@ -1,0 +1,373 @@
+{
+  "$defs": {
+    "SchedulingNecessaryFitProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "custom_plugins_or_extenders": {
+          "const": "unsupported",
+          "default": "unsupported",
+          "title": "Custom Plugins Or Extenders",
+          "type": "string"
+        },
+        "kubernetes_minor": {
+          "const": "1.36",
+          "default": "1.36",
+          "title": "Kubernetes Minor",
+          "type": "string"
+        },
+        "mapping_reference": {
+          "const": "kubernetes-core-v1@v1.36.0",
+          "default": "kubernetes-core-v1@v1.36.0",
+          "title": "Mapping Reference",
+          "type": "string"
+        },
+        "pod_os": {
+          "const": "linux",
+          "default": "linux",
+          "title": "Pod Os",
+          "type": "string"
+        },
+        "preemption": {
+          "const": "unsupported",
+          "default": "unsupported",
+          "title": "Preemption",
+          "type": "string"
+        },
+        "profile_id": {
+          "const": "kubernetes-1.36-linux-default-scheduler",
+          "default": "kubernetes-1.36-linux-default-scheduler",
+          "title": "Profile Id",
+          "type": "string"
+        },
+        "scheduler_name": {
+          "const": "default-scheduler",
+          "default": "default-scheduler",
+          "title": "Scheduler Name",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "simultaneous_placement": {
+          "const": "unsupported",
+          "default": "unsupported",
+          "title": "Simultaneous Placement",
+          "type": "string"
+        },
+        "supported_constraints": {
+          "default": [
+            "cpu",
+            "memory",
+            "pod_slots",
+            "required_node_selector",
+            "required_node_affinity",
+            "hard_taints",
+            "cordon",
+            "mandatory_node_conditions",
+            "daemonset_reservations",
+            "bound_volume_topology",
+            "csi_attachment_limits",
+            "nap_node_requirements"
+          ],
+          "maxItems": 12,
+          "minItems": 12,
+          "prefixItems": [
+            {
+              "const": "cpu",
+              "type": "string"
+            },
+            {
+              "const": "memory",
+              "type": "string"
+            },
+            {
+              "const": "pod_slots",
+              "type": "string"
+            },
+            {
+              "const": "required_node_selector",
+              "type": "string"
+            },
+            {
+              "const": "required_node_affinity",
+              "type": "string"
+            },
+            {
+              "const": "hard_taints",
+              "type": "string"
+            },
+            {
+              "const": "cordon",
+              "type": "string"
+            },
+            {
+              "const": "mandatory_node_conditions",
+              "type": "string"
+            },
+            {
+              "const": "daemonset_reservations",
+              "type": "string"
+            },
+            {
+              "const": "bound_volume_topology",
+              "type": "string"
+            },
+            {
+              "const": "csi_attachment_limits",
+              "type": "string"
+            },
+            {
+              "const": "nap_node_requirements",
+              "type": "string"
+            }
+          ],
+          "title": "Supported Constraints",
+          "type": "array"
+        }
+      },
+      "title": "SchedulingNecessaryFitProfile",
+      "type": "object"
+    },
+    "SchedulingResourceComparison": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_available_mcpu": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Available Mcpu"
+        },
+        "cpu_required_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Required Mcpu"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "memory_available_mib": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Available Mib"
+        },
+        "memory_required_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Required Mib"
+        },
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "pod_slots_available": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod Slots Available"
+        },
+        "pod_slots_required": {
+          "const": 1,
+          "default": 1,
+          "title": "Pod Slots Required",
+          "type": "integer"
+        },
+        "pod_uid": {
+          "minLength": 1,
+          "title": "Pod Uid",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "satisfied",
+            "unsatisfied",
+            "blocked"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pod_uid",
+        "node_uid",
+        "status",
+        "issues"
+      ],
+      "title": "SchedulingResourceComparison",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "basis": {
+      "const": "necessary-fit-review",
+      "default": "necessary-fit-review",
+      "title": "Basis",
+      "type": "string"
+    },
+    "calculation_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Calculation Digest",
+      "type": "string"
+    },
+    "cluster_resource_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "evaluated_at": {
+      "format": "date-time",
+      "title": "Evaluated At",
+      "type": "string"
+    },
+    "notice": {
+      "const": "Resource comparisons only; source and scheduler admission remain blocked. No simultaneous placement, disruption feasibility, a removable-node result, approval or savings.",
+      "default": "Resource comparisons only; source and scheduler admission remain blocked. No simultaneous placement, disruption feasibility, a removable-node result, approval or savings.",
+      "title": "Notice",
+      "type": "string"
+    },
+    "pairs": {
+      "items": {
+        "$ref": "#/$defs/SchedulingResourceComparison"
+      },
+      "maxItems": 100000,
+      "minItems": 1,
+      "title": "Pairs",
+      "type": "array"
+    },
+    "profile": {
+      "$ref": "#/$defs/SchedulingNecessaryFitProfile"
+    },
+    "profile_admission": {
+      "const": "blocked",
+      "default": "blocked",
+      "title": "Profile Admission",
+      "type": "string"
+    },
+    "profile_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Profile Digest",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "maxItems": 64,
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "removable_nodes": {
+      "const": "not_calculated",
+      "default": "not_calculated",
+      "title": "Removable Nodes",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "simultaneous_placement": {
+      "const": "not_calculated",
+      "default": "not_calculated",
+      "title": "Simultaneous Placement",
+      "type": "string"
+    },
+    "source_admission": {
+      "const": "blocked",
+      "default": "blocked",
+      "title": "Source Admission",
+      "type": "string"
+    },
+    "source_collection_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Source Collection Digest",
+      "type": "string"
+    },
+    "source_observed_at": {
+      "format": "date-time",
+      "title": "Source Observed At",
+      "type": "string"
+    },
+    "status": {
+      "const": "blocked",
+      "default": "blocked",
+      "title": "Status",
+      "type": "string"
+    },
+    "tenant_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "evaluated_at",
+    "source_observed_at",
+    "profile",
+    "profile_digest",
+    "source_collection_digest",
+    "calculation_digest",
+    "pairs"
+  ],
+  "title": "SchedulingNecessaryFitReview",
+  "type": "object"
+}

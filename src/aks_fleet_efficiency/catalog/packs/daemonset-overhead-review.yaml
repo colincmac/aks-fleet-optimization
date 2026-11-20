@@ -1,0 +1,44 @@
+schema_version: '1.0'
+id: AKS-NP-004
+version: 1.0.0
+family: node-pool
+evaluator: daemonset-overhead-review
+evidence_kind: inventory
+title: Review DaemonSet overhead across current node shapes
+purpose: Compare the same DaemonSet's identical effective admitted CPU and memory requests against current allocatable capacity on different observed nodes.
+sources: []
+parameters: {}
+queries:
+  baseline: {}
+  guarded: {}
+required_evidence:
+  baseline:
+  - Fresh complete scoped inventory with exact cluster fingerprint, Namespace, DaemonSet, Pod and current Node identities
+  - Versioned Pod, Node, Namespace and DaemonSet lists with explicit admitted requests, init containers, Pod overhead and positive node allocatable CPU/memory
+  guarded:
+  - Fresh complete scoped inventory with exact cluster fingerprint, Namespace, DaemonSet, Pod and current Node identities
+  - Versioned Pod, Node, Namespace and DaemonSet lists with explicit admitted requests, init containers, Pod overhead and positive node allocatable CPU/memory
+limitations:
+- Values describe current effective requests including init and restartable-sidecar ordering, not usage, readiness, free capacity or historical membership.
+- Only observed assigned nonterminal DaemonSet Pods are compared; unassigned or unresolved Pods remain evidence gaps and no missing Pod is synthesized.
+- Mixed admitted requests, duplicate Pods on a node, unknown lifecycle/resource accounting and missing node capacity block that DaemonSet's comparison.
+- Different percentages are owner-review context without a universal materiality threshold or safe per-node request target.
+- Desired and ready controller counts are independently retained review context with unverified generation binding; count agreement or differences do not establish desired Node membership, missing Pod placement or disruption feasibility.
+- No NodePool eligibility, GPU/extended-resource fit, storage, packing, replacement, removable-node or savings claim is made.
+prerequisites:
+- Confirm the DaemonSet owner and whether heterogeneous nodes need distinct resource policies using approved tooling.
+risks:
+- Current requests may protect initialization, restartable sidecars or failure scenarios; lower percentages do not authorize a reduction.
+validation:
+- Recheck exact Pod/controller/node identities and admitted requests, init ordering, Pod overhead and allocatable capacity.
+- Review controller desired/ready status separately from complete current owned-Pod and Node counts; unknown status does not invalidate independent observed request shares.
+- Review node-specific demand, startup and reliability evidence independently before any separately approved sizing experiment.
+rollback:
+- No change is proposed. Preserve exact original DaemonSet settings for rollback of any separately approved experiment.
+actions:
+  baseline:
+  - Review observed request-share differences with the DaemonSet and platform owners; do not generate or apply node-specific sizing.
+  guarded:
+  - Review observed request-share differences; guarded mode does not authorize sizing, admission annotations or node changes.
+baseline_summary: Identical admitted DaemonSet requests occupy different fractions of current node allocatable capacity. This is owner-review context, not a universal target, usage measurement, placement claim or savings.
+guarded_summary: Identical admitted DaemonSet requests occupy different fractions of current node allocatable capacity. Guarded mode does not authorize sizing, admission annotations, placement or node removal.

@@ -1,0 +1,142 @@
+{
+  "uid": "aks-advisor-cluster-efficiency",
+  "title": "AKS Advisor: cluster efficiency",
+  "description": "Azure Monitor managed Prometheus. Live observed series, not advisor assessment evidence.",
+  "schemaVersion": 39,
+  "version": 3,
+  "time": { "from": "now-6h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "label": "Data source",
+        "type": "datasource",
+        "query": "prometheus",
+        "current": { "text": "default", "value": "default" },
+        "includeAll": false,
+        "multi": false,
+        "refresh": 1
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "label": "cluster",
+        "name": "cluster",
+        "options": [],
+        "query": "label_values(up{job=\"cadvisor\"}, cluster)",
+        "refresh": 2,
+        "regexApplyTo": "value",
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "name": "namespace",
+        "label": "Namespace",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${datasource}" },
+        "query": "label_values(kube_pod_info{job=\"kube-state-metrics\",cluster=\"$cluster\",cluster!=\"\",namespace!=\"\"}, namespace)",
+        "refresh": 2,
+        "sort": 1
+      },
+      {
+        "name": "pod",
+        "label": "Pod",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${datasource}" },
+        "query": "label_values(kube_pod_info{job=\"kube-state-metrics\",cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",pod!=\"\"}, pod)",
+        "refresh": 2,
+        "sort": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "Read before comparing",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 4 },
+      "options": {
+        "mode": "markdown",
+        "content": "**Setup:** Select the **Data source** used by the built-in Azure Kubernetes compute dashboard, then select an approved **cluster** alias. Select **Namespace** and **Pod** for the trends below the cluster panels. Missing selections and series are unknown. Requests are reported regular-container gauges, not effective Pod reservations. Observed cAdvisor usage excludes host and Windows metrics and can undercount when scrapes are missing. Pod names can be reused; these charts are not workload-UID history, capacity available to remove, or savings."
+      }
+    },
+    {
+        "id": 4,
+        "type": "timeseries",
+        "title": "Namespace CPU",
+        "gridPos": { "x": 0, "y": 14, "w": 12, "h": 9 },
+        "datasource": { "type": "prometheus", "uid": "${datasource}" },
+        "fieldConfig": { "defaults": { "unit": "suffix: cores", "custom": { "spanNulls": false } } },
+        "targets": [
+          { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Container requests", "expr": "sum(kube_pod_container_resource_requests{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",resource=\"cpu\",unit=\"core\"})", "interval": "1m" },
+          { "refId": "B", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Observed cAdvisor usage", "expr": "sum(rate(container_cpu_usage_seconds_total{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",pod!=\"\",container!=\"\",container!=\"POD\"}[5m]))", "interval": "1m" }
+        ]
+      },
+      {
+        "id": 5,
+        "type": "timeseries",
+        "title": "Namespace memory",
+        "gridPos": { "x": 12, "y": 14, "w": 12, "h": 9 },
+        "datasource": { "type": "prometheus", "uid": "${datasource}" },
+        "fieldConfig": { "defaults": { "unit": "bytes", "custom": { "spanNulls": false } } },
+        "targets": [
+          { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Container requests", "expr": "sum(kube_pod_container_resource_requests{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",resource=\"memory\",unit=\"byte\"})", "interval": "1m" },
+          { "refId": "B", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Observed working set", "expr": "sum(container_memory_working_set_bytes{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",pod!=\"\",container!=\"\",container!=\"POD\"})", "interval": "1m" }
+        ]
+      },
+      {
+        "id": 6,
+        "type": "timeseries",
+        "title": "Pod CPU",
+        "gridPos": { "x": 0, "y": 23, "w": 12, "h": 9 },
+        "datasource": { "type": "prometheus", "uid": "${datasource}" },
+        "fieldConfig": { "defaults": { "unit": "suffix: cores", "custom": { "spanNulls": false } } },
+        "targets": [
+          { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Container requests", "expr": "sum(kube_pod_container_resource_requests{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",pod=\"$pod\",pod!=\"\",resource=\"cpu\",unit=\"core\"})", "interval": "1m" },
+          { "refId": "B", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Observed cAdvisor usage", "expr": "sum(rate(container_cpu_usage_seconds_total{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",pod=\"$pod\",pod!=\"\",container!=\"\",container!=\"POD\"}[5m]))", "interval": "1m" }
+        ]
+      },
+      {
+        "id": 7,
+        "type": "timeseries",
+        "title": "Pod memory",
+        "gridPos": { "x": 12, "y": 23, "w": 12, "h": 9 },
+        "datasource": { "type": "prometheus", "uid": "${datasource}" },
+        "fieldConfig": { "defaults": { "unit": "bytes", "custom": { "spanNulls": false } } },
+        "targets": [
+          { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Container requests", "expr": "sum(kube_pod_container_resource_requests{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",pod=\"$pod\",pod!=\"\",resource=\"memory\",unit=\"byte\"})", "interval": "1m" },
+          { "refId": "B", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Observed working set", "expr": "sum(container_memory_working_set_bytes{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",pod=\"$pod\",pod!=\"\",container!=\"\",container!=\"POD\"})", "interval": "1m" }
+        ]
+      },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "CPU",
+      "gridPos": { "x": 0, "y": 4, "w": 12, "h": 10 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": { "defaults": { "unit": "suffix: cores", "custom": { "spanNulls": false } } },
+      "targets": [
+        { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Node capacity", "expr": "sum(kube_node_status_capacity{cluster=\"$cluster\",cluster!=\"\",resource=\"cpu\",unit=\"core\"})", "interval": "1m" },
+        { "refId": "B", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Node allocatable", "expr": "sum(kube_node_status_allocatable{cluster=\"$cluster\",cluster!=\"\",resource=\"cpu\",unit=\"core\"})", "interval": "1m" },
+        { "refId": "C", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Container requests", "expr": "sum(kube_pod_container_resource_requests{cluster=\"$cluster\",cluster!=\"\",resource=\"cpu\",unit=\"core\"})", "interval": "1m" },
+        { "refId": "D", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Observed cAdvisor usage", "expr": "sum(rate(container_cpu_usage_seconds_total{cluster=\"$cluster\",cluster!=\"\",namespace!=\"\",pod!=\"\",container!=\"\",container!=\"POD\"}[5m]))", "interval": "1m" }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Memory",
+      "gridPos": { "x": 12, "y": 4, "w": 12, "h": 10 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": { "defaults": { "unit": "bytes", "custom": { "spanNulls": false } } },
+      "targets": [
+        { "refId": "A", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Node capacity", "expr": "sum(kube_node_status_capacity{cluster=\"$cluster\",cluster!=\"\",resource=\"memory\",unit=\"byte\"})", "interval": "1m" },
+        { "refId": "B", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Node allocatable", "expr": "sum(kube_node_status_allocatable{cluster=\"$cluster\",cluster!=\"\",resource=\"memory\",unit=\"byte\"})", "interval": "1m" },
+        { "refId": "C", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Container requests", "expr": "sum(kube_pod_container_resource_requests{cluster=\"$cluster\",cluster!=\"\",resource=\"memory\",unit=\"byte\"})", "interval": "1m" },
+        { "refId": "D", "datasource": { "type": "prometheus", "uid": "${datasource}" }, "editorMode": "code", "range": true, "legendFormat": "Observed working set", "expr": "sum(container_memory_working_set_bytes{cluster=\"$cluster\",cluster!=\"\",namespace!=\"\",pod!=\"\",container!=\"\",container!=\"POD\"})", "interval": "1m" }
+      ]
+    }
+  ]
+}

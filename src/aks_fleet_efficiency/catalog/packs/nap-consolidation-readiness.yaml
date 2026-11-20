@@ -1,0 +1,52 @@
+schema_version: '1.0'
+id: AKS-NP-003
+version: 1.0.0
+family: node-pool
+evaluator: nap-consolidation-readiness
+evidence_kind: inventory
+title: Review current NAP consolidation blockers
+purpose: Correlate exact current NAP NodePool disruption policy with observed placement, ownership, local-storage and namespace PDB context before a separate consolidation investigation.
+sources: []
+parameters: {}
+queries:
+  baseline: {}
+  guarded: {}
+required_evidence:
+  baseline:
+  - Complete fresh exact-scoped Azure and Kubernetes inventory with a verified cluster fingerprint
+  - Exact NodePool/node-class identity, disruption policy and sanitized current scheduling/PDB context
+  guarded:
+  - Complete fresh exact-scoped Azure and Kubernetes inventory with a verified cluster fingerprint
+  - Exact NodePool/node-class identity, disruption policy and sanitized current scheduling/PDB context
+limitations:
+- Pod constraints are scoped only through exact current Pod-to-Node-to-provider/UID-bound NodeClaim-to-NodePool membership; they do not prove eligibility for another pool.
+- Namespace PDB context is limited to namespaces of attributed Pods and remains unmatched; unknown attribution is a separate gap beside independently observed policy facts.
+- Static-pool effectiveness and disruption-budget reason/schedule semantics are not calculated; literal settings are configuration facts, not an active-disruption simulation.
+- Literal zone requirements, retained minValues and zone labels on exact current NodeClaim-bound Nodes are descriptive only; they do not establish eligible domains, minimum diversity effectiveness, zone availability or replacement feasibility.
+- Missing PDB status remains unknown; an unavailable PDB list produces an independent gap and unknown counts without erasing observed NodePool policy blockers.
+- Invalid static replica evidence blocks only the affected NodePool; shared inventory and identity failures remain cluster-scoped.
+- Unknown NAP APIs are not applicable by default; unavailable NodePool inventory blocks only when Auto mode, a NAP pool or UID/provider-bound NAP supply is observed.
+- NodePool policy and current Pod/PDB facts do not establish packing feasibility, disruption feasibility or a removable node.
+- Namespace PDBs are not matched to Pods because arbitrary labels are excluded; zero disruptions is point-in-time context only.
+- DaemonSet presence is retained but its per-node resource overhead is not calculated by this pack.
+- Do-not-disrupt annotations, volume/CSI binding, application quorum, pending shapes and eligible replacement capacity are not collected here.
+prerequisites:
+- Review each blocker with workload, storage and platform owners using approved current Kubernetes and AKS tooling.
+- Obtain separate pending-shape, DaemonSet overhead, PDB selector, replacement-capacity and failure-domain evidence before any consolidation feasibility claim.
+risks:
+- Treating current policy or aggregate free capacity as removal feasibility can violate availability, storage, topology or specialized-compute requirements.
+- Voluntary disruption settings do not cover every expiry, interruption or involuntary failure path.
+validation:
+- Confirm exact NodePool/node-class identities, current disruption policy and all excluded or unknown blocker classes.
+- Review declared zone requirements separately from current bound-Node zone labels; missing labels, partial requirements and unresolved membership are unknown, not zero available zones.
+- Match actual PDB selectors and storage/topology constraints outside this report before any separately approved disruption test.
+- Validate DaemonSet overhead, pending Pod shapes, replacement capacity and owner availability requirements independently.
+rollback:
+- No change is proposed. Any later owner-approved experiment must preserve the original NodePool and workload policies for immediate restoration.
+actions:
+  baseline:
+  - Investigate current consolidation blockers; do not drain, replace or remove nodes from this report.
+  guarded:
+  - Investigate current consolidation blockers; guarded mode does not authorize disruption or a NodePool change.
+baseline_summary: Observed current NodePool and scheduling facts may block consolidation. This is not packing or disruption feasibility, a removable-node claim, a replacement plan or savings.
+guarded_summary: Observed current NodePool and scheduling facts may block consolidation. Guarded mode does not authorize disruption, removal, replacement or a NodePool change.

@@ -1,0 +1,292 @@
+{
+  "$defs": {
+    "EngineeringCpuObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "available_replicas": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Available Replicas"
+        },
+        "configuration_revision": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configuration Revision"
+        },
+        "configuration_without_cpu_request": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Configuration Without Cpu Request"
+        },
+        "cpu_request_mcpu": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Request Mcpu"
+        },
+        "pending_pods": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pending Pods"
+        },
+        "ready_replicas": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ready Replicas"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id"
+      ],
+      "title": "EngineeringCpuObservation",
+      "type": "object"
+    },
+    "EngineeringWindowObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "coverage_complete": {
+          "title": "Coverage Complete",
+          "type": "boolean"
+        },
+        "observation_ref": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Observation Ref",
+          "type": "string"
+        },
+        "request_count": {
+          "anyOf": [
+            {
+              "maximum": 1000000000000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Request Count"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Source",
+          "type": "string"
+        },
+        "success_count": {
+          "anyOf": [
+            {
+              "maximum": 1000000000000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Success Count"
+        },
+        "window_end": {
+          "format": "date-time",
+          "title": "Window End",
+          "type": "string"
+        },
+        "window_start": {
+          "format": "date-time",
+          "title": "Window Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "window_start",
+        "window_end",
+        "source",
+        "observation_ref",
+        "coverage_complete"
+      ],
+      "title": "EngineeringWindowObservation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "after": {
+      "$ref": "#/$defs/EngineeringCpuObservation"
+    },
+    "after_service": {
+      "$ref": "#/$defs/EngineeringWindowObservation"
+    },
+    "before": {
+      "$ref": "#/$defs/EngineeringCpuObservation"
+    },
+    "before_service": {
+      "$ref": "#/$defs/EngineeringWindowObservation"
+    },
+    "cluster_resource_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "container": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Container",
+      "type": "string"
+    },
+    "maximum_demand_change_ratio": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "decimal_places": 12,
+      "ge": 0,
+      "le": 1,
+      "max_digits": 30,
+      "title": "Maximum Demand Change Ratio"
+    },
+    "minimum_success_ratio": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "decimal_places": 12,
+      "ge": 0,
+      "le": 1,
+      "max_digits": 30,
+      "title": "Minimum Success Ratio"
+    },
+    "owner_disposition": {
+      "enum": [
+        "review",
+        "retain_current_configuration",
+        "rolled_back"
+      ],
+      "title": "Owner Disposition",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "observed_change",
+        "regression",
+        "inconclusive"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "workload_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Workload Uid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "workload_uid",
+    "container",
+    "status",
+    "before",
+    "after",
+    "before_service",
+    "after_service",
+    "minimum_success_ratio",
+    "maximum_demand_change_ratio",
+    "owner_disposition",
+    "reason_codes"
+  ],
+  "title": "EngineeringCpuOutcome",
+  "type": "object"
+}

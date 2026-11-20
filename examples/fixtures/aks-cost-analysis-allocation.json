@@ -1,0 +1,35 @@
+{
+  "schema_version": "reviewed-aks-cost-analysis-v1",
+  "producer_version": "1.0.0",
+  "source_reference": "synthetic-aks-cost-analysis",
+  "cost_basis": "actual",
+  "period": {
+    "start": "2026-09-29T00:00:00Z",
+    "end": "2026-10-29T00:00:00Z"
+  },
+  "complete": true,
+  "allocation_policy": "source-native",
+  "shares": [],
+  "amounts": [
+    {
+      "amount": "60",
+      "currency": "USD",
+      "category": "allocated",
+      "granularity": "namespace",
+      "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+      "namespace": "apps",
+      "identity_basis": "name-only",
+      "reference": "synthetic-aks-cost-analysis"
+    },
+    {
+      "amount": "25",
+      "currency": "USD",
+      "category": "idle"
+    },
+    {
+      "amount": "15",
+      "currency": "USD",
+      "category": "system"
+    }
+  ]
+}

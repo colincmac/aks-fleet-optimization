@@ -1,0 +1,116 @@
+{
+  "$defs": {
+    "FindingTrend": {
+      "additionalProperties": false,
+      "properties": {
+        "finding_id": {
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "first_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Observed At"
+        },
+        "last_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Observed At"
+        },
+        "resource_id": {
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "new",
+            "persistent",
+            "changed",
+            "blocked",
+            "not_observed",
+            "not_comparable"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "rule_id",
+        "resource_id",
+        "state"
+      ],
+      "title": "FindingTrend",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "comparable": {
+      "title": "Comparable",
+      "type": "boolean"
+    },
+    "current_run_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Current Run Id",
+      "type": "string"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/FindingTrend"
+      },
+      "title": "Findings",
+      "type": "array"
+    },
+    "previous_run_id": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Previous Run Id",
+      "type": "string"
+    },
+    "savings": {
+      "default": null,
+      "title": "Savings",
+      "type": "null"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "previous_run_id",
+    "current_run_id",
+    "comparable",
+    "findings"
+  ],
+  "title": "HistoryTrend",
+  "type": "object"
+}

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aks-fleet-demo
+  labels:
+    app.kubernetes.io/part-of: aks-fleet-demo
+    pod-security.kubernetes.io/enforce: restricted

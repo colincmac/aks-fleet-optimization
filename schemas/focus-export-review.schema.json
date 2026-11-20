@@ -1,0 +1,162 @@
+{
+  "$defs": {
+    "CostPeriod": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "format": "date-time",
+          "title": "End",
+          "type": "string"
+        },
+        "start": {
+          "format": "date-time",
+          "title": "Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "title": "CostPeriod",
+      "type": "object"
+    },
+    "CostResourceBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "identity_basis": {
+          "const": "exact-historical",
+          "title": "Identity Basis",
+          "type": "string"
+        },
+        "pool_resource_id": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pool Resource Id"
+        },
+        "reference": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Reference",
+          "type": "string"
+        },
+        "resource_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "valid_period": {
+          "$ref": "#/$defs/CostPeriod"
+        }
+      },
+      "required": [
+        "resource_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "valid_period",
+        "identity_basis",
+        "reference"
+      ],
+      "title": "CostResourceBinding",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "bindings": {
+      "items": {
+        "$ref": "#/$defs/CostResourceBinding"
+      },
+      "maxItems": 100000,
+      "title": "Bindings",
+      "type": "array"
+    },
+    "expected_totals": {
+      "maxProperties": 100,
+      "minProperties": 1,
+      "patternProperties": {
+        "^[A-Z]{3}$": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "decimal_places": 12,
+          "max_digits": 30
+        }
+      },
+      "title": "Expected Totals",
+      "type": "object"
+    },
+    "period": {
+      "$ref": "#/$defs/CostPeriod"
+    },
+    "source_observed_at": {
+      "format": "date-time",
+      "title": "Source Observed At",
+      "type": "string"
+    },
+    "source_reference": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Source Reference",
+      "type": "string"
+    },
+    "subscription_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "maxItems": 1000,
+      "minItems": 1,
+      "title": "Subscription Ids",
+      "type": "array"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "subscription_ids",
+    "period",
+    "source_reference",
+    "source_observed_at",
+    "expected_totals"
+  ],
+  "title": "FocusExportReview",
+  "type": "object"
+}

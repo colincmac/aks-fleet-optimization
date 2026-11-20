@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../base
+  - 20-hpa.yaml
+  - 21-vpa-off.yaml
+  - 22-keda.yaml
+  - 30-fault-once.yaml
+  - 40-daemonset.yaml
+  - 41-storage.yaml
+  - 50-placement-gate.yaml
+  - 51-nap-provisioning.yaml

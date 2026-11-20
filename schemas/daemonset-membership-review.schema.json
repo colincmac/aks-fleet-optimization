@@ -1,0 +1,718 @@
+{
+  "$defs": {
+    "CollectionError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "unauthorized",
+            "forbidden",
+            "timeout",
+            "throttled",
+            "unavailable",
+            "invalid-response",
+            "response-budget-exceeded",
+            "identity-mismatch"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "code"
+      ],
+      "title": "CollectionError",
+      "type": "object"
+    },
+    "CollectionStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "title": "CollectionStatus",
+      "type": "string"
+    },
+    "CollectorResult": {
+      "additionalProperties": false,
+      "properties": {
+        "collector": {
+          "minLength": 1,
+          "title": "Collector",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "completed_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Completed Scope",
+          "type": "array"
+        },
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/CollectionError"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "pagination_complete": {
+          "default": false,
+          "title": "Pagination Complete",
+          "type": "boolean"
+        },
+        "requested_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requested Scope",
+          "type": "array"
+        },
+        "retry_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Retry Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Observed At"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CollectionStatus"
+        }
+      },
+      "required": [
+        "collector",
+        "status",
+        "requested_scope",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "CollectorResult",
+      "type": "object"
+    },
+    "DaemonSetCoverageEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "controller_status_binding": {
+          "const": "generation_unverified",
+          "default": "generation_unverified",
+          "title": "Controller Status Binding",
+          "type": "string"
+        },
+        "daemonset_name": {
+          "minLength": 1,
+          "title": "Daemonset Name",
+          "type": "string"
+        },
+        "daemonset_uid": {
+          "minLength": 1,
+          "title": "Daemonset Uid",
+          "type": "string"
+        },
+        "desired_minus_observed_nodes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Desired Minus Observed Nodes"
+        },
+        "desired_node_membership": {
+          "const": "unknown",
+          "default": "unknown",
+          "title": "Desired Node Membership",
+          "type": "string"
+        },
+        "desired_number_scheduled": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Desired Number Scheduled"
+        },
+        "disruption_feasibility": {
+          "const": "unknown",
+          "default": "unknown",
+          "title": "Disruption Feasibility",
+          "type": "string"
+        },
+        "duplicate_node_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Duplicate Node Uids",
+          "type": "array"
+        },
+        "namespace": {
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace Uid"
+        },
+        "number_ready": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Number Ready"
+        },
+        "observation_issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Observation Issues",
+          "type": "array"
+        },
+        "observed_node_uids": {
+          "anyOf": [
+            {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Node Uids"
+        },
+        "observed_nonterminal_pod_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Nonterminal Pod Count"
+        },
+        "observed_pod_uids": {
+          "anyOf": [
+            {
+              "items": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Pod Uids"
+        },
+        "status_issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Status Issues",
+          "type": "array"
+        }
+      },
+      "required": [
+        "daemonset_uid",
+        "daemonset_name",
+        "namespace"
+      ],
+      "title": "DaemonSetCoverageEvidence",
+      "type": "object"
+    },
+    "DaemonSetModeledMembership": {
+      "additionalProperties": false,
+      "properties": {
+        "daemonset_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Daemonset Uid",
+          "type": "string"
+        },
+        "generation": {
+          "anyOf": [
+            {
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Generation"
+        },
+        "modeled_desired_node_uids": {
+          "anyOf": [
+            {
+              "items": {
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Modeled Desired Node Uids"
+        },
+        "namespace_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "original_observed_coverage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DaemonSetCoverageEvidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "reconciliation_completion": {
+          "const": "unknown",
+          "default": "unknown",
+          "title": "Reconciliation Completion",
+          "type": "string"
+        }
+      },
+      "required": [
+        "daemonset_uid",
+        "namespace_uid",
+        "generation",
+        "modeled_desired_node_uids",
+        "original_observed_coverage",
+        "reason_codes"
+      ],
+      "title": "DaemonSetModeledMembership",
+      "type": "object"
+    },
+    "DaemonSetNodeSelection": {
+      "additionalProperties": false,
+      "properties": {
+        "daemonset_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Daemonset Uid",
+          "type": "string"
+        },
+        "node_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "resource_and_storage_fit": {
+          "const": "not_calculated",
+          "default": "not_calculated",
+          "title": "Resource And Storage Fit",
+          "type": "string"
+        },
+        "selection": {
+          "enum": [
+            "selected",
+            "excluded",
+            "unknown"
+          ],
+          "title": "Selection",
+          "type": "string"
+        }
+      },
+      "required": [
+        "daemonset_uid",
+        "node_uid",
+        "selection",
+        "reason_codes"
+      ],
+      "title": "DaemonSetNodeSelection",
+      "type": "object"
+    },
+    "DaemonSetStatusObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "daemonset_name": {
+          "minLength": 1,
+          "title": "Daemonset Name",
+          "type": "string"
+        },
+        "daemonset_uid": {
+          "minLength": 1,
+          "title": "Daemonset Uid",
+          "type": "string"
+        },
+        "desired_node_membership": {
+          "const": "unknown",
+          "default": "unknown",
+          "title": "Desired Node Membership",
+          "type": "string"
+        },
+        "desired_number_scheduled": {
+          "anyOf": [
+            {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Desired Number Scheduled"
+        },
+        "disruption_feasibility": {
+          "const": "unknown",
+          "default": "unknown",
+          "title": "Disruption Feasibility",
+          "type": "string"
+        },
+        "generation_relation": {
+          "enum": [
+            "equal",
+            "lagging",
+            "contradictory",
+            "unknown"
+          ],
+          "title": "Generation Relation",
+          "type": "string"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "metadata_generation": {
+          "anyOf": [
+            {
+              "maximum": 9223372036854775807,
+              "minimum": 1,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Metadata Generation"
+        },
+        "namespace": {
+          "minLength": 1,
+          "title": "Namespace",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "minLength": 1,
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "number_ready": {
+          "anyOf": [
+            {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Number Ready"
+        },
+        "observed_generation": {
+          "anyOf": [
+            {
+              "maximum": 9223372036854775807,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Observed Generation"
+        },
+        "resource_version": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Version"
+        }
+      },
+      "required": [
+        "daemonset_uid",
+        "daemonset_name",
+        "namespace",
+        "namespace_uid",
+        "resource_version",
+        "metadata_generation",
+        "observed_generation",
+        "generation_relation",
+        "desired_number_scheduled",
+        "number_ready",
+        "issues"
+      ],
+      "title": "DaemonSetStatusObservation",
+      "type": "object"
+    },
+    "DaemonSetStatusProjection": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "minLength": 1,
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "collection": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "daemonsets": {
+          "items": {
+            "$ref": "#/$defs/DaemonSetStatusObservation"
+          },
+          "maxItems": 100000,
+          "title": "Daemonsets",
+          "type": "array"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "mapping_reference": {
+          "const": "kubernetes-apps-v1@v1.36.0",
+          "default": "kubernetes-apps-v1@v1.36.0",
+          "title": "Mapping Reference",
+          "type": "string"
+        },
+        "maximum_source_age_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Maximum Source Age Seconds",
+          "type": "integer"
+        },
+        "metadata_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Metadata Digest",
+          "type": "string"
+        },
+        "metadata_generated_at": {
+          "format": "date-time",
+          "title": "Metadata Generated At",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_binding": {
+          "const": "unverified_supplied_native_objects",
+          "default": "unverified_supplied_native_objects",
+          "title": "Source Binding",
+          "type": "string"
+        },
+        "source_issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Source Issues",
+          "type": "array"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "metadata_digest",
+        "metadata_generated_at",
+        "evaluated_at",
+        "maximum_source_age_seconds",
+        "collection",
+        "daemonsets",
+        "source_issues"
+      ],
+      "title": "DaemonSetStatusProjection",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "approved_binding_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Approved Binding Digest",
+      "type": "string"
+    },
+    "comparisons": {
+      "items": {
+        "$ref": "#/$defs/DaemonSetNodeSelection"
+      },
+      "title": "Comparisons",
+      "type": "array"
+    },
+    "daemonsets": {
+      "items": {
+        "$ref": "#/$defs/DaemonSetModeledMembership"
+      },
+      "title": "Daemonsets",
+      "type": "array"
+    },
+    "desired_membership_admission": {
+      "const": "unverified",
+      "default": "unverified",
+      "title": "Desired Membership Admission",
+      "type": "string"
+    },
+    "disruption_feasibility": {
+      "const": "unknown",
+      "default": "unknown",
+      "title": "Disruption Feasibility",
+      "type": "string"
+    },
+    "fit_status": {
+      "const": "blocked",
+      "default": "blocked",
+      "title": "Fit Status",
+      "type": "string"
+    },
+    "mapping_reference": {
+      "const": "kubernetes-daemon-controller@v1.36.0",
+      "default": "kubernetes-daemon-controller@v1.36.0",
+      "title": "Mapping Reference",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_issues": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Issues",
+      "type": "array"
+    },
+    "status_projection": {
+      "$ref": "#/$defs/DaemonSetStatusProjection"
+    }
+  },
+  "required": [
+    "status_projection",
+    "approved_binding_digest",
+    "source_issues",
+    "daemonsets",
+    "comparisons"
+  ],
+  "title": "DaemonSetMembershipReview",
+  "type": "object"
+}

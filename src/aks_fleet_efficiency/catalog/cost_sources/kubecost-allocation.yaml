@@ -1,0 +1,19 @@
+id: kubecost-allocation
+version: 1.0.0
+provider: kubecost
+evidence_kind: allocation
+projection_format: reviewed-kubecost-allocation-v1
+producer_version_kind: product
+pricing_provenance: reviewed
+cost_basis: source-declared
+granularities: [namespace, workload, container, asset]
+identity: name-only
+allocation_policy: source-native
+reconciliation: aggregate-attribution
+characterized_versions:
+  kubecost: [2.4.0]
+characterization: synthetic
+limitations:
+  - Saved reviewed projection only; no undocumented or version-ambiguous API response is accepted.
+  - Allocation settings, shared-cost policy, and pricing basis must be retained.
+  - Billing provenance must be independently reviewed; list-price estimates are not accepted by this billing workflow.

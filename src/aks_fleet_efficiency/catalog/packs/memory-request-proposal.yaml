@@ -1,0 +1,79 @@
+schema_version: '1.0'
+id: AKS-MEM-003
+version: 1.0.0
+family: memory
+evaluator: memory-request-proposal
+evidence_kind: metrics
+title: Validate memory request candidate
+purpose: Validate one exact upstream memory request candidate against the declared owner minimum, maximum reduction, peak/startup/failover headroom, admission, QoS and reliability evidence.
+sources:
+- prometheus
+- azure-managed-prometheus
+parameters: {}
+queries:
+  baseline: &id001
+    container:
+    - memory_request
+    - memory_limit
+    - memory_usage
+    - oom_events
+    - restarts
+    workload_container:
+    - replica_memory_envelope
+    - replica_memory_request_min
+    - replica_memory_request_max
+    - replica_memory_limit_min
+    - replica_memory_limit_max
+    - replica_oom_events
+    - replica_restarts
+    workload:
+    - desired_replicas
+    - available_replicas
+    - observed_replicas
+    - hpa_present
+    - keda_present
+    - vpa_present
+    - unschedulable_pods
+    - evictions
+  guarded: *id001
+required_evidence:
+  baseline: &id002
+  - Complete fresh exact-scoped sources and aligned metric quality
+  - Exact historical identities and complete required history; missing is not zero
+  - Independent owner-reviewed window/SLO/disruption/scenario bounds
+  - One exact fresh per-container VPA or Kubecost candidate from a characterized source version matching current workload, request and unit
+  - Existing QoS, admission, controller, full-grid and reliability guards
+  guarded: *id002
+limitations:
+- The accelerator calculates a safety floor and rejects candidates below it; the accepted value remains the upstream candidate, not an independently derived target.
+- A validated candidate does not prove node removability, financial savings or change approval.
+- References/digests are integrity declarations, not source attestation or approval.
+- Candidate conflicts are evaluated per exact container and resource dimension; unknown source versions remain blocked.
+- Current Off-mode VPA preserves qualified history but does not prove its historical mode or authorize a change.
+prerequisites:
+- Obtain separate owner approval for this specific request-only change; enabling proposals
+  is not approval to apply them.
+- Independently verify the reviewed scenario/eviction evidence, supported direct or
+  approved-envelope history, absent overhead and current admitted settings.
+- Keep CPU requests, all limits and other containers unchanged; do not combine independent
+  CPU and memory proposals in one canary.
+risks:
+- Working-set samples can omit relevant memory and short peaks.
+- Lower requests reduce eviction protection and can increase node pressure or change
+  placement despite unchanged Burstable QoS.
+validation:
+- Canary only the approved memory request under startup, peak load and failover; confirm
+  the limit and QoS remain unchanged.
+- Compare OOM, restarts, evictions, placement and owner-declared SLOs with the pre-change
+  baseline before promotion.
+rollback:
+- If OOM, restarts, evictions or owner-declared SLOs regress, stop promotion and restore
+  the original __current_request_mib__ MiB memory request through the owning delivery
+  pipeline; keep all other settings unchanged.
+actions:
+  baseline:
+  - Review the validated upstream __proposed_request_mib__ MiB candidate for this container only; keep limits unchanged and obtain owner approval.
+  guarded:
+  - Review the validated upstream __proposed_request_mib__ MiB candidate for this container only; keep limits unchanged and obtain owner approval.
+baseline_summary: The upstream memory request candidate requires guarded evidence validation; no candidate is approved or applied by this baseline review.
+guarded_summary: The upstream memory request candidate is not below the accelerator safety floor and passed the required admission, QoS, reliability and owner-policy gates.

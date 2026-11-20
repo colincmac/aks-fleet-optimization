@@ -1,0 +1,133 @@
+{
+  "$defs": {
+    "PackParameters": {
+      "additionalProperties": false,
+      "properties": {
+        "review_ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Ratio"
+        }
+      },
+      "title": "PackParameters",
+      "type": "object"
+    },
+    "Thresholds": {
+      "additionalProperties": false,
+      "properties": {
+        "maximum_evidence_age_hours": {
+          "default": 24,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Evidence Age Hours",
+          "type": "number"
+        },
+        "maximum_metric_step_seconds": {
+          "default": 300,
+          "exclusiveMinimum": 0,
+          "title": "Maximum Metric Step Seconds",
+          "type": "integer"
+        },
+        "minimum_coverage_ratio": {
+          "default": 0.85,
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Minimum Coverage Ratio",
+          "type": "number"
+        },
+        "minimum_observation_days": {
+          "default": 30,
+          "minimum": 1,
+          "title": "Minimum Observation Days",
+          "type": "integer"
+        },
+        "minimum_replicas_for_autoscaling_review": {
+          "default": 2,
+          "minimum": 1,
+          "title": "Minimum Replicas For Autoscaling Review",
+          "type": "integer"
+        }
+      },
+      "title": "Thresholds",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "enable_estimated_savings": {
+      "default": false,
+      "title": "Enable Estimated Savings",
+      "type": "boolean"
+    },
+    "environment_risk": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Environment Risk",
+      "type": "object"
+    },
+    "excluded_namespaces": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Excluded Namespaces",
+      "type": "array"
+    },
+    "mode": {
+      "default": "baseline",
+      "enum": [
+        "baseline",
+        "guarded"
+      ],
+      "title": "Mode",
+      "type": "string"
+    },
+    "pack_locks": {
+      "patternProperties": {
+        "^AKS-[A-Z]+-[0-9]{3}$": {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        }
+      },
+      "title": "Pack Locks",
+      "type": "object"
+    },
+    "pack_parameters": {
+      "patternProperties": {
+        "^AKS-[A-Z]+-[0-9]{3}$": {
+          "$ref": "#/$defs/PackParameters"
+        }
+      },
+      "title": "Pack Parameters",
+      "type": "object"
+    },
+    "packs": {
+      "anyOf": [
+        {
+          "items": {
+            "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Packs"
+    },
+    "thresholds": {
+      "$ref": "#/$defs/Thresholds"
+    }
+  },
+  "title": "AdvisorConfig",
+  "type": "object"
+}

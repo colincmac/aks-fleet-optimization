@@ -1,0 +1,34 @@
+name: Build and Push Docker Image
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - '.github/workflows/publish-python-image.yml'
+  #     - '.dockerignore'
+  #     - 'Dockerfile'
+  #     - 'README.md'
+  #     - 'pyproject.toml'
+  #     - 'src/**'
+
+permissions:
+  contents: read
+
+jobs:
+ build:
+   runs-on: ubuntu-latest
+   steps:
+   - name: Checkout repository
+     uses: actions/checkout@v3
+   - name: Login to Azure
+     uses: azure/login@v1
+     with:
+       creds: ${{ secrets.AZURE_CREDENTIALS }}
+   - name: Build and Push Docker image
+     run: |
+       docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/aks-efficiency-advisor:${{ github.sha }}
+       docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/aks-efficiency-advisor:${{ github.sha }}
+     env:
+       REGISTRY_LOGIN_SERVER: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+       REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+       REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "reviewed-allocation-shares-v1",
+  "producer_version": "1.0.0",
+  "source_reference": "synthetic-reviewed-shares",
+  "cost_basis": "amortized",
+  "period": {
+    "start": "2026-09-29T00:00:00Z",
+    "end": "2026-10-29T00:00:00Z"
+  },
+  "complete": true,
+  "allocation_policy": "not-shared",
+  "shares": [
+    {
+      "row_id": "row-1",
+      "fraction": "0.60",
+      "category": "allocated",
+      "granularity": "container",
+      "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+      "namespace": "apps",
+      "workload_name": "synthetic",
+      "workload_uid": "workload-uid",
+      "container": "app",
+      "identity_basis": "exact-historical",
+      "valid_period": {
+        "start": "2026-09-29T00:00:00Z",
+        "end": "2026-10-29T00:00:00Z"
+      },
+      "reference": "synthetic-workload-history"
+    },
+    {
+      "row_id": "row-1",
+      "fraction": "0.25",
+      "category": "idle"
+    },
+    {
+      "row_id": "row-1",
+      "fraction": "0.15",
+      "category": "system"
+    }
+  ],
+  "amounts": []
+}

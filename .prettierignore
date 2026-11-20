@@ -1,0 +1,4 @@
+# Generated reports: formatting changes break golden comparisons and locked replay.
+examples/expected-*.md
+history-example/report.md
+docs/operator-catalog.md

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-owner
+  namespace: aks-fleet-demo
+spec:
+  selector:
+    matchLabels: {app.kubernetes.io/name: event-owner}
+  template:
+    metadata:
+      labels: {app.kubernetes.io/name: event-owner, app.kubernetes.io/part-of: aks-fleet-demo}
+    spec:
+      nodeSelector: {kubernetes.io/os: linux}
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: worker
+          image: docker.io/library/python:3.13-alpine@sha256:9ef1a599f863231c3d91e941389bfdc4a2d6070557243d54df1a4e57015b960e
+          args: ["python", "-c", "import time; time.sleep(10**8)"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          resources:
+            requests: {cpu: 50m, memory: 32Mi}
+            limits: {cpu: 100m, memory: 48Mi}
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: event-owner
+  namespace: aks-fleet-demo
+spec:
+  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: event-owner}
+  pollingInterval: 30
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 2
+  triggers:
+    - type: cpu
+      metricType: Utilization
+      metadata: {value: "70"}

@@ -1,0 +1,755 @@
+{
+  "$defs": {
+    "DriftReason": {
+      "enum": [
+        "insufficient_samples",
+        "comparison_basis_changed",
+        "source_basis_changed",
+        "controller_identity_changed",
+        "workload_policy_changed"
+      ],
+      "type": "string"
+    },
+    "FindingTrend": {
+      "additionalProperties": false,
+      "properties": {
+        "finding_id": {
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "first_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Observed At"
+        },
+        "last_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Last Observed At"
+        },
+        "resource_id": {
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "new",
+            "persistent",
+            "changed",
+            "blocked",
+            "not_observed",
+            "not_comparable"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "rule_id",
+        "resource_id",
+        "state"
+      ],
+      "title": "FindingTrend",
+      "type": "object"
+    },
+    "FleetCheckEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "coverage_reason": {
+          "const": "expected_subject_roster_not_retained",
+          "default": "expected_subject_roster_not_retained",
+          "title": "Coverage Reason",
+          "type": "string"
+        },
+        "packs": {
+          "items": {
+            "$ref": "#/$defs/FleetPackEvidence"
+          },
+          "title": "Packs",
+          "type": "array"
+        }
+      },
+      "required": [
+        "packs"
+      ],
+      "title": "FleetCheckEvidence",
+      "type": "object"
+    },
+    "FleetCurrentGaps": {
+      "additionalProperties": false,
+      "properties": {
+        "allocatable_minus_requests": {
+          "$ref": "#/$defs/FleetGapPair"
+        },
+        "capacity_minus_allocatable": {
+          "$ref": "#/$defs/FleetGapPair"
+        },
+        "requests_minus_usage": {
+          "const": "aligned_cluster_usage_unavailable",
+          "default": "aligned_cluster_usage_unavailable",
+          "title": "Requests Minus Usage",
+          "type": "string"
+        }
+      },
+      "title": "FleetCurrentGaps",
+      "type": "object"
+    },
+    "FleetDriftObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "age_seconds": {
+          "minimum": 0,
+          "title": "Age Seconds",
+          "type": "number"
+        },
+        "check_evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FleetCheckEvidence"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "high_or_critical": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "High Or Critical"
+        },
+        "metric_coverage_ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Metric Coverage Ratio",
+          "type": "number"
+        },
+        "metric_sample_count": {
+          "minimum": 0,
+          "title": "Metric Sample Count",
+          "type": "integer"
+        },
+        "resources": {
+          "$ref": "#/$defs/FleetResourceEnvelope"
+        },
+        "run": {
+          "$ref": "#/$defs/HistoryRun"
+        }
+      },
+      "required": [
+        "run",
+        "age_seconds",
+        "metric_sample_count",
+        "metric_coverage_ratio",
+        "resources"
+      ],
+      "title": "FleetDriftObservation",
+      "type": "object"
+    },
+    "FleetDriftRow": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "latest": {
+          "$ref": "#/$defs/FleetDriftObservation"
+        },
+        "latest_comparison": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HistoryTrend"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "peer_group": {
+          "maxLength": 128,
+          "minLength": 1,
+          "title": "Peer Group",
+          "type": "string"
+        },
+        "prior_comparable_resources": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FleetDriftObservation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_codes": {
+          "items": {
+            "$ref": "#/$defs/DriftReason"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "recurring_findings": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/FleetFindingRecurrence"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Recurring Findings"
+        },
+        "selected_runs": {
+          "minimum": 1,
+          "title": "Selected Runs",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "cluster_resource_id",
+        "cluster_uid",
+        "peer_group",
+        "selected_runs",
+        "latest",
+        "latest_comparison",
+        "prior_comparable_resources",
+        "reason_codes",
+        "recurring_findings"
+      ],
+      "title": "FleetDriftRow",
+      "type": "object"
+    },
+    "FleetFindingRecurrence": {
+      "additionalProperties": false,
+      "properties": {
+        "finding_id": {
+          "title": "Finding Id",
+          "type": "string"
+        },
+        "first_observed_at": {
+          "format": "date-time",
+          "title": "First Observed At",
+          "type": "string"
+        },
+        "last_observed_at": {
+          "format": "date-time",
+          "title": "Last Observed At",
+          "type": "string"
+        },
+        "observed_runs": {
+          "minimum": 2,
+          "title": "Observed Runs",
+          "type": "integer"
+        },
+        "resource_id": {
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "finding_id",
+        "rule_id",
+        "resource_id",
+        "observed_runs",
+        "first_observed_at",
+        "last_observed_at"
+      ],
+      "title": "FleetFindingRecurrence",
+      "type": "object"
+    },
+    "FleetGapDimension": {
+      "additionalProperties": false,
+      "properties": {
+        "nodes_covered": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nodes Covered"
+        },
+        "nodes_expected": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nodes Expected"
+        },
+        "pods_covered": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pods Covered"
+        },
+        "pods_expected": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pods Expected"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "enum": [
+                "unqualified_inventory",
+                "invalid_node_accounting",
+                "incomplete_node_accounting",
+                "incomplete_pod_accounting",
+                "namespace_scope_mismatch"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "unqualified_inventory",
+          "title": "Reason"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        }
+      },
+      "title": "FleetGapDimension",
+      "type": "object"
+    },
+    "FleetGapPair": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu": {
+          "$ref": "#/$defs/FleetGapDimension"
+        },
+        "cpu_unit": {
+          "const": "mCPU",
+          "default": "mCPU",
+          "title": "Cpu Unit",
+          "type": "string"
+        },
+        "memory": {
+          "$ref": "#/$defs/FleetGapDimension"
+        },
+        "memory_unit": {
+          "const": "MiB",
+          "default": "MiB",
+          "title": "Memory Unit",
+          "type": "string"
+        }
+      },
+      "title": "FleetGapPair",
+      "type": "object"
+    },
+    "FleetPackEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "blocked_records": {
+          "minimum": 0,
+          "title": "Blocked Records",
+          "type": "integer"
+        },
+        "digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "examined_subjects": {
+          "minimum": 0,
+          "title": "Examined Subjects",
+          "type": "integer"
+        },
+        "high_or_critical_findings": {
+          "minimum": 0,
+          "title": "High Or Critical Findings",
+          "type": "integer"
+        },
+        "pack_id": {
+          "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+          "title": "Pack Id",
+          "type": "string"
+        },
+        "qualified_findings": {
+          "minimum": 0,
+          "title": "Qualified Findings",
+          "type": "integer"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pack_id",
+        "version",
+        "digest",
+        "examined_subjects",
+        "qualified_findings",
+        "blocked_records",
+        "high_or_critical_findings"
+      ],
+      "title": "FleetPackEvidence",
+      "type": "object"
+    },
+    "FleetResourceAmount": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Mcpu"
+        },
+        "cpu_unit": {
+          "const": "mCPU",
+          "default": "mCPU",
+          "title": "Cpu Unit",
+          "type": "string"
+        },
+        "memory_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Mib"
+        },
+        "memory_unit": {
+          "const": "MiB",
+          "default": "MiB",
+          "title": "Memory Unit",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "default": "unknown",
+          "enum": [
+            "available",
+            "partial",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "title": "FleetResourceAmount",
+      "type": "object"
+    },
+    "FleetResourceEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "allocatable": {
+          "$ref": "#/$defs/FleetResourceAmount"
+        },
+        "current_gaps": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FleetCurrentGaps"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "current_only": {
+          "const": true,
+          "default": true,
+          "title": "Current Only",
+          "type": "boolean"
+        },
+        "node_capacity": {
+          "$ref": "#/$defs/FleetResourceAmount"
+        },
+        "observation_times": {
+          "items": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "title": "Observation Times",
+          "type": "array"
+        },
+        "observed_usage": {
+          "$ref": "#/$defs/FleetResourceAmount"
+        },
+        "requested": {
+          "$ref": "#/$defs/FleetResourceAmount"
+        },
+        "scope_notice": {
+          "const": "all listed Nodes; included nonterminal Pod requests; not free or movable capacity",
+          "default": "all listed Nodes; included nonterminal Pod requests; not free or movable capacity",
+          "title": "Scope Notice",
+          "type": "string"
+        }
+      },
+      "title": "FleetResourceEnvelope",
+      "type": "object"
+    },
+    "HistoryRun": {
+      "additionalProperties": false,
+      "properties": {
+        "blocked_recommendations": {
+          "minimum": 0,
+          "title": "Blocked Recommendations",
+          "type": "integer"
+        },
+        "comparison_key": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Comparison Key",
+          "type": "string"
+        },
+        "configuration_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Configuration Digest",
+          "type": "string"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "recommendations": {
+          "minimum": 0,
+          "title": "Recommendations",
+          "type": "integer"
+        },
+        "run_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "savings": {
+          "default": null,
+          "title": "Savings",
+          "type": "null"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "snapshot_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Digest",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "partial"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "window_end": {
+          "format": "date-time",
+          "title": "Window End",
+          "type": "string"
+        },
+        "window_start": {
+          "format": "date-time",
+          "title": "Window Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "tenant_id",
+        "generated_at",
+        "window_start",
+        "window_end",
+        "status",
+        "snapshot_digest",
+        "configuration_digest",
+        "comparison_key",
+        "recommendations",
+        "blocked_recommendations"
+      ],
+      "title": "HistoryRun",
+      "type": "object"
+    },
+    "HistoryTrend": {
+      "additionalProperties": false,
+      "properties": {
+        "comparable": {
+          "title": "Comparable",
+          "type": "boolean"
+        },
+        "current_run_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Current Run Id",
+          "type": "string"
+        },
+        "findings": {
+          "items": {
+            "$ref": "#/$defs/FindingTrend"
+          },
+          "title": "Findings",
+          "type": "array"
+        },
+        "previous_run_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Previous Run Id",
+          "type": "string"
+        },
+        "savings": {
+          "default": null,
+          "title": "Savings",
+          "type": "null"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "previous_run_id",
+        "current_run_id",
+        "comparable",
+        "findings"
+      ],
+      "title": "HistoryTrend",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "evaluated_at": {
+      "format": "date-time",
+      "title": "Evaluated At",
+      "type": "string"
+    },
+    "rows": {
+      "items": {
+        "$ref": "#/$defs/FleetDriftRow"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Rows",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "evaluated_at",
+    "rows"
+  ],
+  "title": "FleetDriftMatrix",
+  "type": "object"
+}

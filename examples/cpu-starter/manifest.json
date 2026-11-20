@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0",
+  "mode": "baseline",
+  "pack": {
+    "id": "AKS-RQ-002",
+    "version": "1.0.0",
+    "digest": "d7f0b7902c6400c9b2be49472a75ee4f949ac164dd6db69f80b2b86f0ff5bd56",
+    "parameters": {
+      "review_ratio": 0.4
+    },
+    "queries": [
+      {
+        "id": "cpu_request",
+        "version": "1.0.0",
+        "unit": "mCPU",
+        "kind": "container",
+        "delta": false,
+        "expression": "kube_pod_container_resource_requests{__scope__,resource=\"cpu\",unit=\"core\"} * 1000"
+      },
+      {
+        "id": "cpu_throttling",
+        "version": "1.0.0",
+        "unit": "ratio",
+        "kind": "container",
+        "delta": false,
+        "expression": "rate(container_cpu_cfs_throttled_periods_total{__scope__}[5m]) / rate(container_cpu_cfs_periods_total{__scope__}[5m])"
+      },
+      {
+        "id": "cpu_usage",
+        "version": "1.0.0",
+        "unit": "mCPU",
+        "kind": "container",
+        "delta": false,
+        "expression": "rate(container_cpu_usage_seconds_total{__scope__}[5m]) * 1000"
+      },
+      {
+        "id": "oom_events",
+        "version": "1.0.0",
+        "unit": "events",
+        "kind": "container",
+        "delta": true,
+        "expression": "increase(container_oom_events_total{__scope__}[__step__s])"
+      },
+      {
+        "id": "replica_cpu_envelope",
+        "version": "1.0.0",
+        "unit": "mCPU",
+        "kind": "workload_container",
+        "delta": false,
+        "expression": "aks_advisor:workload_container_cpu_max_mcores{__scope__}"
+      },
+      {
+        "id": "replica_cpu_request_max",
+        "version": "1.0.0",
+        "unit": "mCPU",
+        "kind": "workload_container",
+        "delta": false,
+        "expression": "aks_advisor:workload_container_cpu_request_max_mcores{__scope__}"
+      },
+      {
+        "id": "replica_cpu_request_min",
+        "version": "1.0.0",
+        "unit": "mCPU",
+        "kind": "workload_container",
+        "delta": false,
+        "expression": "aks_advisor:workload_container_cpu_request_min_mcores{__scope__}"
+      },
+      {
+        "id": "replica_cpu_throttling",
+        "version": "1.0.0",
+        "unit": "ratio",
+        "kind": "workload_container",
+        "delta": false,
+        "expression": "aks_advisor:workload_container_cpu_throttling_max{__scope__}"
+      },
+      {
+        "id": "replica_oom_events",
+        "version": "1.0.0",
+        "unit": "events",
+        "kind": "workload_container",
+        "delta": true,
+        "expression": "aks_advisor:workload_container_oom_increase{__scope__,step_seconds=\"__step__\"}"
+      }
+    ]
+  },
+  "queries": [
+    {
+      "metric": "cpu_request",
+      "version": "1.0.0",
+      "source": "synthetic",
+      "expression": "kube_pod_container_resource_requests{azure_resource_id=\"/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic\",container=\"api\",namespace=\"synthetic\",pod=\"synthetic-pod\",resource=\"cpu\",unit=\"core\"} * 1000",
+      "expression_digest": "cd8022d625747dc74275f71e13a8fa74326065edac084c23da5967d18085d349",
+      "entity_digest": "22d8565a085fca3fe6b855943ee34efd8f06c6cea19a44bb19b72cb6a74b8bdd",
+      "step_seconds": 300
+    },
+    {
+      "metric": "cpu_usage",
+      "version": "1.0.0",
+      "source": "synthetic",
+      "expression": "rate(container_cpu_usage_seconds_total{azure_resource_id=\"/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic\",container=\"api\",namespace=\"synthetic\",pod=\"synthetic-pod\"}[5m]) * 1000",
+      "expression_digest": "8e8e7f6225cb350683443efb882ae4410a09381e5622210183f8081f518e9a4e",
+      "entity_digest": "22d8565a085fca3fe6b855943ee34efd8f06c6cea19a44bb19b72cb6a74b8bdd",
+      "step_seconds": 300
+    }
+  ],
+  "source_profile": {
+    "id": "cadvisor-ksm",
+    "version": "1.0.0",
+    "identity": "name-only",
+    "transports": [
+      "prometheus",
+      "azure-managed-prometheus"
+    ],
+    "labels": {
+      "cluster_resource_id": "azure_resource_id",
+      "namespace": "namespace",
+      "pod": "pod",
+      "container": "container"
+    },
+    "query_ids": [
+      "cpu_usage",
+      "cpu_request"
+    ],
+    "characterized_versions": {
+      "prometheus": [
+        "3.16.0-rc.2"
+      ],
+      "kube-state-metrics": [
+        "2.17.0"
+      ]
+    },
+    "characterization": "synthetic",
+    "joins": "none",
+    "limitations": [
+      "These are synthetic metric-shape tests, not live AKS/exporter certification.",
+      "An exact approved cluster resource-ID label is required; cluster display names are insufficient.",
+      "Pod names are unresolved series identity, not historical workload or Pod UIDs.",
+      "No ownership join, historical relabelling, zero fill or guarded proposal is supported."
+    ]
+  },
+  "notice": "Query export does not attest source history or authorize a change."
+}

@@ -1,0 +1,19 @@
+id: opencost-allocation
+version: 1.0.0
+provider: opencost
+evidence_kind: allocation
+projection_format: reviewed-opencost-allocation-v1
+producer_version_kind: product
+pricing_provenance: reviewed
+cost_basis: source-declared
+granularities: [namespace, workload, container, asset]
+identity: name-only
+allocation_policy: source-native
+reconciliation: aggregate-attribution
+characterized_versions:
+  opencost: [1.117.6]
+characterization: synthetic
+limitations:
+  - Saved reviewed allocation evidence only; the advisor does not query an OpenCost endpoint.
+  - Provider pricing and idle or shared-cost policy must be retained and independently reviewed.
+  - Default on-demand list-price allocations are estimates, not billing actuals, and are not accepted by this billing workflow.

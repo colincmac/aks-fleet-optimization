@@ -1,0 +1,24 @@
+{
+  "manifestVersion": "2024-04-01",
+  "byteCount": 509,
+  "blobCount": 1,
+  "dataRowCount": 1,
+  "exportConfig": {
+    "dataVersion": "1.2-preview",
+    "type": "FocusCost"
+  },
+  "deliveryConfig": {
+    "fileFormat": "Csv",
+    "compressionMode": "None"
+  },
+  "runInfo": {
+    "runId": "synthetic-focus-run"
+  },
+  "blobs": [
+    {
+      "blobName": "synthetic-export/focus-part0.csv",
+      "byteCount": 509,
+      "dataRowCount": 1
+    }
+  ]
+}

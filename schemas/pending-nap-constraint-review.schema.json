@@ -1,0 +1,466 @@
+{
+  "$defs": {
+    "NapManagedNode": {
+      "additionalProperties": false,
+      "properties": {
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "nodeclaim_uid": {
+          "minLength": 1,
+          "title": "Nodeclaim Uid",
+          "type": "string"
+        },
+        "nodepool_uid": {
+          "minLength": 1,
+          "title": "Nodepool Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "node_uid",
+        "nodeclaim_uid",
+        "nodepool_uid"
+      ],
+      "title": "NapManagedNode",
+      "type": "object"
+    },
+    "NapNodeConstraintContext": {
+      "additionalProperties": false,
+      "properties": {
+        "binding": {
+          "$ref": "#/$defs/NapManagedNode"
+        },
+        "observed_daemonset_cpu_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Daemonset Cpu Mcpu"
+        },
+        "observed_daemonset_memory_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Daemonset Memory Mib"
+        },
+        "observed_daemonset_pods": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Daemonset Pods"
+        },
+        "placement": {
+          "$ref": "#/$defs/PodNodeConstraintReview"
+        },
+        "resources": {
+          "$ref": "#/$defs/SchedulingResourceComparison"
+        }
+      },
+      "required": [
+        "binding",
+        "resources",
+        "placement"
+      ],
+      "title": "NapNodeConstraintContext",
+      "type": "object"
+    },
+    "PodNodeConstraintReview": {
+      "additionalProperties": false,
+      "properties": {
+        "constraints": {
+          "additionalProperties": {
+            "enum": [
+              "matched",
+              "excluded",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "node_selector",
+              "required_node_affinity",
+              "hard_taints",
+              "cordon"
+            ]
+          },
+          "title": "Constraints",
+          "type": "object"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "pod_uid": {
+          "minLength": 1,
+          "title": "Pod Uid",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "no_observed_exclusion",
+            "excluded_by_observed_constraint",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pod_uid",
+        "node_uid",
+        "constraints",
+        "status"
+      ],
+      "title": "PodNodeConstraintReview",
+      "type": "object"
+    },
+    "SchedulingResourceComparison": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_available_mcpu": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Available Mcpu"
+        },
+        "cpu_required_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Required Mcpu"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "memory_available_mib": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Available Mib"
+        },
+        "memory_required_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Required Mib"
+        },
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "pod_slots_available": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pod Slots Available"
+        },
+        "pod_slots_required": {
+          "const": 1,
+          "default": 1,
+          "title": "Pod Slots Required",
+          "type": "integer"
+        },
+        "pod_uid": {
+          "minLength": 1,
+          "title": "Pod Uid",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "satisfied",
+            "unsatisfied",
+            "blocked"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pod_uid",
+        "node_uid",
+        "status",
+        "issues"
+      ],
+      "title": "SchedulingResourceComparison",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "azure_observed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Azure Observed At"
+    },
+    "cluster_resource_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "evaluated_at": {
+      "format": "date-time",
+      "title": "Evaluated At",
+      "type": "string"
+    },
+    "fit_status": {
+      "const": "blocked",
+      "default": "blocked",
+      "title": "Fit Status",
+      "type": "string"
+    },
+    "fragmentation": {
+      "default": "unknown",
+      "enum": [
+        "scattered_across_nodes",
+        "not_observed",
+        "unknown"
+      ],
+      "title": "Fragmentation",
+      "type": "string"
+    },
+    "kubernetes_observed_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Kubernetes Observed At"
+    },
+    "metadata_digest": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Metadata Digest",
+      "type": "string"
+    },
+    "namespace_pdb_candidates": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Namespace Pdb Candidates"
+    },
+    "nodepool_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Nodepool Uid",
+      "type": "string"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/NapNodeConstraintContext"
+      },
+      "maxItems": 256,
+      "title": "Nodes",
+      "type": "array"
+    },
+    "not_evaluated": {
+      "default": [
+        "topology_spread",
+        "pod_affinity",
+        "storage",
+        "extended_resources",
+        "node_conditions",
+        "scheduler_plugins",
+        "nap_provisioning"
+      ],
+      "maxItems": 7,
+      "minItems": 7,
+      "prefixItems": [
+        {
+          "const": "topology_spread",
+          "type": "string"
+        },
+        {
+          "const": "pod_affinity",
+          "type": "string"
+        },
+        {
+          "const": "storage",
+          "type": "string"
+        },
+        {
+          "const": "extended_resources",
+          "type": "string"
+        },
+        {
+          "const": "node_conditions",
+          "type": "string"
+        },
+        {
+          "const": "scheduler_plugins",
+          "type": "string"
+        },
+        {
+          "const": "nap_provisioning",
+          "type": "string"
+        }
+      ],
+      "title": "Not Evaluated",
+      "type": "array"
+    },
+    "pod_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Pod Uid",
+      "type": "string"
+    },
+    "protection_effectiveness": {
+      "const": "unknown",
+      "default": "unknown",
+      "title": "Protection Effectiveness",
+      "type": "string"
+    },
+    "reason_codes": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "title": "Reason Codes",
+      "type": "array"
+    },
+    "removable_nodes": {
+      "const": "not_calculated",
+      "default": "not_calculated",
+      "title": "Removable Nodes",
+      "type": "string"
+    },
+    "scheduler_admission": {
+      "const": "blocked",
+      "default": "blocked",
+      "title": "Scheduler Admission",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "simultaneous_placement": {
+      "const": "not_calculated",
+      "default": "not_calculated",
+      "title": "Simultaneous Placement",
+      "type": "string"
+    },
+    "source_admission": {
+      "const": "blocked",
+      "default": "blocked",
+      "title": "Source Admission",
+      "type": "string"
+    },
+    "tenant_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "nodepool_uid",
+    "pod_uid",
+    "evaluated_at",
+    "azure_observed_at",
+    "kubernetes_observed_at",
+    "metadata_digest"
+  ],
+  "title": "PendingNapConstraintReview",
+  "type": "object"
+}

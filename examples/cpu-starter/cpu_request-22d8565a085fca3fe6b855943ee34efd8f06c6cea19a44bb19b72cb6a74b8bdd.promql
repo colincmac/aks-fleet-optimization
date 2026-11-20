@@ -1,0 +1,1 @@
+kube_pod_container_resource_requests{azure_resource_id="/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",container="api",namespace="synthetic",pod="synthetic-pod",resource="cpu",unit="core"} * 1000

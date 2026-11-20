@@ -1,0 +1,343 @@
+{
+  "$defs": {
+    "CapacityEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "after_node_hours": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 12,
+              "ge": 0,
+              "max_digits": 30
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "After Node Hours"
+        },
+        "before_node_hours": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 12,
+              "ge": 0,
+              "max_digits": 30
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Before Node Hours"
+        },
+        "evidence_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Digest"
+        },
+        "reason_codes": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "observed",
+            "declared",
+            "blocked",
+            "not_supplied"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "CapacityEffect",
+      "type": "object"
+    },
+    "FinancialEffect": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 12,
+              "max_digits": 30
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Amount"
+        },
+        "currency": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Z]{3}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Currency"
+        },
+        "evidence_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Digest"
+        },
+        "method_reference": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Method Reference"
+        },
+        "reason_codes": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "modeled",
+            "observed",
+            "blocked",
+            "not_supplied"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "FinancialEffect",
+      "type": "object"
+    },
+    "ResourceChange": {
+      "additionalProperties": false,
+      "properties": {
+        "after": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 12,
+              "ge": 0,
+              "max_digits": 30
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "After"
+        },
+        "after_assessment_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "After Assessment Digest"
+        },
+        "before": {
+          "anyOf": [
+            {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 12,
+              "ge": 0,
+              "max_digits": 30
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Before"
+        },
+        "before_assessment_digest": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Before Assessment Digest"
+        },
+        "demand_comparable": {
+          "title": "Demand Comparable",
+          "type": "boolean"
+        },
+        "dimension": {
+          "enum": [
+            "cpu_request",
+            "memory_request",
+            "memory_limit",
+            "replica_floor",
+            "controller_configuration",
+            "evidence_only"
+          ],
+          "title": "Dimension",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "maxItems": 32,
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "observed",
+            "declared",
+            "blocked",
+            "inconclusive"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "unit": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Unit",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "dimension",
+        "unit",
+        "demand_comparable"
+      ],
+      "title": "ResourceChange",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "capacity": {
+      "$ref": "#/$defs/CapacityEffect"
+    },
+    "engineering": {
+      "$ref": "#/$defs/ResourceChange"
+    },
+    "modeled_cost_avoidance": {
+      "$ref": "#/$defs/FinancialEffect"
+    },
+    "reconciled_bill_effect": {
+      "$ref": "#/$defs/FinancialEffect"
+    },
+    "reviewer_reference": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Reviewer Reference",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "engineering",
+    "capacity",
+    "modeled_cost_avoidance",
+    "reconciled_bill_effect",
+    "reviewer_reference"
+  ],
+  "title": "ExperimentValueOutcomeRequest",
+  "type": "object"
+}

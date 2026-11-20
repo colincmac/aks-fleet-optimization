@@ -1,0 +1,208 @@
+{
+  "$defs": {
+    "EngineeringWindowObservation": {
+      "additionalProperties": false,
+      "properties": {
+        "coverage_complete": {
+          "title": "Coverage Complete",
+          "type": "boolean"
+        },
+        "observation_ref": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Observation Ref",
+          "type": "string"
+        },
+        "request_count": {
+          "anyOf": [
+            {
+              "maximum": 1000000000000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Request Count"
+        },
+        "run_id": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Source",
+          "type": "string"
+        },
+        "success_count": {
+          "anyOf": [
+            {
+              "maximum": 1000000000000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Success Count"
+        },
+        "window_end": {
+          "format": "date-time",
+          "title": "Window End",
+          "type": "string"
+        },
+        "window_start": {
+          "format": "date-time",
+          "title": "Window Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "window_start",
+        "window_end",
+        "source",
+        "observation_ref",
+        "coverage_complete"
+      ],
+      "title": "EngineeringWindowObservation",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "after": {
+      "$ref": "#/$defs/EngineeringWindowObservation"
+    },
+    "approval_ref": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Approval Ref",
+      "type": "string"
+    },
+    "before": {
+      "$ref": "#/$defs/EngineeringWindowObservation"
+    },
+    "changed_at": {
+      "format": "date-time",
+      "title": "Changed At",
+      "type": "string"
+    },
+    "cluster_resource_id": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "container": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Container",
+      "type": "string"
+    },
+    "dimension": {
+      "const": "cpu_request",
+      "default": "cpu_request",
+      "title": "Dimension",
+      "type": "string"
+    },
+    "hpa_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Hpa Uid",
+      "type": "string"
+    },
+    "maximum_demand_change_ratio": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "decimal_places": 12,
+      "ge": 0,
+      "le": 1,
+      "max_digits": 30,
+      "title": "Maximum Demand Change Ratio"
+    },
+    "minimum_success_ratio": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        }
+      ],
+      "decimal_places": 12,
+      "ge": 0,
+      "le": 1,
+      "max_digits": 30,
+      "title": "Minimum Success Ratio"
+    },
+    "namespace_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Namespace Uid",
+      "type": "string"
+    },
+    "owner_disposition": {
+      "enum": [
+        "review",
+        "retain_current_configuration",
+        "rolled_back"
+      ],
+      "title": "Owner Disposition",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "workload_uid": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Workload Uid",
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "namespace_uid",
+    "workload_uid",
+    "hpa_uid",
+    "container",
+    "approval_ref",
+    "changed_at",
+    "before",
+    "after",
+    "minimum_success_ratio",
+    "maximum_demand_change_ratio",
+    "owner_disposition"
+  ],
+  "title": "EngineeringChangeRecord",
+  "type": "object"
+}

@@ -1,0 +1,394 @@
+{
+  "$defs": {
+    "SingleContainerCpuBasis": {
+      "additionalProperties": false,
+      "properties": {
+        "configuration_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Configuration Revision",
+          "type": "string"
+        },
+        "hpa_uid": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Hpa Uid",
+          "type": "string"
+        },
+        "request_revision": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Request Revision",
+          "type": "string"
+        },
+        "sole_container": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Sole Container",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hpa_uid",
+        "configuration_revision",
+        "request_revision",
+        "sole_container"
+      ],
+      "title": "SingleContainerCpuBasis",
+      "type": "object"
+    },
+    "VpaConfiguration": {
+      "additionalProperties": false,
+      "properties": {
+        "container_policies": {
+          "items": {
+            "$ref": "#/$defs/VpaContainerPolicy"
+          },
+          "title": "Container Policies",
+          "type": "array"
+        },
+        "evidence_issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Evidence Issues",
+          "type": "array"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "recommendations": {
+          "items": {
+            "$ref": "#/$defs/VpaContainerRecommendation"
+          },
+          "title": "Recommendations",
+          "type": "array"
+        },
+        "uid": {
+          "minLength": 1,
+          "title": "Uid",
+          "type": "string"
+        },
+        "update_mode": {
+          "enum": [
+            "Off",
+            "Initial",
+            "Recreate",
+            "Auto",
+            "InPlaceOrRecreate"
+          ],
+          "title": "Update Mode",
+          "type": "string"
+        }
+      },
+      "required": [
+        "uid",
+        "name",
+        "update_mode"
+      ],
+      "title": "VpaConfiguration",
+      "type": "object"
+    },
+    "VpaContainerPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "container_name": {
+          "minLength": 1,
+          "title": "Container Name",
+          "type": "string"
+        },
+        "controlled_resources": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "cpu",
+                  "memory"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Controlled Resources"
+        },
+        "controlled_values": {
+          "anyOf": [
+            {
+              "enum": [
+                "RequestsOnly",
+                "RequestsAndLimits"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Controlled Values"
+        },
+        "max_allowed": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VpaResourceValues"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "min_allowed": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VpaResourceValues"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "mode": {
+          "enum": [
+            "Auto",
+            "Off"
+          ],
+          "title": "Mode",
+          "type": "string"
+        }
+      },
+      "required": [
+        "container_name",
+        "mode"
+      ],
+      "title": "VpaContainerPolicy",
+      "type": "object"
+    },
+    "VpaContainerRecommendation": {
+      "additionalProperties": false,
+      "properties": {
+        "container_name": {
+          "minLength": 1,
+          "title": "Container Name",
+          "type": "string"
+        },
+        "lower_bound": {
+          "$ref": "#/$defs/VpaResourceValues"
+        },
+        "target": {
+          "$ref": "#/$defs/VpaResourceValues"
+        },
+        "uncapped_target": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/VpaResourceValues"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "upper_bound": {
+          "$ref": "#/$defs/VpaResourceValues"
+        }
+      },
+      "required": [
+        "container_name",
+        "target",
+        "lower_bound",
+        "upper_bound"
+      ],
+      "title": "VpaContainerRecommendation",
+      "type": "object"
+    },
+    "VpaResourceValues": {
+      "additionalProperties": false,
+      "properties": {
+        "cpu_mcores": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cpu Mcores"
+        },
+        "memory_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Memory Mib"
+        }
+      },
+      "title": "VpaResourceValues",
+      "type": "object"
+    },
+    "VpaScope": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "maxLength": 512,
+          "pattern": "^\\S+$",
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "tenant_id": {
+          "format": "uuid",
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "vpa_uid": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Vpa Uid",
+          "type": "string"
+        },
+        "workload_kind": {
+          "const": "Deployment",
+          "title": "Workload Kind",
+          "type": "string"
+        },
+        "workload_uid": {
+          "maxLength": 128,
+          "minLength": 1,
+          "pattern": "^\\S+$",
+          "title": "Workload Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "namespace_uid",
+        "workload_uid",
+        "workload_kind",
+        "vpa_uid"
+      ],
+      "title": "VpaScope",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "container": {
+      "maxLength": 128,
+      "minLength": 1,
+      "pattern": "^\\S+$",
+      "title": "Container",
+      "type": "string"
+    },
+    "cpu_basis": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SingleContainerCpuBasis"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "observed_at": {
+      "format": "date-time",
+      "title": "Observed At",
+      "type": "string"
+    },
+    "request_cpu_mcpu": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Request Cpu Mcpu"
+    },
+    "request_memory_mib": {
+      "anyOf": [
+        {
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Request Memory Mib"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "scope": {
+      "$ref": "#/$defs/VpaScope"
+    },
+    "source_status": {
+      "enum": [
+        "complete",
+        "partial",
+        "denied"
+      ],
+      "title": "Source Status",
+      "type": "string"
+    },
+    "vpa": {
+      "$ref": "#/$defs/VpaConfiguration"
+    }
+  },
+  "required": [
+    "schema_version",
+    "scope",
+    "source_status",
+    "observed_at",
+    "container",
+    "vpa"
+  ],
+  "title": "CurrentVpaEvidence",
+  "type": "object"
+}

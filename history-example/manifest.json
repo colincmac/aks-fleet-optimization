@@ -1,0 +1,12 @@
+{
+  "files": {
+    "analysis-config.json": "52dce6124ae4be47620fcc7bdf9cda3eb4d086db9cc516cf2736b52b421d3dd9",
+    "assessment.json": "b6e0443f2b33188ab82800bc1c57f022bf2c744076cd044e597e1140ed55c68e",
+    "fragments.json": "62805ddedaf904b17f9ce923ded246fea9f394ebbd27f5240696d33b26708d8d",
+    "report.md": "426b1127ebc98c915e35a781908ff9702d246cb2be0583ef8d86ab8eba05be3a",
+    "snapshot.json": "57d3635ad188db730a81afbb14d0b8f89f4a0838cf290758d30d89a080134945"
+  },
+  "input_digest": "2e3c778296043923491c3ec25bac20c4801bec2effd2fc01730971135bf83f10",
+  "schema_version": "1.0",
+  "status": "partial"
+}

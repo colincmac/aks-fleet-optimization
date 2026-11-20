@@ -1,0 +1,32 @@
+name: Recommendation rule
+description: Specify a deterministic efficiency or guardrail rule
+title: "[RULE] "
+labels: [rule]
+body:
+  - type: input
+    id: id
+    attributes:
+      label: Proposed rule ID
+      placeholder: AKS-RQ-004
+    validations: {required: true}
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Required evidence, formula, and units
+    validations: {required: true}
+  - type: textarea
+    id: gates
+    attributes:
+      label: Window, coverage, suppression, and reliability guardrails
+    validations: {required: true}
+  - type: textarea
+    id: action
+    attributes:
+      label: Proposed action, validation, risk, and rollback context
+    validations: {required: true}
+  - type: textarea
+    id: tests
+    attributes:
+      label: Test matrix
+      description: Positive, negative, boundary, missing, stale, low coverage, and conflicts
+    validations: {required: true}

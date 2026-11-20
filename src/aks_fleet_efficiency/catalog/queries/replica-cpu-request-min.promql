@@ -1,0 +1,1 @@
+aks_advisor:workload_container_cpu_request_min_mcores{__scope__}

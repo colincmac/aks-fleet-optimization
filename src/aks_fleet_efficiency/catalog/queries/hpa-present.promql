@@ -1,0 +1,1 @@
+aks_advisor:workload_hpa_present{__scope__}

@@ -1,0 +1,202 @@
+{
+  "schema_version": "1.0",
+  "tenant_id": "00000000-0000-0000-0000-000000000000",
+  "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+  "cluster_uid": "synthetic-cluster-uid",
+  "source": "synthetic-history",
+  "source_version": "1.0.0",
+  "profile": "synthetic-node-uid-history",
+  "profile_version": "1.0.0",
+  "mapping_reference": "synthetic-explicit-historical-node-uids",
+  "window_start": "2026-10-29T11:50:00Z",
+  "window_end": "2026-10-29T12:00:00Z",
+  "step_seconds": 300,
+  "cpu_measure": "rate(node_cpu_usage_seconds_total)",
+  "cpu_rate_window_seconds": 300,
+  "memory_measure": "node_memory_working_set_bytes",
+  "cpu_receipt": {
+    "schema_version": "1.0",
+    "collector": "synthetic-history",
+    "status": "complete",
+    "requested_scope": [
+      "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+    ],
+    "completed_scope": [
+      "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+    ],
+    "started_at": "2026-10-29T12:00:00Z",
+    "completed_at": "2026-10-29T12:00:00Z",
+    "source_observed_at": "2026-10-29T12:00:00Z",
+    "pagination_complete": true,
+    "retry_count": 0,
+    "errors": [],
+    "missing_fields": []
+  },
+  "memory_receipt": {
+    "schema_version": "1.0",
+    "collector": "synthetic-history",
+    "status": "complete",
+    "requested_scope": [
+      "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+    ],
+    "completed_scope": [
+      "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+    ],
+    "started_at": "2026-10-29T12:00:00Z",
+    "completed_at": "2026-10-29T12:00:00Z",
+    "source_observed_at": "2026-10-29T12:00:00Z",
+    "pagination_complete": true,
+    "retry_count": 0,
+    "errors": [],
+    "missing_fields": []
+  },
+  "points": [
+    {
+      "timestamp": "2026-10-29T11:50:00Z",
+      "membership_receipt": {
+        "schema_version": "1.0",
+        "collector": "synthetic-history",
+        "status": "complete",
+        "requested_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "completed_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "started_at": "2026-10-29T11:50:00Z",
+        "completed_at": "2026-10-29T11:50:00Z",
+        "source_observed_at": "2026-10-29T11:50:00Z",
+        "pagination_complete": true,
+        "retry_count": 0,
+        "errors": [],
+        "missing_fields": []
+      },
+      "members": [
+        {
+          "node_uid": "synthetic-historical-node-0",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-0"
+        },
+        {
+          "node_uid": "synthetic-historical-node-1",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-1"
+        }
+      ],
+      "contributions": [
+        {
+          "node_uid": "synthetic-historical-node-0",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-0",
+          "cpu_mcpu": 0.0,
+          "memory_working_set_mib": 100.0,
+          "cpu_sampled_at": "2026-10-29T11:50:00Z",
+          "memory_sampled_at": "2026-10-29T11:50:00Z"
+        },
+        {
+          "node_uid": "synthetic-historical-node-1",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-1",
+          "cpu_mcpu": 1000.0,
+          "memory_working_set_mib": 100.0,
+          "cpu_sampled_at": "2026-10-29T11:50:00Z",
+          "memory_sampled_at": "2026-10-29T11:50:00Z"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-29T11:55:00Z",
+      "membership_receipt": {
+        "schema_version": "1.0",
+        "collector": "synthetic-history",
+        "status": "complete",
+        "requested_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "completed_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "started_at": "2026-10-29T11:55:00Z",
+        "completed_at": "2026-10-29T11:55:00Z",
+        "source_observed_at": "2026-10-29T11:55:00Z",
+        "pagination_complete": true,
+        "retry_count": 0,
+        "errors": [],
+        "missing_fields": []
+      },
+      "members": [
+        {
+          "node_uid": "synthetic-historical-node-0",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-0"
+        },
+        {
+          "node_uid": "synthetic-historical-node-1",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-1"
+        }
+      ],
+      "contributions": [
+        {
+          "node_uid": "synthetic-historical-node-0",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-0",
+          "cpu_mcpu": 1000.0,
+          "memory_working_set_mib": 100.0,
+          "cpu_sampled_at": "2026-10-29T11:55:00Z",
+          "memory_sampled_at": "2026-10-29T11:55:00Z"
+        },
+        {
+          "node_uid": "synthetic-historical-node-1",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-1",
+          "cpu_mcpu": 0.0,
+          "memory_working_set_mib": 100.0,
+          "cpu_sampled_at": "2026-10-29T11:55:00Z",
+          "memory_sampled_at": "2026-10-29T11:55:00Z"
+        }
+      ]
+    },
+    {
+      "timestamp": "2026-10-29T12:00:00Z",
+      "membership_receipt": {
+        "schema_version": "1.0",
+        "collector": "synthetic-history",
+        "status": "complete",
+        "requested_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "completed_scope": [
+          "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"
+        ],
+        "started_at": "2026-10-29T12:00:00Z",
+        "completed_at": "2026-10-29T12:00:00Z",
+        "source_observed_at": "2026-10-29T12:00:00Z",
+        "pagination_complete": true,
+        "retry_count": 0,
+        "errors": [],
+        "missing_fields": []
+      },
+      "members": [
+        {
+          "node_uid": "synthetic-historical-node-0",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-0"
+        },
+        {
+          "node_uid": "synthetic-historical-node-1",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-1"
+        }
+      ],
+      "contributions": [
+        {
+          "node_uid": "synthetic-historical-node-0",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-0",
+          "cpu_mcpu": 0.0,
+          "memory_working_set_mib": 100.0,
+          "cpu_sampled_at": "2026-10-29T12:00:00Z",
+          "memory_sampled_at": "2026-10-29T12:00:00Z"
+        },
+        {
+          "node_uid": "synthetic-historical-node-1",
+          "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.Compute/virtualMachines/synthetic-history-1",
+          "cpu_mcpu": 1000.0,
+          "memory_working_set_mib": 100.0,
+          "cpu_sampled_at": "2026-10-29T12:00:00Z",
+          "memory_sampled_at": "2026-10-29T12:00:00Z"
+        }
+      ]
+    }
+  ]
+}

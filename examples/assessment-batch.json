@@ -1,0 +1,10 @@
+{
+  "tenant_id": "00000000-0000-0000-0000-000000000000",
+  "targets": [
+    {
+      "config": "cpu-pack-config.yaml",
+      "fragments": "fixtures/history-assessment.json",
+      "cluster_uid": "synthetic-cluster-uid"
+    }
+  ]
+}

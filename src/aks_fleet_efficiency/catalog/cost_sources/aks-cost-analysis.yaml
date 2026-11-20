@@ -1,0 +1,19 @@
+id: aks-cost-analysis
+version: 1.0.0
+provider: aks-cost-analysis
+evidence_kind: allocation
+projection_format: reviewed-aks-cost-analysis-v1
+producer_version_kind: projection
+pricing_provenance: billing-ledger
+cost_basis: source-declared
+granularities: [cluster, namespace, asset]
+identity: name-only
+allocation_policy: source-native
+reconciliation: aggregate-attribution
+characterized_versions:
+  projection: [1.0.0]
+characterization: synthetic
+limitations:
+  - Reviewed saved evidence only; no public managed add-on OpenCost endpoint is assumed.
+  - Native aggregate views do not establish original billing-row or workload-UID identity.
+  - The producer version identifies the reviewed projection, not a discovered managed add-on version.

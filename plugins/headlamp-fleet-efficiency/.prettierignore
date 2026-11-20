@@ -1,0 +1,6 @@
+src/models/advisor.generated.ts
+src/models/operator-catalog.generated.ts
+src/models/operator-inspection.generated.ts
+src/models/review.schema.json
+src/models/vpa.schema.json
+package-lock.json

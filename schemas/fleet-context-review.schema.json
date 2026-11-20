@@ -1,0 +1,306 @@
+{
+  "$defs": {
+    "BusinessOwnerRouting": {
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "const": "routing_declaration_not_authorization",
+          "default": "routing_declaration_not_authorization",
+          "title": "Authority",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "owner_ref": {
+          "anyOf": [
+            {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Owner Ref"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "declared",
+            "unknown",
+            "conflicting"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "workload_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Workload Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "namespace_uid",
+        "workload_uid",
+        "status",
+        "owner_ref",
+        "reason_codes"
+      ],
+      "title": "BusinessOwnerRouting",
+      "type": "object"
+    },
+    "HistoricalMarketCounts": {
+      "additionalProperties": false,
+      "properties": {
+        "market_counts": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "integer"
+              },
+              "propertyNames": {
+                "enum": [
+                  "spot",
+                  "regular",
+                  "unknown"
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Market Counts"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        }
+      },
+      "required": [
+        "timestamp",
+        "market_counts",
+        "reason_codes"
+      ],
+      "title": "HistoricalMarketCounts",
+      "type": "object"
+    },
+    "HistoricalMarketReview": {
+      "additionalProperties": false,
+      "properties": {
+        "fallback_gaps": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Fallback Gaps",
+          "type": "array"
+        },
+        "fallback_records": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/SourceFallbackRecord"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Fallback Records"
+        },
+        "interpretation": {
+          "const": "sampled_source_market_not_inferred_fallback_or_placement",
+          "default": "sampled_source_market_not_inferred_fallback_or_placement",
+          "title": "Interpretation",
+          "type": "string"
+        },
+        "points": {
+          "items": {
+            "$ref": "#/$defs/HistoricalMarketCounts"
+          },
+          "title": "Points",
+          "type": "array"
+        },
+        "step_seconds": {
+          "title": "Step Seconds",
+          "type": "integer"
+        },
+        "window_end": {
+          "format": "date-time",
+          "title": "Window End",
+          "type": "string"
+        },
+        "window_start": {
+          "format": "date-time",
+          "title": "Window Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "window_start",
+        "window_end",
+        "step_seconds",
+        "points",
+        "fallback_records",
+        "fallback_gaps"
+      ],
+      "title": "HistoricalMarketReview",
+      "type": "object"
+    },
+    "SourceFallbackRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "from_node_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "From Node Uid",
+          "type": "string"
+        },
+        "source_reference": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        },
+        "to_node_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "To Node Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "timestamp",
+        "from_node_uid",
+        "to_node_uid",
+        "source_reference"
+      ],
+      "title": "SourceFallbackRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "business_owners": {
+      "items": {
+        "$ref": "#/$defs/BusinessOwnerRouting"
+      },
+      "title": "Business Owners",
+      "type": "array"
+    },
+    "cluster_resource_id": {
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "context_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Context Digest",
+      "type": "string"
+    },
+    "evaluated_at": {
+      "format": "date-time",
+      "title": "Evaluated At",
+      "type": "string"
+    },
+    "market_history": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HistoricalMarketReview"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "observed_at": {
+      "format": "date-time",
+      "title": "Observed At",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source",
+      "type": "string"
+    },
+    "source_admission": {
+      "const": "unverified_saved_context",
+      "default": "unverified_saved_context",
+      "title": "Source Admission",
+      "type": "string"
+    },
+    "source_profile": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source Profile",
+      "type": "string"
+    },
+    "source_profile_version": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source Profile Version",
+      "type": "string"
+    },
+    "source_version": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source Version",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "unmatched_owner_declarations": {
+      "minimum": 0,
+      "title": "Unmatched Owner Declarations",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "source",
+    "source_version",
+    "source_profile",
+    "source_profile_version",
+    "observed_at",
+    "evaluated_at",
+    "context_digest",
+    "business_owners",
+    "unmatched_owner_declarations",
+    "market_history"
+  ],
+  "title": "FleetContextReview",
+  "type": "object"
+}

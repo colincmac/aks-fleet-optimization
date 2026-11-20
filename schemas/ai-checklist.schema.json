@@ -1,0 +1,307 @@
+{
+  "$defs": {
+    "AIChecklistStep": {
+      "additionalProperties": false,
+      "properties": {
+        "citation": {
+          "$ref": "#/$defs/EvidenceCitation"
+        },
+        "kind": {
+          "enum": [
+            "confirm_scope",
+            "inspect_source_gaps",
+            "review_controller_interactions",
+            "define_test_and_abort_criteria",
+            "verify_rollback_prerequisites",
+            "retain_no_change_option"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "citation"
+      ],
+      "title": "AIChecklistStep",
+      "type": "object"
+    },
+    "AIExplanationClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "citation": {
+          "$ref": "#/$defs/EvidenceCitation"
+        },
+        "fact": {
+          "$ref": "#/$defs/AIFindingSummary"
+        },
+        "interpretation": {
+          "maxLength": 4096,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Interpretation",
+          "type": "string"
+        }
+      },
+      "required": [
+        "fact",
+        "citation",
+        "interpretation"
+      ],
+      "title": "AIExplanationClaim",
+      "type": "object"
+    },
+    "AIExplanationDraft": {
+      "additionalProperties": false,
+      "properties": {
+        "claims": {
+          "items": {
+            "$ref": "#/$defs/AIExplanationClaim"
+          },
+          "maxItems": 128,
+          "minItems": 1,
+          "title": "Claims",
+          "type": "array"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "package_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Package Digest",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/AdvisoryProvenance"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "package_digest",
+        "generated_at",
+        "expires_at",
+        "provenance",
+        "claims"
+      ],
+      "title": "AIExplanationDraft",
+      "type": "object"
+    },
+    "AIFindingSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Confidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_digests": {
+          "items": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "maxItems": 128,
+          "title": "Reason Digests",
+          "type": "array"
+        },
+        "record_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Record Id",
+          "type": "string"
+        },
+        "resource_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Resource Digest",
+          "type": "string"
+        },
+        "rule_id": {
+          "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Rule Version",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "scope_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Scope Id",
+          "type": "string"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Severity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "enum": [
+            "finding",
+            "blocked"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "record_id",
+        "run_id",
+        "scope_id",
+        "resource_digest",
+        "rule_id",
+        "rule_version",
+        "state",
+        "severity",
+        "confidence",
+        "reason_digests"
+      ],
+      "title": "AIFindingSummary",
+      "type": "object"
+    },
+    "AdvisoryProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "model": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Model",
+          "type": "string"
+        },
+        "prompt_revision": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Prompt Revision",
+          "type": "string"
+        },
+        "provider": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Provider",
+          "type": "string"
+        },
+        "skill_revision": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Skill Revision",
+          "type": "string"
+        },
+        "tool_revision": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Tool Revision",
+          "type": "string"
+        }
+      },
+      "required": [
+        "provider",
+        "model",
+        "prompt_revision",
+        "skill_revision",
+        "tool_revision"
+      ],
+      "title": "AdvisoryProvenance",
+      "type": "object"
+    },
+    "Confidence": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "Confidence",
+      "type": "string"
+    },
+    "EvidenceCitation": {
+      "additionalProperties": false,
+      "properties": {
+        "record_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Record Digest",
+          "type": "string"
+        },
+        "record_id": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Record Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "record_id",
+        "record_digest"
+      ],
+      "title": "EvidenceCitation",
+      "type": "object"
+    },
+    "Severity": {
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "explanation": {
+      "$ref": "#/$defs/AIExplanationDraft"
+    },
+    "intent_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Intent Digest",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "state": {
+      "const": "unverified_checklist",
+      "default": "unverified_checklist",
+      "title": "State",
+      "type": "string"
+    },
+    "steps": {
+      "items": {
+        "$ref": "#/$defs/AIChecklistStep"
+      },
+      "maxItems": 32,
+      "minItems": 3,
+      "title": "Steps",
+      "type": "array"
+    }
+  },
+  "required": [
+    "intent_digest",
+    "explanation",
+    "steps"
+  ],
+  "title": "AIChecklist",
+  "type": "object"
+}

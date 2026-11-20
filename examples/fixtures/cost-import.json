@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0",
+  "ledger_profile": {
+    "id": "azure-cost-details-amortized",
+    "version": "1.0.0",
+    "producer_version": "2025.05.01"
+  },
+  "cost_basis": "amortized",
+  "tenant_id": "00000000-0000-0000-0000-000000000000",
+  "subscription_ids": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "period": {
+    "start": "2026-09-29T00:00:00Z",
+    "end": "2026-10-29T00:00:00Z"
+  },
+  "source_reference": "synthetic-azure-export",
+  "source_observed_at": "2026-10-29T00:00:00Z",
+  "export_complete": true,
+  "rows": [
+    {
+      "id": "row-1",
+      "subscription_id": "00000000-0000-0000-0000-000000000000",
+      "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic",
+      "period": {
+        "start": "2026-09-29T00:00:00Z",
+        "end": "2026-10-29T00:00:00Z"
+      },
+      "amount": "100.00",
+      "currency": "USD",
+      "charge_category": "compute",
+      "source_category": "Virtual Machines",
+      "charge_type": "Usage",
+      "pricing_model": "Reservation",
+      "benefit_id": "synthetic-reservation",
+      "reservation_id": null,
+      "focus": null
+    }
+  ],
+  "bindings": [
+    {
+      "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic",
+      "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+      "cluster_uid": "cluster-uid",
+      "pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/apps",
+      "valid_period": {
+        "start": "2026-09-29T00:00:00Z",
+        "end": "2026-10-29T00:00:00Z"
+      },
+      "identity_basis": "exact-historical",
+      "reference": "synthetic-historical-binding"
+    }
+  ],
+  "allocation": {
+    "profile": {
+      "id": "reviewed-allocation-shares",
+      "version": "1.0.0",
+      "producer_version": "1.0.0"
+    },
+    "source_reference": "synthetic-reviewed-shares",
+    "cost_basis": "amortized",
+    "pricing_basis": "source-declared",
+    "period": {
+      "start": "2026-09-29T00:00:00Z",
+      "end": "2026-10-29T00:00:00Z"
+    },
+    "complete": true,
+    "allocation_policy": "not-shared",
+    "shares": [
+      {
+        "category": "allocated",
+        "granularity": "container",
+        "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+        "namespace": "apps",
+        "workload_name": "synthetic",
+        "workload_uid": "workload-uid",
+        "container": "app",
+        "asset_id": null,
+        "identity_basis": "exact-historical",
+        "valid_period": {
+          "start": "2026-09-29T00:00:00Z",
+          "end": "2026-10-29T00:00:00Z"
+        },
+        "reference": "synthetic-workload-history",
+        "row_id": "row-1",
+        "fraction": "0.60"
+      },
+      {
+        "category": "idle",
+        "granularity": null,
+        "cluster_resource_id": null,
+        "namespace": null,
+        "workload_name": null,
+        "workload_uid": null,
+        "container": null,
+        "asset_id": null,
+        "identity_basis": null,
+        "valid_period": null,
+        "reference": null,
+        "row_id": "row-1",
+        "fraction": "0.25"
+      },
+      {
+        "category": "system",
+        "granularity": null,
+        "cluster_resource_id": null,
+        "namespace": null,
+        "workload_name": null,
+        "workload_uid": null,
+        "container": null,
+        "asset_id": null,
+        "identity_basis": null,
+        "valid_period": null,
+        "reference": null,
+        "row_id": "row-1",
+        "fraction": "0.15"
+      }
+    ],
+    "amounts": []
+  },
+  "export_provenance": null
+}

@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "#/definitions/VpaRecord",
+  "definitions": {
+    "VpaRecord": {
+      "type": "object",
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "const": "autoscaling.k8s.io/v1"
+        },
+        "kind": {
+          "type": "string",
+          "const": "VerticalPodAutoscaler"
+        },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "namespace": {
+              "type": "string"
+            },
+            "uid": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "namespace"
+          ]
+        },
+        "spec": {
+          "type": "object",
+          "properties": {
+            "targetRef": {
+              "type": "object",
+              "properties": {
+                "apiVersion": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "apiVersion",
+                "kind",
+                "name"
+              ]
+            },
+            "updatePolicy": {
+              "type": "object",
+              "properties": {
+                "updateMode": {
+                  "type": "string"
+                }
+              }
+            },
+            "resourcePolicy": {
+              "type": "object",
+              "properties": {
+                "containerPolicies": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "containerName": {
+                        "type": "string"
+                      },
+                      "mode": {
+                        "type": "string"
+                      },
+                      "minAllowed": {
+                        "$ref": "#/definitions/Requests"
+                      },
+                      "maxAllowed": {
+                        "$ref": "#/definitions/Requests"
+                      },
+                      "controlledResources": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "containerName"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "required": [
+            "targetRef"
+          ]
+        },
+        "status": {
+          "type": "object",
+          "properties": {
+            "recommendation": {
+              "type": "object",
+              "properties": {
+                "containerRecommendations": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/VpaBounds"
+                  }
+                }
+              },
+              "required": [
+                "containerRecommendations"
+              ]
+            }
+          }
+        }
+      },
+      "required": [
+        "apiVersion",
+        "kind",
+        "metadata",
+        "spec"
+      ]
+    },
+    "Requests": {
+      "type": "object",
+      "properties": {
+        "cpu": {
+          "type": "string"
+        },
+        "memory": {
+          "type": "string"
+        }
+      }
+    },
+    "VpaBounds": {
+      "type": "object",
+      "properties": {
+        "containerName": {
+          "type": "string"
+        },
+        "lowerBound": {
+          "$ref": "#/definitions/Requests"
+        },
+        "target": {
+          "$ref": "#/definitions/Requests"
+        },
+        "upperBound": {
+          "$ref": "#/definitions/Requests"
+        },
+        "uncappedTarget": {
+          "$ref": "#/definitions/Requests"
+        }
+      },
+      "required": [
+        "containerName"
+      ]
+    }
+  }
+}

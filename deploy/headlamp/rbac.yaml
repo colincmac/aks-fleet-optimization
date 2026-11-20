@@ -1,0 +1,39 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: fleet-recommendation-viewer
+  namespace: fleet-efficiency-system
+rules:
+  - apiGroups: [optimization.aks.io]
+    resources: [optimizationrecommendations]
+    verbs: [get, list, watch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: application-recommendation-approver
+  namespace: fleet-efficiency-system
+rules:
+  - apiGroups: [optimization.aks.io]
+    resources: [optimizationrecommendations]
+    verbs: [approve, reject, defer, request-observation, exception]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: platform-recommendation-approver
+  namespace: fleet-efficiency-system
+rules:
+  - apiGroups: [optimization.aks.io]
+    resources: [optimizationrecommendations]
+    verbs: [approve, reject, defer, request-observation, exception, create-pull-request, cancel]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: fleet-recommendation-administrator
+  namespace: fleet-efficiency-system
+rules:
+  - apiGroups: [optimization.aks.io]
+    resources: [optimizationrecommendations]
+    verbs: [configure]

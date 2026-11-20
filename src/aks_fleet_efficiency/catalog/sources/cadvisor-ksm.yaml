@@ -1,0 +1,20 @@
+id: cadvisor-ksm
+version: "1.0.0"
+identity: name-only
+transports: [prometheus, azure-managed-prometheus]
+labels:
+  cluster_resource_id: azure_resource_id
+  namespace: namespace
+  pod: pod
+  container: container
+query_ids: [cpu_usage, cpu_request]
+characterized_versions:
+  prometheus: ["3.16.0-rc.2"]
+  kube-state-metrics: ["2.17.0"]
+characterization: synthetic
+joins: none
+limitations:
+  - These are synthetic metric-shape tests, not live AKS/exporter certification.
+  - An exact approved cluster resource-ID label is required; cluster display names are insufficient.
+  - Pod names are unresolved series identity, not historical workload or Pod UIDs.
+  - No ownership join, historical relabelling, zero fill or guarded proposal is supported.

@@ -1,0 +1,1 @@
+rate(container_cpu_usage_seconds_total{azure_resource_id="/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",container="api",namespace="synthetic",pod="synthetic-pod"}[5m]) * 1000

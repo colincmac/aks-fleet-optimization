@@ -1,0 +1,20 @@
+id: finops-focus
+version: 1.0.0
+provider: finops-toolkit
+evidence_kind: ledger
+projection_format: finops-focus-projection-v1
+producer_version_kind: dataset
+specification_version: '1.2'
+pricing_provenance: billing-ledger
+cost_basis: effective
+granularities: [resource]
+identity: exact-historical
+allocation_policy: none
+reconciliation: ledger-row-partition
+characterized_versions:
+  azure-focus: [1.2-preview]
+characterization: synthetic
+limitations:
+  - Sanitized projection or bounded local Azure CSV/manifest conversion; no FinOps hub, Fabric, ADX, or storage client.
+  - Effective cost mapping must be reviewed against the supplying FOCUS dataset.
+  - Corrections, nonusage charges and unused commitments remain blocked; null commitment consumption status is unknown.

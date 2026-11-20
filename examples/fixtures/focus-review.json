@@ -1,0 +1,15 @@
+{
+  "tenant_id": "00000000-0000-0000-0000-000000000000",
+  "subscription_ids": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "period": {
+    "start": "2026-09-29T00:00:00Z",
+    "end": "2026-10-29T00:00:00Z"
+  },
+  "source_reference": "synthetic-reviewed-focus-export",
+  "source_observed_at": "2026-10-29T00:00:00+00:00",
+  "expected_totals": {
+    "USD": "100.00"
+  }
+}

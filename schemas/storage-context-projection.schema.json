@@ -1,0 +1,1090 @@
+{
+  "$defs": {
+    "CollectionError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "unauthorized",
+            "forbidden",
+            "timeout",
+            "throttled",
+            "unavailable",
+            "invalid-response",
+            "response-budget-exceeded",
+            "identity-mismatch"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "code"
+      ],
+      "title": "CollectionError",
+      "type": "object"
+    },
+    "CollectionStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "title": "CollectionStatus",
+      "type": "string"
+    },
+    "CollectorResult": {
+      "additionalProperties": false,
+      "properties": {
+        "collector": {
+          "minLength": 1,
+          "title": "Collector",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "completed_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Completed Scope",
+          "type": "array"
+        },
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/CollectionError"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "pagination_complete": {
+          "default": false,
+          "title": "Pagination Complete",
+          "type": "boolean"
+        },
+        "requested_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requested Scope",
+          "type": "array"
+        },
+        "retry_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Retry Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Observed At"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CollectionStatus"
+        }
+      },
+      "required": [
+        "collector",
+        "status",
+        "requested_scope",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "CollectorResult",
+      "type": "object"
+    },
+    "CsiDriverContext": {
+      "additionalProperties": false,
+      "properties": {
+        "attach_required": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Attach Required"
+        },
+        "issues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 253,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "resource_version": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Version"
+        },
+        "uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "uid",
+        "name",
+        "resource_version",
+        "attach_required"
+      ],
+      "title": "CsiDriverContext",
+      "type": "object"
+    },
+    "CsiNodeContext": {
+      "additionalProperties": false,
+      "properties": {
+        "drivers": {
+          "items": {
+            "$ref": "#/$defs/CsiNodeDriver"
+          },
+          "title": "Drivers",
+          "type": "array"
+        },
+        "issues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 253,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "node_uid": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Node Uid"
+        },
+        "resource_version": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Version"
+        },
+        "uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "uid",
+        "name",
+        "resource_version",
+        "node_uid",
+        "drivers"
+      ],
+      "title": "CsiNodeContext",
+      "type": "object"
+    },
+    "CsiNodeDriver": {
+      "additionalProperties": false,
+      "properties": {
+        "issues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "maximum_volumes": {
+          "anyOf": [
+            {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Maximum Volumes"
+        },
+        "name": {
+          "maxLength": 253,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "topology_keys": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Topology Keys"
+        }
+      },
+      "required": [
+        "name",
+        "maximum_volumes",
+        "topology_keys",
+        "issues"
+      ],
+      "title": "CsiNodeDriver",
+      "type": "object"
+    },
+    "JsonValue": {},
+    "NodeReservationAudit": {
+      "additionalProperties": false,
+      "properties": {
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "node_name": {
+          "minLength": 1,
+          "title": "Node Name",
+          "type": "string"
+        },
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "observed_cpu_request_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Cpu Request Mcpu"
+        },
+        "observed_memory_request_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Memory Request Mib"
+        },
+        "observed_nonterminal_pod_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Nonterminal Pod Count"
+        },
+        "pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Pod Uids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "node_uid",
+        "node_name",
+        "pod_uids"
+      ],
+      "title": "NodeReservationAudit",
+      "type": "object"
+    },
+    "SchedulingCompletenessAudit": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "const": "sanitized-metadata-reservation-audit",
+          "default": "sanitized-metadata-reservation-audit",
+          "title": "Basis",
+          "type": "string"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "minLength": 1,
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "collection": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "fit_status": {
+          "const": "blocked",
+          "default": "blocked",
+          "title": "Fit Status",
+          "type": "string"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "maximum_source_age_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Maximum Source Age Seconds",
+          "type": "integer"
+        },
+        "metadata_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Metadata Digest",
+          "type": "string"
+        },
+        "metadata_generated_at": {
+          "format": "date-time",
+          "title": "Metadata Generated At",
+          "type": "string"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/NodeReservationAudit"
+          },
+          "title": "Nodes",
+          "type": "array"
+        },
+        "pending_pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Pending Pod Uids",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "terminal_pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Terminal Pod Uids",
+          "type": "array"
+        },
+        "unobserved_dimensions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unobserved Dimensions",
+          "type": "array"
+        },
+        "unresolved_assignment_pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unresolved Assignment Pod Uids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "metadata_digest",
+        "metadata_generated_at",
+        "evaluated_at",
+        "maximum_source_age_seconds",
+        "collection",
+        "nodes",
+        "pending_pod_uids",
+        "unresolved_assignment_pod_uids",
+        "terminal_pod_uids",
+        "issues"
+      ],
+      "title": "SchedulingCompletenessAudit",
+      "type": "object"
+    },
+    "StorageClaim": {
+      "additionalProperties": false,
+      "properties": {
+        "access_modes": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "ReadWriteOnce",
+                  "ReadOnlyMany",
+                  "ReadWriteMany",
+                  "ReadWriteOncePod"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Access Modes"
+        },
+        "bound_volume_uid": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bound Volume Uid"
+        },
+        "issues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 253,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "namespace": {
+          "title": "Namespace",
+          "type": "string"
+        },
+        "namespace_uid": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Namespace Uid"
+        },
+        "resource_version": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Version"
+        },
+        "storage_class_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Storage Class Name"
+        },
+        "uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Uid",
+          "type": "string"
+        },
+        "volume_mode": {
+          "anyOf": [
+            {
+              "enum": [
+                "Filesystem",
+                "Block"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Volume Mode"
+        },
+        "volume_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Volume Name"
+        }
+      },
+      "required": [
+        "uid",
+        "name",
+        "resource_version",
+        "namespace_uid",
+        "namespace",
+        "volume_name",
+        "storage_class_name",
+        "access_modes",
+        "volume_mode"
+      ],
+      "title": "StorageClaim",
+      "type": "object"
+    },
+    "StorageClassContext": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_topology": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/JsonValue"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Allowed Topology"
+        },
+        "binding_mode": {
+          "anyOf": [
+            {
+              "enum": [
+                "Immediate",
+                "WaitForFirstConsumer"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Binding Mode"
+        },
+        "issues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 253,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "provisioner": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Provisioner"
+        },
+        "resource_version": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Version"
+        },
+        "uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "uid",
+        "name",
+        "resource_version",
+        "provisioner",
+        "binding_mode",
+        "allowed_topology"
+      ],
+      "title": "StorageClassContext",
+      "type": "object"
+    },
+    "StorageNodeComparison": {
+      "additionalProperties": false,
+      "properties": {
+        "bound_volume_topology": {
+          "enum": [
+            "matched",
+            "excluded",
+            "unknown"
+          ],
+          "title": "Bound Volume Topology",
+          "type": "string"
+        },
+        "claim_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Claim Uid",
+          "type": "string"
+        },
+        "node_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "storage_class_topology": {
+          "enum": [
+            "matched",
+            "excluded",
+            "unknown"
+          ],
+          "title": "Storage Class Topology",
+          "type": "string"
+        },
+        "storage_feasibility": {
+          "const": "unknown",
+          "default": "unknown",
+          "title": "Storage Feasibility",
+          "type": "string"
+        }
+      },
+      "required": [
+        "claim_uid",
+        "node_uid",
+        "bound_volume_topology",
+        "storage_class_topology",
+        "reason_codes"
+      ],
+      "title": "StorageNodeComparison",
+      "type": "object"
+    },
+    "StorageVolume": {
+      "additionalProperties": false,
+      "properties": {
+        "access_modes": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "ReadWriteOnce",
+                  "ReadOnlyMany",
+                  "ReadWriteMany",
+                  "ReadWriteOncePod"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Access Modes"
+        },
+        "claim_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Claim Name"
+        },
+        "claim_namespace": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Claim Namespace"
+        },
+        "claim_uid": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Claim Uid"
+        },
+        "csi_driver": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Csi Driver"
+        },
+        "issues": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 253,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "node_affinity": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/JsonValue"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Node Affinity"
+        },
+        "resource_version": {
+          "anyOf": [
+            {
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Version"
+        },
+        "storage_class_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Storage Class Name"
+        },
+        "storage_type": {
+          "enum": [
+            "csi",
+            "local",
+            "hostPath",
+            "other",
+            "unknown"
+          ],
+          "title": "Storage Type",
+          "type": "string"
+        },
+        "uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Uid",
+          "type": "string"
+        },
+        "volume_mode": {
+          "anyOf": [
+            {
+              "enum": [
+                "Filesystem",
+                "Block"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Volume Mode"
+        }
+      },
+      "required": [
+        "uid",
+        "name",
+        "resource_version",
+        "claim_uid",
+        "claim_name",
+        "claim_namespace",
+        "storage_class_name",
+        "access_modes",
+        "volume_mode",
+        "storage_type",
+        "csi_driver",
+        "node_affinity"
+      ],
+      "title": "StorageVolume",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "attachment_headroom": {
+      "const": "not_calculated",
+      "default": "not_calculated",
+      "title": "Attachment Headroom",
+      "type": "string"
+    },
+    "audit": {
+      "$ref": "#/$defs/SchedulingCompletenessAudit"
+    },
+    "claims": {
+      "items": {
+        "$ref": "#/$defs/StorageClaim"
+      },
+      "title": "Claims",
+      "type": "array"
+    },
+    "cluster_resource_id": {
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "comparisons": {
+      "items": {
+        "$ref": "#/$defs/StorageNodeComparison"
+      },
+      "title": "Comparisons",
+      "type": "array"
+    },
+    "csi_drivers": {
+      "items": {
+        "$ref": "#/$defs/CsiDriverContext"
+      },
+      "title": "Csi Drivers",
+      "type": "array"
+    },
+    "csi_nodes": {
+      "items": {
+        "$ref": "#/$defs/CsiNodeContext"
+      },
+      "title": "Csi Nodes",
+      "type": "array"
+    },
+    "evaluated_at": {
+      "format": "date-time",
+      "title": "Evaluated At",
+      "type": "string"
+    },
+    "fit_status": {
+      "const": "blocked",
+      "default": "blocked",
+      "title": "Fit Status",
+      "type": "string"
+    },
+    "input_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "title": "Input Digest",
+      "type": "string"
+    },
+    "mapping_reference": {
+      "const": "kubernetes-core-storage-v1@v1.36.0",
+      "default": "kubernetes-core-storage-v1@v1.36.0",
+      "title": "Mapping Reference",
+      "type": "string"
+    },
+    "maximum_source_age_seconds": {
+      "minimum": 1,
+      "title": "Maximum Source Age Seconds",
+      "type": "integer"
+    },
+    "receipts": {
+      "additionalProperties": {
+        "$ref": "#/$defs/CollectorResult"
+      },
+      "title": "Receipts",
+      "type": "object"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_admission": {
+      "const": "unverified_supplied_native_objects",
+      "default": "unverified_supplied_native_objects",
+      "title": "Source Admission",
+      "type": "string"
+    },
+    "source_issues": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Source Issues",
+      "type": "array"
+    },
+    "storage_classes": {
+      "items": {
+        "$ref": "#/$defs/StorageClassContext"
+      },
+      "title": "Storage Classes",
+      "type": "array"
+    },
+    "tenant_id": {
+      "title": "Tenant Id",
+      "type": "string"
+    },
+    "volumes": {
+      "items": {
+        "$ref": "#/$defs/StorageVolume"
+      },
+      "title": "Volumes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "evaluated_at",
+    "maximum_source_age_seconds",
+    "input_digest",
+    "audit",
+    "receipts",
+    "source_issues",
+    "claims",
+    "volumes",
+    "storage_classes",
+    "csi_nodes",
+    "csi_drivers",
+    "comparisons"
+  ],
+  "title": "StorageContextProjection",
+  "type": "object"
+}

@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0",
+  "window_start": "2026-09-29T00:00:00Z",
+  "window_end": "2026-10-29T00:00:00Z",
+  "azure": [{
+    "tenant_id": "00000000-0000-0000-0000-000000000000",
+    "generated_at": "2026-10-29T11:00:00Z",
+    "collection": {
+      "collector": "azure-inventory", "status": "complete",
+      "requested_scope": ["00000000-0000-0000-0000-000000000000"],
+      "completed_scope": ["00000000-0000-0000-0000-000000000000"],
+      "started_at": "2026-10-29T10:00:00Z", "completed_at": "2026-10-29T11:00:00Z",
+      "source_observed_at": "2026-10-29T10:00:00Z", "pagination_complete": true
+    },
+    "clusters": [{
+      "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+      "name": "aks-synthetic", "subscription_id": "00000000-0000-0000-0000-000000000000",
+      "resource_group": "rg-synthetic", "location": "eastus", "node_provisioning_mode": "Manual",
+      "node_pools": [{
+        "resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool",
+        "name": "userpool", "vm_size": "Standard_D4s_v5", "mode": "User",
+        "node_count": 1, "autoscaling_enabled": false, "spot": false
+      }]
+    }]
+  }],
+  "kubernetes": [{
+    "tenant_id": "00000000-0000-0000-0000-000000000000",
+    "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+    "cluster_uid": "synthetic-cluster-uid", "generated_at": "2026-10-29T11:00:00Z",
+    "collection": {
+      "collector": "kubernetes-metadata", "status": "complete",
+      "requested_scope": ["/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"],
+      "completed_scope": ["/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"],
+      "started_at": "2026-10-29T10:00:00Z", "completed_at": "2026-10-29T11:00:00Z",
+      "source_observed_at": "2026-10-29T10:00:00Z", "pagination_complete": true
+    },
+    "api_availability": {
+      "v1/nodes": "available", "v1/namespaces": "available", "v1/pods": "available"
+    },
+    "resource_versions": {
+      "v1/nodes": "synthetic-version", "v1/namespaces": "synthetic-version",
+      "v1/pods": "synthetic-version"
+    },
+    "resources": [
+      {"api_version": "v1", "kind": "Namespace", "name": "kube-system", "uid": "synthetic-cluster-uid"},
+      {"api_version": "v1", "kind": "Node", "name": "node-synthetic", "uid": "synthetic-node-uid"}
+    ],
+    "nodes": [{
+      "node_uid": "synthetic-node-uid", "state": "matched",
+      "azure_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic/virtualMachines/0",
+      "node_pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool"
+    }]
+  }],
+  "metrics": [{
+    "tenant_id": "00000000-0000-0000-0000-000000000000", "source_name": "synthetic",
+    "generated_at": "2026-10-29T11:00:00Z",
+    "query_start": "2026-09-29T00:00:00Z", "query_end": "2026-10-29T00:00:00Z", "step_seconds": 300,
+    "collection": {
+      "collector": "prometheus", "status": "complete",
+      "requested_scope": ["/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"],
+      "completed_scope": ["/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic"],
+      "started_at": "2026-10-29T10:00:00Z", "completed_at": "2026-10-29T11:00:00Z",
+      "source_observed_at": "2026-10-29T10:00:00Z", "pagination_complete": true
+    },
+    "observations": [
+      {
+        "entity": {"kind": "node_pool", "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic", "node_pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool"},
+        "metric": "pool_cpu_usage", "p50": 100, "p95": 200, "p99": 250, "minimum": 50, "maximum": 300,
+        "latest_sample_at": "2026-10-28T23:55:00Z",
+        "quality": {"source": "synthetic", "query_version": "1.0", "step_seconds": 300, "observed_at": "2026-10-29T11:00:00Z", "unit": "mCPU", "minimum": 50, "maximum": 300, "window": {"start": "2026-09-29T00:00:00Z", "end": "2026-10-29T00:00:00Z", "sample_count": 8640, "coverage_ratio": 1}}
+      },
+      {
+        "entity": {"kind": "node_pool", "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic", "node_pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool"},
+        "metric": "pool_allocatable_cpu", "p50": 3500, "p95": 3500, "p99": 3500, "minimum": 3500, "maximum": 3500,
+        "latest_sample_at": "2026-10-28T23:55:00Z",
+        "quality": {"source": "synthetic", "query_version": "1.0", "step_seconds": 300, "observed_at": "2026-10-29T11:00:00Z", "unit": "mCPU", "minimum": 3500, "maximum": 3500, "window": {"start": "2026-09-29T00:00:00Z", "end": "2026-10-29T00:00:00Z", "sample_count": 8640, "coverage_ratio": 1}}
+      },
+      {
+        "entity": {"kind": "node_pool", "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic", "node_pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool"},
+        "metric": "pool_allocatable_memory", "p50": 14000, "p95": 14000, "p99": 14000, "minimum": 14000, "maximum": 14000,
+        "latest_sample_at": "2026-10-28T23:55:00Z",
+        "quality": {"source": "synthetic", "query_version": "1.0", "step_seconds": 300, "observed_at": "2026-10-29T11:00:00Z", "unit": "MiB", "minimum": 14000, "maximum": 14000, "window": {"start": "2026-09-29T00:00:00Z", "end": "2026-10-29T00:00:00Z", "sample_count": 8640, "coverage_ratio": 1}}
+      },
+      {
+        "entity": {"kind": "node", "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic", "node_pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool", "node_uid": "synthetic-node-uid", "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic/virtualMachines/0"},
+        "metric": "node_cpu_usage", "p50": 100, "p95": 200, "p99": 250, "minimum": 50, "maximum": 300,
+        "latest_sample_at": "2026-10-28T23:55:00Z",
+        "quality": {"source": "synthetic", "query_version": "1.0", "step_seconds": 300, "observed_at": "2026-10-29T11:00:00Z", "unit": "mCPU", "minimum": 50, "maximum": 300, "window": {"start": "2026-09-29T00:00:00Z", "end": "2026-10-29T00:00:00Z", "sample_count": 8640, "coverage_ratio": 1}}
+      },
+      {
+        "entity": {"kind": "node", "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic", "node_pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool", "node_uid": "synthetic-node-uid", "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic/virtualMachines/0"},
+        "metric": "node_allocatable_cpu", "p50": 3500, "p95": 3500, "p99": 3500, "minimum": 3500, "maximum": 3500,
+        "latest_sample_at": "2026-10-28T23:55:00Z",
+        "quality": {"source": "synthetic", "query_version": "1.0", "step_seconds": 300, "observed_at": "2026-10-29T11:00:00Z", "unit": "mCPU", "minimum": 3500, "maximum": 3500, "window": {"start": "2026-09-29T00:00:00Z", "end": "2026-10-29T00:00:00Z", "sample_count": 8640, "coverage_ratio": 1}}
+      },
+      {
+        "entity": {"kind": "node", "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic", "node_pool_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic/agentPools/userpool", "node_uid": "synthetic-node-uid", "node_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic/virtualMachines/0"},
+        "metric": "node_allocatable_memory", "p50": 14000, "p95": 14000, "p99": 14000, "minimum": 14000, "maximum": 14000,
+        "latest_sample_at": "2026-10-28T23:55:00Z",
+        "quality": {"source": "synthetic", "query_version": "1.0", "step_seconds": 300, "observed_at": "2026-10-29T11:00:00Z", "unit": "MiB", "minimum": 14000, "maximum": 14000, "window": {"start": "2026-09-29T00:00:00Z", "end": "2026-10-29T00:00:00Z", "sample_count": 8640, "coverage_ratio": 1}}
+      }
+    ]
+  }]
+}

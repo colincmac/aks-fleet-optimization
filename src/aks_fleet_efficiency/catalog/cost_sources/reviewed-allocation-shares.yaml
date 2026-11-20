@@ -1,0 +1,18 @@
+id: reviewed-allocation-shares
+version: 1.0.0
+provider: operator-reviewed
+evidence_kind: allocation
+projection_format: reviewed-allocation-shares-v1
+producer_version_kind: projection
+pricing_provenance: not-applicable
+cost_basis: source-declared
+granularities: [cluster, namespace, workload, container, asset]
+identity: exact-historical
+allocation_policy: reviewed-shares
+reconciliation: ledger-row-partition
+characterized_versions:
+  projection: [1.0.0]
+characterization: synthetic
+limitations:
+  - Fractions require original billing-row identity and independently reviewed historical bindings.
+  - A reviewed partition is attribution evidence, not avoidable spend or realized savings.

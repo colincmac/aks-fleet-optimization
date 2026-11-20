@@ -1,0 +1,2 @@
+SubAccountId,ResourceId,ChargePeriodStart,ChargePeriodEnd,EffectiveCost,BillingCurrency,ServiceCategory,ChargeCategory,PricingCategory,ChargeClass,CommitmentDiscountCategory,CommitmentDiscountId,CommitmentDiscountStatus,CommitmentDiscountType
+00000000-0000-0000-0000-000000000000,/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-nodes/providers/Microsoft.Compute/virtualMachineScaleSets/synthetic,2026-09-29T00:00:00+00:00,2026-10-29T00:00:00+00:00,100.00,USD,Compute,Usage,Standard,,,,,

@@ -1,0 +1,139 @@
+{
+  "uid": "aks-advisor-rightsizing-scaling",
+  "title": "AKS Advisor: Rightsizing & Scaling Review",
+  "description": "Review one HPA's replica response and sampled bounds. Read-only, name-scoped observations, not qualified advisor history.",
+  "schemaVersion": 39,
+  "version": 2,
+  "timezone": "utc",
+  "time": { "from": "now-6h", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "label": "Data source",
+        "type": "datasource",
+        "query": "prometheus",
+        "current": { "text": "default", "value": "default" },
+        "includeAll": false,
+        "multi": false,
+        "refresh": 1
+      },
+      {
+        "name": "cluster",
+        "label": "Cluster",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${datasource}" },
+        "query": "label_values(up{job=\"cadvisor\"}, cluster)",
+        "options": [],
+        "refresh": 2,
+        "regexApplyTo": "value",
+        "sort": 1
+      },
+      {
+        "name": "namespace",
+        "label": "Namespace with HPA metrics",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${datasource}" },
+        "query": "label_values(kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace!=\"\"}, namespace)",
+        "refresh": 2,
+        "sort": 1
+      },
+      {
+        "name": "hpa",
+        "label": "Horizontal Pod Autoscaler",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${datasource}" },
+        "query": "label_values(kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler!=\"\"}, horizontalpodautoscaler)",
+        "refresh": 2,
+        "sort": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "Review scaling before changing requests",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 5 },
+      "options": {
+        "mode": "markdown",
+        "content": "Select an approved **Data source**, **Cluster**, **Namespace**, and **Horizontal Pod Autoscaler**. The legend lists all four series even when plotted values overlap. Missing, invalid, or ambiguous observations leave gaps, not zeros. The observed current count is **not ready replicas**. Gaps and bound states do not reveal the scaling signal or prove why the controller acted. Controller metric/target and VPA candidate telemetry require a separately verified source and are not displayed. Names can be reused; use the advisor's saved evidence to qualify controller history before changing settings."
+      }
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Observed HPA replica counts and configured bounds",
+      "gridPos": { "x": 0, "y": 5, "w": 24, "h": 9 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "options": {
+        "legend": { "displayMode": "table", "placement": "bottom", "calcs": ["last"] },
+        "tooltip": { "mode": "multi", "sort": "none" }
+      },
+      "fieldConfig": { "defaults": { "unit": "suffix: replicas", "decimals": 0, "custom": { "spanNulls": false, "lineInterpolation": "stepAfter" } } },
+      "targets": [
+        { "refId": "A", "editorMode": "code", "range": true, "legendFormat": "Desired", "expr": "(max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1))", "interval": "1m" },
+        { "refId": "B", "editorMode": "code", "range": true, "legendFormat": "Current", "expr": "(max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1))", "interval": "1m" },
+        { "refId": "C", "editorMode": "code", "range": true, "legendFormat": "Minimum", "expr": "(max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1))", "interval": "1m" },
+        { "refId": "D", "editorMode": "code", "range": true, "legendFormat": "Maximum", "expr": "(max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} > 0) < +Inf) and (kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1))", "interval": "1m" }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Replica gap",
+      "description": "Observed desired minus current. Positive means fewer current than desired, negative means more. This is neither readiness lag nor evidence of unmet demand.",
+      "gridPos": { "x": 0, "y": 14, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": { "defaults": { "unit": "suffix: replicas", "decimals": 0, "custom": { "spanNulls": false, "lineInterpolation": "stepAfter" } } },
+      "targets": [
+        {
+          "refId": "A",
+          "editorMode": "code",
+          "range": true,
+          "legendFormat": "Desired minus current",
+          "expr": "(max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1)) - on (cluster,namespace,horizontalpodautoscaler) (max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1))",
+          "interval": "1m"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Sampled HPA bound state",
+      "description": "Discrete evaluation points: 0 Not pinned, 1 At floor, 2 At ceiling, 3 Fixed. Floor and ceiling require both observed counts to equal that bound. Missing samples, inverted bounds, and counts outside the bounds do not produce a point. Not pinned is not a health verdict or proof of continuous activity.",
+      "gridPos": { "x": 12, "y": 14, "w": 12, "h": 8 },
+      "datasource": { "type": "prometheus", "uid": "${datasource}" },
+      "fieldConfig": {
+        "defaults": {
+          "noValue": "Unknown",
+          "min": 0,
+          "max": 3,
+          "decimals": 0,
+          "custom": { "spanNulls": false, "showPoints": "always", "lineWidth": 0 },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "Not pinned", "color": "blue" },
+                "1": { "text": "At floor", "color": "yellow" },
+                "2": { "text": "At ceiling", "color": "orange" },
+                "3": { "text": "Fixed", "color": "purple" }
+              }
+            }
+          ]
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "editorMode": "code",
+          "range": true,
+          "legendFormat": "Bound state",
+          "expr": "(((max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1)) == bool on (cluster,namespace,horizontalpodautoscaler) (max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1))) * ((max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1)) == bool on (cluster,namespace,horizontalpodautoscaler) (max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1))) + 2 * ((max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1)) == bool on (cluster,namespace,horizontalpodautoscaler) (max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} > 0) < +Inf) and (kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1))) * ((max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1)) == bool on (cluster,namespace,horizontalpodautoscaler) (max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} > 0) < +Inf) and (kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1)))) and on (cluster,namespace,horizontalpodautoscaler) ((max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1)) >= on (cluster,namespace,horizontalpodautoscaler) (max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1))) and on (cluster,namespace,horizontalpodautoscaler) ((max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_desired_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1)) <= on (cluster,namespace,horizontalpodautoscaler) (max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} > 0) < +Inf) and (kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1))) and on (cluster,namespace,horizontalpodautoscaler) ((max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1)) >= on (cluster,namespace,horizontalpodautoscaler) (max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_spec_min_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1))) and on (cluster,namespace,horizontalpodautoscaler) ((max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} >= 0) < +Inf) and (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_status_current_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1)) <= on (cluster,namespace,horizontalpodautoscaler) (max by (cluster,namespace,horizontalpodautoscaler) (((kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} > 0) < +Inf) and (kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"} % 1 == 0)) and on (cluster,namespace,horizontalpodautoscaler) (count by (cluster,namespace,horizontalpodautoscaler) (kube_horizontalpodautoscaler_spec_max_replicas{cluster=\"$cluster\",cluster!=\"\",namespace=\"$namespace\",namespace!=\"\",horizontalpodautoscaler=\"$hpa\",horizontalpodautoscaler!=\"\"}) == 1)))",
+          "interval": "1m"
+        }
+      ]
+    }
+  ]
+}

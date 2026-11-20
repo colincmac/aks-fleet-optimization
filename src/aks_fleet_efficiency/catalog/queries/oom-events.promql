@@ -1,0 +1,1 @@
+increase(container_oom_events_total{__scope__}[__step__s])

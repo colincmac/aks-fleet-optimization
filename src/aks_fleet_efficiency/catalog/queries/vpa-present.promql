@@ -1,0 +1,1 @@
+aks_advisor:workload_vpa_present{__scope__}

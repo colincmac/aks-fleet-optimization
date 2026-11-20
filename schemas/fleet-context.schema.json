@@ -1,0 +1,414 @@
+{
+  "$defs": {
+    "BusinessOwnerDeclaration": {
+      "additionalProperties": false,
+      "properties": {
+        "namespace_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Namespace Uid",
+          "type": "string"
+        },
+        "owner_ref": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Owner Ref",
+          "type": "string"
+        },
+        "valid_from": {
+          "format": "date-time",
+          "title": "Valid From",
+          "type": "string"
+        },
+        "valid_until": {
+          "format": "date-time",
+          "title": "Valid Until",
+          "type": "string"
+        },
+        "workload_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Workload Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "namespace_uid",
+        "workload_uid",
+        "owner_ref",
+        "valid_from",
+        "valid_until"
+      ],
+      "title": "BusinessOwnerDeclaration",
+      "type": "object"
+    },
+    "CollectionError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "unauthorized",
+            "forbidden",
+            "timeout",
+            "throttled",
+            "unavailable",
+            "invalid-response",
+            "response-budget-exceeded",
+            "identity-mismatch"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "code"
+      ],
+      "title": "CollectionError",
+      "type": "object"
+    },
+    "CollectionStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "title": "CollectionStatus",
+      "type": "string"
+    },
+    "CollectorResult": {
+      "additionalProperties": false,
+      "properties": {
+        "collector": {
+          "minLength": 1,
+          "title": "Collector",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "completed_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Completed Scope",
+          "type": "array"
+        },
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/CollectionError"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "pagination_complete": {
+          "default": false,
+          "title": "Pagination Complete",
+          "type": "boolean"
+        },
+        "requested_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requested Scope",
+          "type": "array"
+        },
+        "retry_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Retry Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Observed At"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CollectionStatus"
+        }
+      },
+      "required": [
+        "collector",
+        "status",
+        "requested_scope",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "CollectorResult",
+      "type": "object"
+    },
+    "HistoricalMarketEvidence": {
+      "additionalProperties": false,
+      "properties": {
+        "fallback_receipt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CollectorResult"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "fallback_records": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/SourceFallbackRecord"
+          },
+          "maxItems": 1000,
+          "title": "Fallback Records",
+          "type": "array"
+        },
+        "points": {
+          "items": {
+            "$ref": "#/$defs/HistoricalMarketPoint"
+          },
+          "maxItems": 100000,
+          "title": "Points",
+          "type": "array"
+        },
+        "step_seconds": {
+          "maximum": 300,
+          "minimum": 1,
+          "title": "Step Seconds",
+          "type": "integer"
+        },
+        "window_end": {
+          "format": "date-time",
+          "title": "Window End",
+          "type": "string"
+        },
+        "window_start": {
+          "format": "date-time",
+          "title": "Window Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "window_start",
+        "window_end",
+        "step_seconds",
+        "points"
+      ],
+      "title": "HistoricalMarketEvidence",
+      "type": "object"
+    },
+    "HistoricalMarketPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "nodes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/HistoricalNodeMarket"
+              },
+              "maxItems": 100000,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nodes"
+        },
+        "receipt": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        }
+      },
+      "required": [
+        "timestamp",
+        "receipt"
+      ],
+      "title": "HistoricalMarketPoint",
+      "type": "object"
+    },
+    "HistoricalNodeMarket": {
+      "additionalProperties": false,
+      "properties": {
+        "market": {
+          "enum": [
+            "spot",
+            "regular",
+            "unknown"
+          ],
+          "title": "Market",
+          "type": "string"
+        },
+        "node_resource_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "title": "Node Resource Id",
+          "type": "string"
+        },
+        "node_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "Node Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "node_uid",
+        "node_resource_id",
+        "market"
+      ],
+      "title": "HistoricalNodeMarket",
+      "type": "object"
+    },
+    "SourceFallbackRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "from_node_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "From Node Uid",
+          "type": "string"
+        },
+        "source_reference": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Reference",
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "date-time",
+          "title": "Timestamp",
+          "type": "string"
+        },
+        "to_node_uid": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+          "title": "To Node Uid",
+          "type": "string"
+        }
+      },
+      "required": [
+        "timestamp",
+        "from_node_uid",
+        "to_node_uid",
+        "source_reference"
+      ],
+      "title": "SourceFallbackRecord",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "cluster_resource_id": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "title": "Cluster Resource Id",
+      "type": "string"
+    },
+    "cluster_uid": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Cluster Uid",
+      "type": "string"
+    },
+    "market_history": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HistoricalMarketEvidence"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "observed_at": {
+      "format": "date-time",
+      "title": "Observed At",
+      "type": "string"
+    },
+    "owner_declarations": {
+      "items": {
+        "$ref": "#/$defs/BusinessOwnerDeclaration"
+      },
+      "maxItems": 100000,
+      "title": "Owner Declarations",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source",
+      "type": "string"
+    },
+    "source_profile": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source Profile",
+      "type": "string"
+    },
+    "source_profile_version": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source Profile Version",
+      "type": "string"
+    },
+    "source_version": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/-]{0,199}$",
+      "title": "Source Version",
+      "type": "string"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "tenant_id",
+    "cluster_resource_id",
+    "cluster_uid",
+    "source",
+    "source_version",
+    "source_profile",
+    "source_profile_version",
+    "observed_at"
+  ],
+  "title": "FleetContext",
+  "type": "object"
+}

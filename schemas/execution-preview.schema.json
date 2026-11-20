@@ -1,0 +1,601 @@
+{
+  "$defs": {
+    "CapabilityCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "reason_codes": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown",
+            "unsupported"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "status",
+        "reason_codes"
+      ],
+      "title": "CapabilityCheck",
+      "type": "object"
+    },
+    "MetricQueryPlan": {
+      "additionalProperties": false,
+      "properties": {
+        "expected_evaluations": {
+          "minimum": 0,
+          "title": "Expected Evaluations",
+          "type": "integer"
+        },
+        "logical_queries": {
+          "minimum": 0,
+          "title": "Logical Queries",
+          "type": "integer"
+        },
+        "maximum_series": {
+          "minimum": 1,
+          "title": "Maximum Series",
+          "type": "integer"
+        },
+        "requests": {
+          "minimum": 0,
+          "title": "Requests",
+          "type": "integer"
+        },
+        "unique_queries": {
+          "minimum": 0,
+          "title": "Unique Queries",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "logical_queries",
+        "unique_queries",
+        "requests",
+        "expected_evaluations",
+        "maximum_series"
+      ],
+      "title": "MetricQueryPlan",
+      "type": "object"
+    },
+    "PackParameters": {
+      "additionalProperties": false,
+      "properties": {
+        "review_ratio": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Review Ratio"
+        }
+      },
+      "title": "PackParameters",
+      "type": "object"
+    },
+    "PackProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Digest",
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+          "title": "Id",
+          "type": "string"
+        },
+        "parameters": {
+          "$ref": "#/$defs/PackParameters"
+        },
+        "queries": {
+          "items": {
+            "$ref": "#/$defs/QueryAsset"
+          },
+          "title": "Queries",
+          "type": "array"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "digest",
+        "parameters",
+        "queries"
+      ],
+      "title": "PackProvenance",
+      "type": "object"
+    },
+    "PreviewOperation": {
+      "additionalProperties": false,
+      "properties": {
+        "detail": {
+          "title": "Detail",
+          "type": "string"
+        },
+        "endpoint": {
+          "title": "Endpoint",
+          "type": "string"
+        },
+        "method": {
+          "enum": [
+            "POST",
+            "GET",
+            "local-read"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "query": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Query"
+        },
+        "scope": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Scope",
+          "type": "array"
+        }
+      },
+      "required": [
+        "method",
+        "endpoint",
+        "scope",
+        "detail"
+      ],
+      "title": "PreviewOperation",
+      "type": "object"
+    },
+    "QueryAsset": {
+      "additionalProperties": false,
+      "properties": {
+        "delta": {
+          "title": "Delta",
+          "type": "boolean"
+        },
+        "expression": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Expression",
+          "type": "string"
+        },
+        "id": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "container",
+            "workload_container",
+            "unresolved_container",
+            "node",
+            "workload",
+            "hpa"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "unit": {
+          "enum": [
+            "mCPU",
+            "MiB",
+            "ratio",
+            "events",
+            "pods",
+            "boolean"
+          ],
+          "title": "Unit",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "unit",
+        "kind",
+        "delta",
+        "expression"
+      ],
+      "title": "QueryAsset",
+      "type": "object"
+    },
+    "RenderedQuery": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Entity Digest",
+          "type": "string"
+        },
+        "expression": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Expression",
+          "type": "string"
+        },
+        "expression_digest": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Expression Digest",
+          "type": "string"
+        },
+        "metric": {
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "title": "Metric",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Source",
+          "type": "string"
+        },
+        "step_seconds": {
+          "exclusiveMinimum": 0,
+          "maximum": 300,
+          "title": "Step Seconds",
+          "type": "integer"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "metric",
+        "version",
+        "source",
+        "expression",
+        "expression_digest",
+        "entity_digest",
+        "step_seconds"
+      ],
+      "title": "RenderedQuery",
+      "type": "object"
+    },
+    "SourceCapability": {
+      "additionalProperties": false,
+      "properties": {
+        "checks": {
+          "items": {
+            "$ref": "#/$defs/CapabilityCheck"
+          },
+          "minItems": 1,
+          "title": "Checks",
+          "type": "array"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "baseline",
+            "guarded"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "notice": {
+          "const": "Metric capability is not source attestation or safe-change approval.",
+          "default": "Metric capability is not source attestation or safe-change approval.",
+          "title": "Notice",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "pack_id": {
+          "minLength": 1,
+          "title": "Pack Id",
+          "type": "string"
+        },
+        "source": {
+          "minLength": 1,
+          "title": "Source",
+          "type": "string"
+        },
+        "source_profile": {
+          "$ref": "#/$defs/SourceDefinition"
+        },
+        "status": {
+          "enum": [
+            "available",
+            "unavailable",
+            "unknown",
+            "unsupported"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pack_id",
+        "mode",
+        "source",
+        "cluster_resource_id",
+        "observed_at",
+        "source_profile",
+        "status",
+        "checks"
+      ],
+      "title": "SourceCapability",
+      "type": "object"
+    },
+    "SourceDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "characterization": {
+          "const": "synthetic",
+          "title": "Characterization",
+          "type": "string"
+        },
+        "characterized_versions": {
+          "additionalProperties": {
+            "items": {
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[a-z0-9.]+)?$",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "propertyNames": {
+            "enum": [
+              "prometheus",
+              "kube-state-metrics",
+              "cadvisor",
+              "kubernetes"
+            ]
+          },
+          "title": "Characterized Versions",
+          "type": "object"
+        },
+        "id": {
+          "enum": [
+            "identity-enriched",
+            "cadvisor-ksm"
+          ],
+          "title": "Id",
+          "type": "string"
+        },
+        "identity": {
+          "enum": [
+            "historical",
+            "name-only"
+          ],
+          "title": "Identity",
+          "type": "string"
+        },
+        "joins": {
+          "const": "none",
+          "title": "Joins",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Labels",
+          "type": "object"
+        },
+        "limitations": {
+          "items": {
+            "minLength": 1,
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Limitations",
+          "type": "array"
+        },
+        "query_ids": {
+          "items": {
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Query Ids",
+          "type": "array"
+        },
+        "transports": {
+          "items": {
+            "enum": [
+              "prometheus",
+              "azure-managed-prometheus"
+            ],
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Transports",
+          "type": "array"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "identity",
+        "transports",
+        "labels",
+        "query_ids",
+        "characterized_versions",
+        "characterization",
+        "joins",
+        "limitations"
+      ],
+      "title": "SourceDefinition",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "artifact_destination": {
+      "title": "Artifact Destination",
+      "type": "string"
+    },
+    "budgets": {
+      "additionalProperties": {
+        "type": "integer"
+      },
+      "title": "Budgets",
+      "type": "object"
+    },
+    "capabilities": {
+      "items": {
+        "$ref": "#/$defs/SourceCapability"
+      },
+      "title": "Capabilities",
+      "type": "array"
+    },
+    "configuration_digest": {
+      "title": "Configuration Digest",
+      "type": "string"
+    },
+    "excluded_fields": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Excluded Fields",
+      "type": "array"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "mode": {
+      "const": "offline",
+      "default": "offline",
+      "title": "Mode",
+      "type": "string"
+    },
+    "notice": {
+      "default": "Preview only; no clients, credentials, source exports or endpoints were read.",
+      "title": "Notice",
+      "type": "string"
+    },
+    "operations": {
+      "items": {
+        "$ref": "#/$defs/PreviewOperation"
+      },
+      "title": "Operations",
+      "type": "array"
+    },
+    "packs": {
+      "items": {
+        "$ref": "#/$defs/PackProvenance"
+      },
+      "title": "Packs",
+      "type": "array"
+    },
+    "plan_digest": {
+      "title": "Plan Digest",
+      "type": "string"
+    },
+    "queries": {
+      "items": {
+        "$ref": "#/$defs/RenderedQuery"
+      },
+      "title": "Queries",
+      "type": "array"
+    },
+    "query_plan": {
+      "$ref": "#/$defs/MetricQueryPlan"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "step_seconds": {
+      "title": "Step Seconds",
+      "type": "integer"
+    },
+    "unresolved_prerequisites": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "title": "Unresolved Prerequisites",
+      "type": "array"
+    },
+    "window_end": {
+      "format": "date-time",
+      "title": "Window End",
+      "type": "string"
+    },
+    "window_start": {
+      "format": "date-time",
+      "title": "Window Start",
+      "type": "string"
+    }
+  },
+  "required": [
+    "generated_at",
+    "configuration_digest",
+    "plan_digest",
+    "window_start",
+    "window_end",
+    "step_seconds",
+    "packs",
+    "operations",
+    "queries",
+    "query_plan",
+    "budgets",
+    "excluded_fields",
+    "artifact_destination",
+    "unresolved_prerequisites",
+    "capabilities"
+  ],
+  "title": "ExecutionPreview",
+  "type": "object"
+}

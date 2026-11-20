@@ -1,0 +1,491 @@
+{
+  "$defs": {
+    "AIAssessmentReference": {
+      "additionalProperties": false,
+      "properties": {
+        "configuration_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Configuration Digest",
+          "type": "string"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "baseline",
+            "guarded"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "scope_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Scope Id",
+          "type": "string"
+        },
+        "snapshot_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Snapshot Digest",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "partial"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "valid_until": {
+          "format": "date-time",
+          "title": "Valid Until",
+          "type": "string"
+        },
+        "window_end": {
+          "format": "date-time",
+          "title": "Window End",
+          "type": "string"
+        },
+        "window_start": {
+          "format": "date-time",
+          "title": "Window Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_id",
+        "scope_id",
+        "snapshot_digest",
+        "configuration_digest",
+        "evaluated_at",
+        "valid_until",
+        "window_start",
+        "window_end",
+        "status",
+        "mode"
+      ],
+      "title": "AIAssessmentReference",
+      "type": "object"
+    },
+    "AIEvidencePackage": {
+      "additionalProperties": false,
+      "properties": {
+        "assessments": {
+          "items": {
+            "$ref": "#/$defs/AIAssessmentReference"
+          },
+          "maxItems": 16,
+          "minItems": 1,
+          "title": "Assessments",
+          "type": "array"
+        },
+        "expires_at": {
+          "format": "date-time",
+          "title": "Expires At",
+          "type": "string"
+        },
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "notice": {
+          "const": "Pseudonymous finding summaries, not anonymous data or source attestation. Raw evidence and blocker text withheld. No AI invocation, approval or action authority.",
+          "default": "Pseudonymous finding summaries, not anonymous data or source attestation. Raw evidence and blocker text withheld. No AI invocation, approval or action authority.",
+          "title": "Notice",
+          "type": "string"
+        },
+        "records": {
+          "items": {
+            "$ref": "#/$defs/AIFindingSummary"
+          },
+          "maxItems": 128,
+          "title": "Records",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "tenant_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Tenant Digest",
+          "type": "string"
+        },
+        "ttl_seconds": {
+          "maximum": 3600,
+          "minimum": 60,
+          "title": "Ttl Seconds",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "tenant_digest",
+        "generated_at",
+        "expires_at",
+        "ttl_seconds",
+        "assessments",
+        "records"
+      ],
+      "title": "AIEvidencePackage",
+      "type": "object"
+    },
+    "AIFindingSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "confidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Confidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason_digests": {
+          "items": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "maxItems": 128,
+          "title": "Reason Digests",
+          "type": "array"
+        },
+        "record_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Record Id",
+          "type": "string"
+        },
+        "resource_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Resource Digest",
+          "type": "string"
+        },
+        "rule_id": {
+          "pattern": "^AKS-[A-Z]+-[0-9]{3}$",
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "rule_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Rule Version",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "scope_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Scope Id",
+          "type": "string"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Severity"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "enum": [
+            "finding",
+            "blocked"
+          ],
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [
+        "record_id",
+        "run_id",
+        "scope_id",
+        "resource_digest",
+        "rule_id",
+        "rule_version",
+        "state",
+        "severity",
+        "confidence",
+        "reason_digests"
+      ],
+      "title": "AIFindingSummary",
+      "type": "object"
+    },
+    "AIResourceMeasurement": {
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "enum": [
+            "cpu_request",
+            "cpu_usage_p95",
+            "memory_request",
+            "memory_usage_p99"
+          ],
+          "title": "Dimension",
+          "type": "string"
+        },
+        "quality": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AIResourceQuality"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "reason_codes": {
+          "items": {
+            "enum": [
+              "executed_provenance_unavailable",
+              "identity_unavailable",
+              "metric_unavailable",
+              "quality_unqualified",
+              "query_definition_unavailable",
+              "ambiguous_original_metric"
+            ],
+            "type": "string"
+          },
+          "title": "Reason Codes",
+          "type": "array"
+        },
+        "record_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Record Id",
+          "type": "string"
+        },
+        "run_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Run Id",
+          "type": "string"
+        },
+        "scope_id": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Scope Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "observed",
+            "withheld"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "subject_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Subject Digest",
+          "type": "string"
+        },
+        "unit": {
+          "enum": [
+            "mCPU",
+            "MiB"
+          ],
+          "title": "Unit",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Value"
+        }
+      },
+      "required": [
+        "record_id",
+        "run_id",
+        "scope_id",
+        "subject_digest",
+        "dimension",
+        "unit",
+        "status",
+        "value",
+        "reason_codes"
+      ],
+      "title": "AIResourceMeasurement",
+      "type": "object"
+    },
+    "AIResourceQuality": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_version": {
+          "const": "1.0",
+          "title": "Adapter Version",
+          "type": "string"
+        },
+        "coverage_ratio": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Coverage Ratio",
+          "type": "number"
+        },
+        "latest_sample_at": {
+          "format": "date-time",
+          "title": "Latest Sample At",
+          "type": "string"
+        },
+        "observation_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Observation Digest",
+          "type": "string"
+        },
+        "observed_at": {
+          "format": "date-time",
+          "title": "Observed At",
+          "type": "string"
+        },
+        "qualified_at": {
+          "format": "date-time",
+          "title": "Qualified At",
+          "type": "string"
+        },
+        "query_asset_version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Query Asset Version",
+          "type": "string"
+        },
+        "query_expression_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Query Expression Digest",
+          "type": "string"
+        },
+        "receipt_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Receipt Digest",
+          "type": "string"
+        },
+        "sample_count": {
+          "exclusiveMinimum": 0,
+          "title": "Sample Count",
+          "type": "integer"
+        },
+        "source_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Digest",
+          "type": "string"
+        },
+        "source_observed_at": {
+          "format": "date-time",
+          "title": "Source Observed At",
+          "type": "string"
+        },
+        "source_profile_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Source Profile Digest",
+          "type": "string"
+        },
+        "step_seconds": {
+          "exclusiveMinimum": 0,
+          "maximum": 300,
+          "title": "Step Seconds",
+          "type": "integer"
+        },
+        "window_end": {
+          "format": "date-time",
+          "title": "Window End",
+          "type": "string"
+        },
+        "window_start": {
+          "format": "date-time",
+          "title": "Window Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "qualified_at",
+        "observed_at",
+        "source_observed_at",
+        "latest_sample_at",
+        "window_start",
+        "window_end",
+        "step_seconds",
+        "sample_count",
+        "coverage_ratio",
+        "source_digest",
+        "source_profile_digest",
+        "receipt_digest",
+        "observation_digest",
+        "query_expression_digest",
+        "query_asset_version",
+        "adapter_version"
+      ],
+      "title": "AIResourceQuality",
+      "type": "object"
+    },
+    "Confidence": {
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "title": "Confidence",
+      "type": "string"
+    },
+    "Severity": {
+      "enum": [
+        "info",
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Severity",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "measurements": {
+      "items": {
+        "$ref": "#/$defs/AIResourceMeasurement"
+      },
+      "maxItems": 512,
+      "title": "Measurements",
+      "type": "array"
+    },
+    "notice": {
+      "const": "Separately opted-in pseudonymous measurements; not anonymous data, source attestation, safe values or action authority. No model invocation.",
+      "default": "Separately opted-in pseudonymous measurements; not anonymous data, source attestation, safe values or action authority. No model invocation.",
+      "title": "Notice",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "summary": {
+      "$ref": "#/$defs/AIEvidencePackage"
+    }
+  },
+  "required": [
+    "summary",
+    "measurements"
+  ],
+  "title": "AIResourceEvidencePackage",
+  "type": "object"
+}

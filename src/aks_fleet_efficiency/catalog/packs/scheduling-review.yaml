@@ -1,0 +1,40 @@
+schema_version: '1.0'
+id: AKS-SCHED-001
+version: 1.0.0
+family: scheduling
+evaluator: scheduling-review
+evidence_kind: inventory
+title: Investigate current placement constraints
+purpose: Explain observed placement restrictions separately from resource usage and vertical eligibility.
+sources: []
+parameters: {}
+queries:
+  baseline: {}
+  guarded: {}
+required_evidence:
+  baseline:
+  - Fresh complete scoped inventory with exact cluster, Namespace, Pod and controller UIDs
+  guarded:
+  - Fresh complete scoped inventory with exact cluster, Namespace, Pod and controller UIDs
+limitations:
+- Current metadata is not historical scheduling behavior, a packing simulation or proof of stranded capacity.
+- Projected labels cannot prove selector matches or absence. Namespace PDB candidates are not matched budgets.
+- Tolerations permit placement but do not require it. Soft preferences are distinct from hard constraints.
+- Volume bindings, CSI topology, Pod/IP slots, priority/preemption, daemon requests and availability need independent review.
+prerequisites:
+- Review the admitted Pod, matching node labels/taints, volume topology and actual PDB selectors with its owner.
+risks:
+- Relaxing affinity, topology, taints or disruption policy can violate isolation, availability or storage requirements.
+validation:
+- Correlate each observed restriction with approved pending-Pod history and scheduler capacity evidence.
+- Check daemon and init/sidecar overhead, Pod/IP slots, priorities, volumes and zonal failover before any packing claim.
+- Keep hard requirements and soft preferences separate; verify unknown fields rather than assuming absence.
+rollback:
+- No change is proposed. Any later owner-approved experiment requires a separate canary and exact configuration rollback.
+actions:
+  baseline:
+  - Investigate current placement restrictions; do not remove nodes or relax policy from this report.
+  guarded:
+  - Investigate current placement restrictions; guarded mode does not authorize a scheduling change.
+baseline_summary: Observed current constraints may restrict placement. These are review candidates, not proof of stranded capacity, scheduler failure, PDB matching or removable nodes.
+guarded_summary: Observed current constraints may restrict placement. These are review candidates, not proof of stranded capacity, scheduler failure, PDB matching or removable nodes.

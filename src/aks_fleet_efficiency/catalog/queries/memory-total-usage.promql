@@ -1,0 +1,1 @@
+container_memory_usage_bytes{__scope__} / 1048576

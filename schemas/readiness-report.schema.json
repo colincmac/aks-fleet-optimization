@@ -1,0 +1,114 @@
+{
+  "$defs": {
+    "ReadinessCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "minLength": 1,
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "minLength": 1,
+          "title": "Message",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pass",
+            "blocked",
+            "unknown"
+          ],
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "status",
+        "scope",
+        "message"
+      ],
+      "title": "ReadinessCheck",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "checks": {
+      "items": {
+        "$ref": "#/$defs/ReadinessCheck"
+      },
+      "minItems": 1,
+      "title": "Checks",
+      "type": "array"
+    },
+    "configuration_digest": {
+      "title": "Configuration Digest",
+      "type": "string"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    },
+    "mode": {
+      "const": "offline",
+      "default": "offline",
+      "title": "Mode",
+      "type": "string"
+    },
+    "requested_clusters": {
+      "minimum": 0,
+      "title": "Requested Clusters",
+      "type": "integer"
+    },
+    "requested_subscriptions": {
+      "minimum": 1,
+      "title": "Requested Subscriptions",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "snapshot_digest": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Snapshot Digest"
+    },
+    "status": {
+      "enum": [
+        "ready",
+        "blocked",
+        "unknown"
+      ],
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "generated_at",
+    "status",
+    "requested_subscriptions",
+    "requested_clusters",
+    "configuration_digest",
+    "checks"
+  ],
+  "title": "ReadinessReport",
+  "type": "object"
+}

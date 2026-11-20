@@ -1,0 +1,1050 @@
+{
+  "$defs": {
+    "AggregateAllocation": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "decimal_places": 12,
+          "max_digits": 30,
+          "title": "Amount"
+        },
+        "asset_id": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Asset Id"
+        },
+        "category": {
+          "enum": [
+            "allocated",
+            "idle",
+            "shared",
+            "system",
+            "unallocated"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "cluster_resource_id": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cluster Resource Id"
+        },
+        "container": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Container"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "granularity": {
+          "anyOf": [
+            {
+              "enum": [
+                "resource",
+                "cluster",
+                "namespace",
+                "workload",
+                "container",
+                "asset"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Granularity"
+        },
+        "identity_basis": {
+          "anyOf": [
+            {
+              "enum": [
+                "exact-historical",
+                "current-only",
+                "name-only"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identity Basis"
+        },
+        "namespace": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace"
+        },
+        "reference": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reference"
+        },
+        "valid_period": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CostPeriod"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "workload_name": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Name"
+        },
+        "workload_uid": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Uid"
+        }
+      },
+      "required": [
+        "category",
+        "amount",
+        "currency"
+      ],
+      "title": "AggregateAllocation",
+      "type": "object"
+    },
+    "AllocationShare": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Asset Id"
+        },
+        "category": {
+          "enum": [
+            "allocated",
+            "idle",
+            "shared",
+            "system",
+            "unallocated"
+          ],
+          "title": "Category",
+          "type": "string"
+        },
+        "cluster_resource_id": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Cluster Resource Id"
+        },
+        "container": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Container"
+        },
+        "fraction": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "decimal_places": 18,
+          "ge": 0,
+          "le": 1,
+          "max_digits": 19,
+          "title": "Fraction"
+        },
+        "granularity": {
+          "anyOf": [
+            {
+              "enum": [
+                "resource",
+                "cluster",
+                "namespace",
+                "workload",
+                "container",
+                "asset"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Granularity"
+        },
+        "identity_basis": {
+          "anyOf": [
+            {
+              "enum": [
+                "exact-historical",
+                "current-only",
+                "name-only"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Identity Basis"
+        },
+        "namespace": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Namespace"
+        },
+        "reference": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reference"
+        },
+        "row_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Row Id",
+          "type": "string"
+        },
+        "valid_period": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/CostPeriod"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "workload_name": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Name"
+        },
+        "workload_uid": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Workload Uid"
+        }
+      },
+      "required": [
+        "category",
+        "row_id",
+        "fraction"
+      ],
+      "title": "AllocationShare",
+      "type": "object"
+    },
+    "CostAllocation": {
+      "additionalProperties": false,
+      "properties": {
+        "allocation_policy": {
+          "enum": [
+            "not-shared",
+            "source-native"
+          ],
+          "title": "Allocation Policy",
+          "type": "string"
+        },
+        "amounts": {
+          "items": {
+            "$ref": "#/$defs/AggregateAllocation"
+          },
+          "maxItems": 100000,
+          "title": "Amounts",
+          "type": "array"
+        },
+        "complete": {
+          "title": "Complete",
+          "type": "boolean"
+        },
+        "cost_basis": {
+          "enum": [
+            "actual",
+            "amortized",
+            "effective"
+          ],
+          "title": "Cost Basis",
+          "type": "string"
+        },
+        "period": {
+          "$ref": "#/$defs/CostPeriod"
+        },
+        "pricing_basis": {
+          "default": "source-declared",
+          "enum": [
+            "billing-ledger",
+            "source-declared"
+          ],
+          "title": "Pricing Basis",
+          "type": "string"
+        },
+        "profile": {
+          "$ref": "#/$defs/FinancialProfileReference"
+        },
+        "shares": {
+          "items": {
+            "$ref": "#/$defs/AllocationShare"
+          },
+          "maxItems": 100000,
+          "title": "Shares",
+          "type": "array"
+        },
+        "source_reference": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Source Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "profile",
+        "source_reference",
+        "cost_basis",
+        "period",
+        "complete",
+        "allocation_policy"
+      ],
+      "title": "CostAllocation",
+      "type": "object"
+    },
+    "CostExportFile": {
+      "additionalProperties": false,
+      "properties": {
+        "byte_count": {
+          "minimum": 0,
+          "title": "Byte Count",
+          "type": "integer"
+        },
+        "partition_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Partition Sha256",
+          "type": "string"
+        },
+        "row_count": {
+          "minimum": 0,
+          "title": "Row Count",
+          "type": "integer"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "partition_sha256",
+        "sha256",
+        "byte_count",
+        "row_count"
+      ],
+      "title": "CostExportFile",
+      "type": "object"
+    },
+    "CostExportProvenance": {
+      "additionalProperties": false,
+      "properties": {
+        "effective_cost_totals": {
+          "maxProperties": 100,
+          "minProperties": 1,
+          "patternProperties": {
+            "^[A-Z]{3}$": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "decimal_places": 12,
+              "max_digits": 30
+            }
+          },
+          "title": "Effective Cost Totals",
+          "type": "object"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/CostExportFile"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "title": "Files",
+          "type": "array"
+        },
+        "manifest_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Manifest Sha256",
+          "type": "string"
+        },
+        "run_id_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Run Id Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "manifest_sha256",
+        "run_id_sha256",
+        "files",
+        "effective_cost_totals"
+      ],
+      "title": "CostExportProvenance",
+      "type": "object"
+    },
+    "CostPeriod": {
+      "additionalProperties": false,
+      "properties": {
+        "end": {
+          "format": "date-time",
+          "title": "End",
+          "type": "string"
+        },
+        "start": {
+          "format": "date-time",
+          "title": "Start",
+          "type": "string"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "title": "CostPeriod",
+      "type": "object"
+    },
+    "CostResourceBinding": {
+      "additionalProperties": false,
+      "properties": {
+        "cluster_resource_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "identity_basis": {
+          "const": "exact-historical",
+          "title": "Identity Basis",
+          "type": "string"
+        },
+        "pool_resource_id": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pool Resource Id"
+        },
+        "reference": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Reference",
+          "type": "string"
+        },
+        "resource_id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "valid_period": {
+          "$ref": "#/$defs/CostPeriod"
+        }
+      },
+      "required": [
+        "resource_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "valid_period",
+        "identity_basis",
+        "reference"
+      ],
+      "title": "CostResourceBinding",
+      "type": "object"
+    },
+    "CostRow": {
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "decimal_places": 12,
+          "max_digits": 30,
+          "title": "Amount"
+        },
+        "benefit_id": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Benefit Id"
+        },
+        "charge_category": {
+          "enum": [
+            "compute",
+            "storage",
+            "network",
+            "service",
+            "other"
+          ],
+          "title": "Charge Category",
+          "type": "string"
+        },
+        "charge_type": {
+          "enum": [
+            "Usage",
+            "Purchase",
+            "Refund",
+            "UnusedReservation",
+            "UnusedSavingsPlan",
+            "RoundingAdjustment",
+            "Tax",
+            "Credit",
+            "Adjustment"
+          ],
+          "title": "Charge Type",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "focus": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/FocusChargeMetadata"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "id": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Id",
+          "type": "string"
+        },
+        "period": {
+          "$ref": "#/$defs/CostPeriod"
+        },
+        "pricing_model": {
+          "anyOf": [
+            {
+              "enum": [
+                "OnDemand",
+                "Reservation",
+                "SavingsPlan",
+                "Spot",
+                "Dynamic",
+                "Committed",
+                "Other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Pricing Model"
+        },
+        "reservation_id": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reservation Id"
+        },
+        "resource_id": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Id"
+        },
+        "source_category": {
+          "maxLength": 2048,
+          "minLength": 1,
+          "pattern": "\\S",
+          "title": "Source Category",
+          "type": "string"
+        },
+        "subscription_id": {
+          "format": "uuid",
+          "title": "Subscription Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "subscription_id",
+        "resource_id",
+        "period",
+        "amount",
+        "currency",
+        "charge_category",
+        "source_category",
+        "charge_type",
+        "pricing_model"
+      ],
+      "title": "CostRow",
+      "type": "object"
+    },
+    "FinancialProfileReference": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Id",
+          "type": "string"
+        },
+        "producer_version": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._()-]{0,127}$",
+          "title": "Producer Version",
+          "type": "string"
+        },
+        "version": {
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "title": "Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "producer_version"
+      ],
+      "title": "FinancialProfileReference",
+      "type": "object"
+    },
+    "FocusChargeMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "charge_category": {
+          "enum": [
+            "Usage",
+            "Purchase",
+            "Tax",
+            "Credit",
+            "Adjustment"
+          ],
+          "title": "Charge Category",
+          "type": "string"
+        },
+        "charge_class": {
+          "anyOf": [
+            {
+              "const": "Correction",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Charge Class"
+        },
+        "commitment_discount_category": {
+          "anyOf": [
+            {
+              "enum": [
+                "Usage",
+                "Spend"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Commitment Discount Category"
+        },
+        "commitment_discount_id": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Commitment Discount Id"
+        },
+        "commitment_discount_status": {
+          "anyOf": [
+            {
+              "enum": [
+                "Used",
+                "Unused"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Commitment Discount Status"
+        },
+        "commitment_discount_type": {
+          "anyOf": [
+            {
+              "maxLength": 2048,
+              "minLength": 1,
+              "pattern": "\\S",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Commitment Discount Type"
+        },
+        "pricing_category": {
+          "anyOf": [
+            {
+              "enum": [
+                "Standard",
+                "Dynamic",
+                "Committed",
+                "Other"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Pricing Category"
+        }
+      },
+      "required": [
+        "charge_category",
+        "pricing_category"
+      ],
+      "title": "FocusChargeMetadata",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "allocation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CostAllocation"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "bindings": {
+      "items": {
+        "$ref": "#/$defs/CostResourceBinding"
+      },
+      "maxItems": 100000,
+      "title": "Bindings",
+      "type": "array"
+    },
+    "cost_basis": {
+      "enum": [
+        "actual",
+        "amortized",
+        "effective"
+      ],
+      "title": "Cost Basis",
+      "type": "string"
+    },
+    "export_complete": {
+      "default": false,
+      "title": "Export Complete",
+      "type": "boolean"
+    },
+    "export_provenance": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/CostExportProvenance"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "ledger_profile": {
+      "$ref": "#/$defs/FinancialProfileReference"
+    },
+    "period": {
+      "$ref": "#/$defs/CostPeriod"
+    },
+    "rows": {
+      "items": {
+        "$ref": "#/$defs/CostRow"
+      },
+      "maxItems": 100000,
+      "title": "Rows",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_observed_at": {
+      "format": "date-time",
+      "title": "Source Observed At",
+      "type": "string"
+    },
+    "source_reference": {
+      "maxLength": 2048,
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Source Reference",
+      "type": "string"
+    },
+    "subscription_ids": {
+      "items": {
+        "format": "uuid",
+        "type": "string"
+      },
+      "maxItems": 1000,
+      "minItems": 1,
+      "title": "Subscription Ids",
+      "type": "array"
+    },
+    "tenant_id": {
+      "format": "uuid",
+      "title": "Tenant Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "ledger_profile",
+    "cost_basis",
+    "tenant_id",
+    "subscription_ids",
+    "period",
+    "source_reference",
+    "source_observed_at",
+    "rows"
+  ],
+  "title": "CostImport",
+  "type": "object"
+}

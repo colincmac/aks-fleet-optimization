@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "tenant_id": "00000000-0000-0000-0000-000000000000",
+  "subscription_id": "00000000-0000-0000-0000-000000000000",
+  "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+  "cluster_uid": "synthetic-cluster-uid",
+  "source_observed_at": "2026-10-29T12:00:00Z",
+  "binding_reference": "synthetic-source-cluster-binding",
+  "allocation": {
+    "profile": {
+      "id": "aks-cost-analysis",
+      "version": "1.0.0",
+      "producer_version": "1.0.0"
+    },
+    "source_reference": "synthetic-aks-cost-analysis",
+    "cost_basis": "actual",
+    "pricing_basis": "source-declared",
+    "period": {
+      "start": "2026-09-29T00:00:00Z",
+      "end": "2026-10-29T00:00:00Z"
+    },
+    "complete": true,
+    "allocation_policy": "source-native",
+    "shares": [],
+    "amounts": [
+      {
+        "category": "allocated",
+        "granularity": "namespace",
+        "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+        "namespace": "apps",
+        "workload_name": null,
+        "workload_uid": null,
+        "container": null,
+        "asset_id": null,
+        "identity_basis": "name-only",
+        "valid_period": null,
+        "reference": "synthetic-aks-cost-analysis",
+        "amount": "60",
+        "currency": "USD"
+      },
+      {
+        "category": "idle",
+        "granularity": null,
+        "cluster_resource_id": null,
+        "namespace": null,
+        "workload_name": null,
+        "workload_uid": null,
+        "container": null,
+        "asset_id": null,
+        "identity_basis": null,
+        "valid_period": null,
+        "reference": null,
+        "amount": "25",
+        "currency": "USD"
+      },
+      {
+        "category": "system",
+        "granularity": null,
+        "cluster_resource_id": null,
+        "namespace": null,
+        "workload_name": null,
+        "workload_uid": null,
+        "container": null,
+        "asset_id": null,
+        "identity_basis": null,
+        "valid_period": null,
+        "reference": null,
+        "amount": "15",
+        "currency": "USD"
+      }
+    ]
+  }
+}

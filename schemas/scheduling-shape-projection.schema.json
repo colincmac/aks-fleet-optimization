@@ -1,0 +1,595 @@
+{
+  "$defs": {
+    "CollectionError": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "enum": [
+            "unauthorized",
+            "forbidden",
+            "timeout",
+            "throttled",
+            "unavailable",
+            "invalid-response",
+            "response-budget-exceeded",
+            "identity-mismatch"
+          ],
+          "title": "Code",
+          "type": "string"
+        },
+        "scope": {
+          "minLength": 1,
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scope",
+        "code"
+      ],
+      "title": "CollectionError",
+      "type": "object"
+    },
+    "CollectionStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "failed"
+      ],
+      "title": "CollectionStatus",
+      "type": "string"
+    },
+    "CollectorResult": {
+      "additionalProperties": false,
+      "properties": {
+        "collector": {
+          "minLength": 1,
+          "title": "Collector",
+          "type": "string"
+        },
+        "completed_at": {
+          "format": "date-time",
+          "title": "Completed At",
+          "type": "string"
+        },
+        "completed_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Completed Scope",
+          "type": "array"
+        },
+        "errors": {
+          "items": {
+            "$ref": "#/$defs/CollectionError"
+          },
+          "title": "Errors",
+          "type": "array"
+        },
+        "missing_fields": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Missing Fields",
+          "type": "array"
+        },
+        "pagination_complete": {
+          "default": false,
+          "title": "Pagination Complete",
+          "type": "boolean"
+        },
+        "requested_scope": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Requested Scope",
+          "type": "array"
+        },
+        "retry_count": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Retry Count",
+          "type": "integer"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "source_observed_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Observed At"
+        },
+        "started_at": {
+          "format": "date-time",
+          "title": "Started At",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/CollectionStatus"
+        }
+      },
+      "required": [
+        "collector",
+        "status",
+        "requested_scope",
+        "started_at",
+        "completed_at"
+      ],
+      "title": "CollectorResult",
+      "type": "object"
+    },
+    "NodeReservationAudit": {
+      "additionalProperties": false,
+      "properties": {
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "node_name": {
+          "minLength": 1,
+          "title": "Node Name",
+          "type": "string"
+        },
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "observed_cpu_request_mcpu": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Cpu Request Mcpu"
+        },
+        "observed_memory_request_mib": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Memory Request Mib"
+        },
+        "observed_nonterminal_pod_count": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Observed Nonterminal Pod Count"
+        },
+        "pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Pod Uids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "node_uid",
+        "node_name",
+        "pod_uids"
+      ],
+      "title": "NodeReservationAudit",
+      "type": "object"
+    },
+    "SchedulingCompletenessAudit": {
+      "additionalProperties": false,
+      "properties": {
+        "basis": {
+          "const": "sanitized-metadata-reservation-audit",
+          "default": "sanitized-metadata-reservation-audit",
+          "title": "Basis",
+          "type": "string"
+        },
+        "cluster_resource_id": {
+          "minLength": 1,
+          "title": "Cluster Resource Id",
+          "type": "string"
+        },
+        "cluster_uid": {
+          "minLength": 1,
+          "title": "Cluster Uid",
+          "type": "string"
+        },
+        "collection": {
+          "$ref": "#/$defs/CollectorResult"
+        },
+        "evaluated_at": {
+          "format": "date-time",
+          "title": "Evaluated At",
+          "type": "string"
+        },
+        "fit_status": {
+          "const": "blocked",
+          "default": "blocked",
+          "title": "Fit Status",
+          "type": "string"
+        },
+        "issues": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Issues",
+          "type": "array"
+        },
+        "maximum_source_age_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Maximum Source Age Seconds",
+          "type": "integer"
+        },
+        "metadata_digest": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Metadata Digest",
+          "type": "string"
+        },
+        "metadata_generated_at": {
+          "format": "date-time",
+          "title": "Metadata Generated At",
+          "type": "string"
+        },
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/NodeReservationAudit"
+          },
+          "title": "Nodes",
+          "type": "array"
+        },
+        "pending_pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Pending Pod Uids",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "1.0",
+          "default": "1.0",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "tenant_id": {
+          "minLength": 1,
+          "title": "Tenant Id",
+          "type": "string"
+        },
+        "terminal_pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Terminal Pod Uids",
+          "type": "array"
+        },
+        "unobserved_dimensions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unobserved Dimensions",
+          "type": "array"
+        },
+        "unresolved_assignment_pod_uids": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Unresolved Assignment Pod Uids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "tenant_id",
+        "cluster_resource_id",
+        "cluster_uid",
+        "metadata_digest",
+        "metadata_generated_at",
+        "evaluated_at",
+        "maximum_source_age_seconds",
+        "collection",
+        "nodes",
+        "pending_pod_uids",
+        "unresolved_assignment_pod_uids",
+        "terminal_pod_uids",
+        "issues"
+      ],
+      "title": "SchedulingCompletenessAudit",
+      "type": "object"
+    },
+    "SchedulingNodeShape": {
+      "additionalProperties": false,
+      "properties": {
+        "allocatable_pod_slots": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Allocatable Pod Slots"
+        },
+        "architecture": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Architecture"
+        },
+        "conditions": {
+          "additionalProperties": {
+            "enum": [
+              "True",
+              "False",
+              "Unknown"
+            ],
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "Ready",
+              "MemoryPressure",
+              "DiskPressure",
+              "PIDPressure",
+              "NetworkUnavailable"
+            ]
+          },
+          "title": "Conditions",
+          "type": "object"
+        },
+        "features": {
+          "additionalProperties": {
+            "enum": [
+              "present",
+              "absent",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "host_network",
+              "host_ports",
+              "volumes",
+              "resource_claims",
+              "scheduling_gates",
+              "node_selector",
+              "affinity",
+              "topology_spread",
+              "tolerations",
+              "priority_class",
+              "runtime_class",
+              "pod_resource_budget",
+              "init_containers",
+              "pod_overhead",
+              "extended_resources",
+              "hugepages",
+              "ephemeral_storage",
+              "taints",
+              "cordoned"
+            ]
+          },
+          "title": "Features",
+          "type": "object"
+        },
+        "node_uid": {
+          "minLength": 1,
+          "title": "Node Uid",
+          "type": "string"
+        },
+        "os_name": {
+          "enum": [
+            "linux",
+            "windows",
+            "unknown"
+          ],
+          "title": "Os Name",
+          "type": "string"
+        },
+        "resource_version": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Version"
+        }
+      },
+      "required": [
+        "node_uid",
+        "resource_version",
+        "os_name",
+        "architecture",
+        "allocatable_pod_slots",
+        "features",
+        "conditions"
+      ],
+      "title": "SchedulingNodeShape",
+      "type": "object"
+    },
+    "SchedulingPodShape": {
+      "additionalProperties": false,
+      "properties": {
+        "features": {
+          "additionalProperties": {
+            "enum": [
+              "present",
+              "absent",
+              "unknown"
+            ],
+            "type": "string"
+          },
+          "propertyNames": {
+            "enum": [
+              "host_network",
+              "host_ports",
+              "volumes",
+              "resource_claims",
+              "scheduling_gates",
+              "node_selector",
+              "affinity",
+              "topology_spread",
+              "tolerations",
+              "priority_class",
+              "runtime_class",
+              "pod_resource_budget",
+              "init_containers",
+              "pod_overhead",
+              "extended_resources",
+              "hugepages",
+              "ephemeral_storage",
+              "taints",
+              "cordoned"
+            ]
+          },
+          "title": "Features",
+          "type": "object"
+        },
+        "os_name": {
+          "enum": [
+            "linux",
+            "windows",
+            "unknown"
+          ],
+          "title": "Os Name",
+          "type": "string"
+        },
+        "pod_uid": {
+          "minLength": 1,
+          "title": "Pod Uid",
+          "type": "string"
+        },
+        "resource_version": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Resource Version"
+        },
+        "scheduler_name": {
+          "anyOf": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Scheduler Name"
+        }
+      },
+      "required": [
+        "pod_uid",
+        "resource_version",
+        "os_name",
+        "scheduler_name",
+        "features"
+      ],
+      "title": "SchedulingPodShape",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "audit": {
+      "$ref": "#/$defs/SchedulingCompletenessAudit"
+    },
+    "mapping_reference": {
+      "const": "kubernetes-core-v1@v1.36.0",
+      "default": "kubernetes-core-v1@v1.36.0",
+      "title": "Mapping Reference",
+      "type": "string"
+    },
+    "nodes": {
+      "items": {
+        "$ref": "#/$defs/SchedulingNodeShape"
+      },
+      "maxItems": 100000,
+      "title": "Nodes",
+      "type": "array"
+    },
+    "pods": {
+      "items": {
+        "$ref": "#/$defs/SchedulingPodShape"
+      },
+      "maxItems": 100000,
+      "title": "Pods",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "source_binding": {
+      "const": "unverified_supplied_native_objects",
+      "default": "unverified_supplied_native_objects",
+      "title": "Source Binding",
+      "type": "string"
+    }
+  },
+  "required": [
+    "audit",
+    "pods",
+    "nodes"
+  ],
+  "title": "SchedulingShapeProjection",
+  "type": "object"
+}

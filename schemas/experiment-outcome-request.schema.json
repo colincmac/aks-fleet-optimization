@@ -1,0 +1,70 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "after_assessment_digest": {
+      "anyOf": [
+        {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "After Assessment Digest"
+    },
+    "before_assessment_digest": {
+      "anyOf": [
+        {
+          "pattern": "^[a-f0-9]{64}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Before Assessment Digest"
+    },
+    "evidence_references": {
+      "items": {
+        "minLength": 1,
+        "pattern": "\\S",
+        "type": "string"
+      },
+      "maxItems": 32,
+      "title": "Evidence References",
+      "type": "array"
+    },
+    "execution_reference": {
+      "minLength": 1,
+      "pattern": "\\S",
+      "title": "Execution Reference",
+      "type": "string"
+    },
+    "outcome": {
+      "enum": [
+        "completed",
+        "aborted",
+        "rolled_back",
+        "inconclusive",
+        "not_executed"
+      ],
+      "title": "Outcome",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1.0",
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "outcome",
+    "execution_reference"
+  ],
+  "title": "ExperimentOutcomeRequest",
+  "type": "object"
+}

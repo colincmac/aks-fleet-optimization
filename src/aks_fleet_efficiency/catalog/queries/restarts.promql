@@ -1,0 +1,1 @@
+increase(kube_pod_container_status_restarts_total{__scope__}[__step__s])

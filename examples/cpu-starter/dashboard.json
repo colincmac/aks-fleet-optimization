@@ -1,0 +1,104 @@
+{
+  "title": "AKS advisor query-only measurements",
+  "description": "Measurements only, not safe-change approval or source attestation.",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": false,
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Approved Prometheus source",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "panels": [
+    {
+      "id": 1,
+      "title": "Evidence quality and missing series",
+      "description": "Export metadata and unresolved evidence-quality limits.",
+      "type": "text",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 6
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "**Source:** `synthetic`  \n**Profile:** `cadvisor-ksm` v1.0.0 (name-only identity)  \n**Window:** Grafana time picker; not a retained assessment window  \n**Minimum query step:** 300 seconds; Grafana may coarsen it  \n\nCoverage: **unknown** until source execution and assessment.  \nFreshness: **unknown** until source execution and assessment.  \nMissing series: **unknown** until these queries run against the selected datasource.  \nA rendered query, visible series, or empty panel does not attest source completeness, historical identity, approval, or a safe target."
+      }
+    },
+    {
+      "id": 2,
+      "title": "Workload CPU",
+      "type": "row",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 6,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 3,
+      "title": "cpu_request v1.0.0",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "suffix:mCPU"
+        }
+      },
+      "description": "Source synthetic; profile cadvisor-ksm v1.0.0; entity 22d8565a085fca3fe6b855943ee34efd8f06c6cea19a44bb19b72cb6a74b8bdd; minimum step 300s; unit mCPU. Grafana may coarsen evaluation and its time range is the query window, not retained assessment evidence.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 7,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "kube_pod_container_resource_requests{azure_resource_id=\"/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic\",container=\"api\",namespace=\"synthetic\",pod=\"synthetic-pod\",resource=\"cpu\",unit=\"core\"} * 1000",
+          "interval": "300s",
+          "format": "time_series"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "cpu_usage v1.0.0",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "suffix:mCPU"
+        }
+      },
+      "description": "Source synthetic; profile cadvisor-ksm v1.0.0; entity 22d8565a085fca3fe6b855943ee34efd8f06c6cea19a44bb19b72cb6a74b8bdd; minimum step 300s; unit mCPU. Grafana may coarsen evaluation and its time range is the query window, not retained assessment evidence.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 7,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "rate(container_cpu_usage_seconds_total{azure_resource_id=\"/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic\",container=\"api\",namespace=\"synthetic\",pod=\"synthetic-pod\"}[5m]) * 1000",
+          "interval": "300s",
+          "format": "time_series"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "reference": "azure-v1.15.2/karpenter-v1.15.1",
+  "tenant_id": "00000000-0000-0000-0000-000000000000",
+  "cluster_resource_id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-synthetic/providers/Microsoft.ContainerService/managedClusters/aks-synthetic",
+  "cluster_uid": "synthetic-cluster-uid",
+  "nodepool_uid": "synthetic-nap-pool-uid",
+  "object_version": "synthetic-version",
+  "generation": 1,
+  "observed_at": "2026-10-29T12:00:00Z",
+  "collection": null,
+  "supply_mode": "dynamic",
+  "replicas": null,
+  "node_count": 11,
+  "consolidation_policy": "WhenEmpty",
+  "consolidate_after": "0s",
+  "budgets": [
+    {
+      "nodes": "10%",
+      "reasons": null,
+      "schedule": null,
+      "duration": null
+    },
+    {
+      "nodes": "1",
+      "reasons": [
+        "Empty"
+      ],
+      "schedule": null,
+      "duration": null
+    }
+  ]
+}

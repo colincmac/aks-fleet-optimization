@@ -1,0 +1,37 @@
+schema_version: '1.0'
+scope:
+  tenant_id: 00000000-0000-0000-0000-000000000000
+  subscription_ids:
+    - 00000000-0000-0000-0000-000000000000
+metric_sources:
+  - name: synthetic-prometheus
+    type: prometheus
+    endpoint: https://metrics.example.invalid
+    authentication: anonymous
+    label_mapping:
+      cluster_resource_id: azure_resource_id
+      namespace: namespace
+      workload: workload
+      workload_kind: workload_kind
+      container: container
+    declared_retention_days: 30
+    declared_step_seconds: 300
+clusters:
+  - resource_id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-demo/providers/Microsoft.ContainerService/managedClusters/aks-demo
+    metric_source: synthetic-prometheus
+    environment: nonproduction
+ownership:
+  - cluster_resource_id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-demo/providers/Microsoft.ContainerService/managedClusters/aks-demo
+    namespace: orders
+    owner: synthetic-orders-owner
+    policy_reference: policies/synthetic-orders
+  - cluster_resource_id: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-demo/providers/Microsoft.ContainerService/managedClusters/aks-demo
+    namespace: checkout
+    owner: synthetic-checkout-owner
+report_directory: ../reports
+analysis:
+  thresholds:
+    minimum_observation_days: 30
+    minimum_coverage_ratio: 0.85
+    maximum_evidence_age_hours: 24
+    maximum_metric_step_seconds: 300

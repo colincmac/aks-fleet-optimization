@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: idle-fixed
+  namespace: aks-fleet-demo
+spec:
+  template:
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels: {app.kubernetes.io/name: idle-fixed}
+      containers:
+        - name: worker
+          resources:
+            requests: {cpu: 100m, memory: 64Mi}
+          startupProbe:
+            exec: {command: ["python", "-c", "import os; os.kill(1, 0)"]}
+            periodSeconds: 5
+          readinessProbe:
+            exec: {command: ["python", "-c", "import os; os.kill(1, 0)"]}
+            periodSeconds: 15
+          livenessProbe:
+            exec: {command: ["python", "-c", "import os; os.kill(1, 0)"]}
+            periodSeconds: 30
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: idle-fixed
+  namespace: aks-fleet-demo
+spec:
+  maxUnavailable: 1

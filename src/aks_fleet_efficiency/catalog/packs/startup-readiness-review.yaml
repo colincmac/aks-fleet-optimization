@@ -1,0 +1,43 @@
+schema_version: '1.0'
+id: AKS-START-001
+version: 1.0.0
+family: reliability
+evaluator: startup-readiness-review
+evidence_kind: inventory
+title: Investigate observed readiness and subsequent demand
+purpose: Review a bounded sampled Pod readiness transition within one exact observed container attempt and independently qualified post-readiness measurements.
+sources: []
+parameters: {}
+queries:
+  baseline: {}
+  guarded: {}
+required_evidence:
+  baseline:
+  - Complete aligned saved native lifecycle observations with exact cluster, Namespace, workload, Pod and container-attempt identity and original source clocks
+  - Fresh scoped current inventory and an observed not-ready to ready transition without changed or missing attempt evidence
+  guarded:
+  - Complete aligned saved native lifecycle observations with exact cluster, Namespace, workload, Pod and container-attempt identity and original source clocks
+  - Fresh scoped current inventory and an observed not-ready to ready transition without changed or missing attempt evidence
+limitations:
+- Explicitly selected saved-history pack; default analysis retains its original pack selection.
+- Bounds describe a sampled Pod readiness proxy, not first-ever startup, continuous history or application initialization latency.
+- A zero restart counter and stable sampled runtime digest do not prove historical absence of restarts between samples.
+- Usage requires its own exact catalog query, full aligned coverage and a separate post-readiness window inside the sampled attempt; CPU rate lookback must also follow readiness.
+- Missing usage does not erase independently valid readiness observations; working set is not full-memory usage and no representative-demand claim is supplied.
+- Saved source consistency is not authentication or actual-source compatibility certification. No target, autoscaling suitability or savings is supplied.
+prerequisites:
+- Obtain approved existing saved lifecycle evidence; do not install an observer, collect Events/logs or infer history from current status.
+risks:
+- Pod readiness may reflect probes or readiness gates rather than application initialization, and sampling can miss transitions or peaks.
+validation:
+- Review exact Pod/container identity, original receipts, sample cadence and readiness criterion before interpreting the observed bracket.
+- Review independent application startup, SLO, peak, failover and representative usage evidence before considering any change.
+rollback:
+- No change is proposed; preserve original settings for rollback of any separately approved experiment.
+actions:
+  baseline:
+  - Review the observed readiness bracket and independent measurement gaps with the workload owner; do not choose a resource or replica target.
+  guarded:
+  - Review the observed readiness bracket; guarded mode does not authorize sizing, scale-to-zero or remediation.
+baseline_summary: Saved samples bracket an observed Pod readiness transition. This is not application startup duration, proof of a first attempt or a safe resource setting.
+guarded_summary: Saved samples bracket an observed Pod readiness transition. Guarded mode does not authorize resource, replica or startup-policy changes.
